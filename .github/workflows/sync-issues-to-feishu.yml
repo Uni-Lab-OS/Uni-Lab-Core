@@ -1,0 +1,75 @@
+name: Sync GitHub Issues to Feishu OKF
+
+on:
+  issues:
+    types:
+      - opened
+      - edited
+      - assigned
+      - unassigned
+      - labeled
+      - unlabeled
+      - reopened
+      - closed
+  workflow_dispatch:
+    inputs:
+      issue_number:
+        description: GitHub Issue number to synchronize
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: feishu-issue-sync-${{ github.repository }}
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+
+      - name: Test synchronization module
+        run: python -m unittest discover -s tests -p "test_github_feishu_sync.py"
+
+      - name: Install Feishu CLI
+        run: npm install --global @larksuite/cli@1.0.80
+
+      - name: Configure Feishu bot identity
+        env:
+          FEISHU_APP_ID: ${{ secrets.FEISHU_APP_ID }}
+          FEISHU_APP_SECRET: ${{ secrets.FEISHU_APP_SECRET }}
+        run: |
+          test -n "$FEISHU_APP_ID"
+          test -n "$FEISHU_APP_SECRET"
+          printf '%s' "$FEISHU_APP_SECRET" |
+            lark-cli config init \
+              --app-id "$FEISHU_APP_ID" \
+              --app-secret-stdin \
+              --brand feishu
+
+      - name: Synchronize Issue
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_NUMBER: ${{ inputs.issue_number }}
+          LARKSUITE_CLI_NO_UPDATE_NOTIFIER: "1"
+          LARKSUITE_CLI_NO_SKILLS_NOTIFIER: "1"
+        run: |
+          python scripts/github_feishu_sync.py sync \
+            --config .github/feishu-sync.json \
+            --event "$GITHUB_EVENT_PATH" \
+            --repository "$GITHUB_REPOSITORY" \
+            --issue-number "$ISSUE_NUMBER"

@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "repository": "Uni-Lab-OS/Uni-Lab-Core",
+  "lark_cli_version": "1.0.80",
+  "space_id": "7498240950477668371",
+  "root_node_token": "AaokwPX7viwZpTk52Vxcnw6jnCh",
+  "wiki_base_url": "https://dptechnology.feishu.cn/wiki",
+  "sync_parent_title": "GitHub Issues 同步 · Uni-Lab-Core",
+  "sync_parent_node_token": "P4VDwEQQ8iCLNpkXRm2cDs6en2f",
+  "skip_label": "sync:feishu-disabled",
+  "maximum_body_characters": 12000,
+  "stage_labels": [
+    {
+      "label": "stage:accepted",
+      "stage": "accepted",
+      "okf_url": "https://dptechnology.feishu.cn/wiki/DM4cwsJLoisGhBkxS6XcPx2jnac"
+    },
+    {
+      "label": "stage:testing",
+      "stage": "testing",
+      "okf_url": "https://dptechnology.feishu.cn/wiki/DM4cwsJLoisGhBkxS6XcPx2jnac"
+    },
+    {
+      "label": "stage:implementation",
+      "stage": "implementation",
+      "okf_url": "https://dptechnology.feishu.cn/wiki/TcvWwOFeYiAzQsk425PcDAgCnqb"
+    },
+    {
+      "label": "stage:protocol-definition",
+      "stage": "protocol-definition",
+      "okf_url": "https://dptechnology.feishu.cn/wiki/DzjFwDOoBijr25khEoTcFxBdnfb"
+    }
+  ],
+  "default_stage": {
+    "stage": "intake",
+    "okf_url": "https://dptechnology.feishu.cn/wiki/IDO1wrptGiPZl3k6GnDcbqy5nMg"
+  }
+}
