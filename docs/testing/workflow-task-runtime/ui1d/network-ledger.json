@@ -1,8 +1,8 @@
 {
   "pins": {
-    "fe": "27212c7674f746d0ac941ccf592dd57644983272",
-    "os": "3eb8a59014267f3b6161c36dcbc882c4aa3b9e90",
-    "coreBaseline": "9a7467cd4d91a008bdd4b8f754d73fafbb3cacc8"
+    "fe": "b2547ee51fd9d7e6f9f277c407e3503c59cc4085",
+    "os": "68c364e2e70c228a9598fbe1f4a10510602b51c2",
+    "coreBaseline": "0ecb9448ffc4bfb4d05687f5234784f454d6664c"
   },
   "runtimeRequests": [
     {
@@ -82,27 +82,27 @@
     },
     {
       "method": "GET",
-      "path": "/api/v1/workflow-tasks/64307424-c96e-4b8f-aa98-a1149aa13331",
-      "lastEventId": ""
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1/workflow-tasks/64307424-c96e-4b8f-aa98-a1149aa13331/jobs",
-      "lastEventId": ""
-    },
-    {
-      "method": "GET",
       "path": "/api/v1/workflows/10000000-0000-4000-8000-000000000003/authoring",
       "lastEventId": ""
     },
     {
       "method": "GET",
-      "path": "/api/v1/workflow-tasks/64307424-c96e-4b8f-aa98-a1149aa13331",
+      "path": "/api/v1/workflow-tasks/be9892e3-53ab-41a5-91f6-da009ffa45da",
       "lastEventId": ""
     },
     {
       "method": "GET",
-      "path": "/api/v1/workflow-tasks/64307424-c96e-4b8f-aa98-a1149aa13331/jobs",
+      "path": "/api/v1/workflow-tasks/be9892e3-53ab-41a5-91f6-da009ffa45da/jobs",
+      "lastEventId": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflow-tasks/be9892e3-53ab-41a5-91f6-da009ffa45da",
+      "lastEventId": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflow-tasks/be9892e3-53ab-41a5-91f6-da009ffa45da/jobs",
       "lastEventId": ""
     },
     {
@@ -127,22 +127,22 @@
     },
     {
       "method": "GET",
-      "path": "/api/v1/workflow-tasks/2e66fa3f-6996-45c2-9ea2-f1e22919ace7",
+      "path": "/api/v1/workflow-tasks/4476c1d7-7e3a-427d-bf7e-30b52abf9a1f",
       "lastEventId": ""
     },
     {
       "method": "GET",
-      "path": "/api/v1/workflow-tasks/2e66fa3f-6996-45c2-9ea2-f1e22919ace7/jobs",
+      "path": "/api/v1/workflow-tasks/4476c1d7-7e3a-427d-bf7e-30b52abf9a1f/jobs",
       "lastEventId": ""
     },
     {
       "method": "POST",
-      "path": "/api/v1/workflow-tasks/2e66fa3f-6996-45c2-9ea2-f1e22919ace7/commands",
+      "path": "/api/v1/workflow-tasks/4476c1d7-7e3a-427d-bf7e-30b52abf9a1f/commands",
       "lastEventId": ""
     },
     {
       "method": "POST",
-      "path": "/api/v1/workflow-tasks/2e66fa3f-6996-45c2-9ea2-f1e22919ace7/commands",
+      "path": "/api/v1/workflow-tasks/4476c1d7-7e3a-427d-bf7e-30b52abf9a1f/commands",
       "lastEventId": ""
     },
     {
@@ -152,52 +152,52 @@
     },
     {
       "method": "GET",
-      "path": "/api/v1/workflow-tasks/2e66fa3f-6996-45c2-9ea2-f1e22919ace7",
+      "path": "/api/v1/workflow-tasks/4476c1d7-7e3a-427d-bf7e-30b52abf9a1f",
       "lastEventId": ""
     },
     {
       "method": "GET",
-      "path": "/api/v1/workflow-tasks/2e66fa3f-6996-45c2-9ea2-f1e22919ace7/jobs",
+      "path": "/api/v1/workflow-tasks/4476c1d7-7e3a-427d-bf7e-30b52abf9a1f/jobs",
       "lastEventId": ""
     },
     {
       "method": "GET",
-      "path": "/api/v1/workflow-tasks/2e66fa3f-6996-45c2-9ea2-f1e22919ace7",
+      "path": "/api/v1/workflow-tasks/4476c1d7-7e3a-427d-bf7e-30b52abf9a1f",
       "lastEventId": ""
     },
     {
       "method": "GET",
-      "path": "/api/v1/workflow-tasks/2e66fa3f-6996-45c2-9ea2-f1e22919ace7/jobs",
+      "path": "/api/v1/workflow-tasks/4476c1d7-7e3a-427d-bf7e-30b52abf9a1f/jobs",
       "lastEventId": ""
     },
     {
       "method": "POST",
-      "path": "/api/v1/workflow-tasks/2e66fa3f-6996-45c2-9ea2-f1e22919ace7/commands",
+      "path": "/api/v1/workflow-tasks/4476c1d7-7e3a-427d-bf7e-30b52abf9a1f/commands",
       "lastEventId": ""
     },
     {
       "method": "GET",
-      "path": "/api/v1/workflow-tasks/2e66fa3f-6996-45c2-9ea2-f1e22919ace7",
+      "path": "/api/v1/workflow-tasks/4476c1d7-7e3a-427d-bf7e-30b52abf9a1f",
       "lastEventId": ""
     },
     {
       "method": "GET",
-      "path": "/api/v1/workflow-tasks/2e66fa3f-6996-45c2-9ea2-f1e22919ace7/jobs",
+      "path": "/api/v1/workflow-tasks/4476c1d7-7e3a-427d-bf7e-30b52abf9a1f/jobs",
       "lastEventId": ""
     },
     {
       "method": "POST",
-      "path": "/api/v1/workflow-tasks/2e66fa3f-6996-45c2-9ea2-f1e22919ace7/commands",
+      "path": "/api/v1/workflow-tasks/4476c1d7-7e3a-427d-bf7e-30b52abf9a1f/commands",
       "lastEventId": ""
     },
     {
       "method": "GET",
-      "path": "/api/v1/workflow-tasks/2e66fa3f-6996-45c2-9ea2-f1e22919ace7",
+      "path": "/api/v1/workflow-tasks/4476c1d7-7e3a-427d-bf7e-30b52abf9a1f",
       "lastEventId": ""
     },
     {
       "method": "GET",
-      "path": "/api/v1/workflow-tasks/2e66fa3f-6996-45c2-9ea2-f1e22919ace7/jobs",
+      "path": "/api/v1/workflow-tasks/4476c1d7-7e3a-427d-bf7e-30b52abf9a1f/jobs",
       "lastEventId": ""
     },
     {
@@ -227,12 +227,12 @@
     },
     {
       "method": "GET",
-      "path": "/api/v1/workflow-tasks/2e66fa3f-6996-45c2-9ea2-f1e22919ace7",
+      "path": "/api/v1/workflow-tasks/4476c1d7-7e3a-427d-bf7e-30b52abf9a1f",
       "lastEventId": ""
     },
     {
       "method": "GET",
-      "path": "/api/v1/workflow-tasks/2e66fa3f-6996-45c2-9ea2-f1e22919ace7/jobs",
+      "path": "/api/v1/workflow-tasks/4476c1d7-7e3a-427d-bf7e-30b52abf9a1f/jobs",
       "lastEventId": ""
     },
     {
@@ -242,12 +242,12 @@
     },
     {
       "method": "GET",
-      "path": "/api/v1/workflow-tasks/2e66fa3f-6996-45c2-9ea2-f1e22919ace7",
+      "path": "/api/v1/workflow-tasks/4476c1d7-7e3a-427d-bf7e-30b52abf9a1f",
       "lastEventId": ""
     },
     {
       "method": "GET",
-      "path": "/api/v1/workflow-tasks/2e66fa3f-6996-45c2-9ea2-f1e22919ace7/jobs",
+      "path": "/api/v1/workflow-tasks/4476c1d7-7e3a-427d-bf7e-30b52abf9a1f/jobs",
       "lastEventId": ""
     },
     {
@@ -324,6 +324,11 @@
     },
     {
       "method": "GET",
+      "path": "/api/v1/workflows/10000000-0000-4000-8000-000000000003/authoring",
+      "status": 200
+    },
+    {
+      "method": "GET",
       "path": "/api/v1/workflow-tasks?page=1&page_size=1&workflow_uuid=10000000-0000-4000-8000-000000000003",
       "status": 200
     },
@@ -334,27 +339,22 @@
     },
     {
       "method": "GET",
-      "path": "/api/v1/workflow-tasks/64307424-c96e-4b8f-aa98-a1149aa13331",
+      "path": "/api/v1/workflow-tasks/be9892e3-53ab-41a5-91f6-da009ffa45da",
       "status": 200
     },
     {
       "method": "GET",
-      "path": "/api/v1/workflow-tasks/64307424-c96e-4b8f-aa98-a1149aa13331/jobs",
+      "path": "/api/v1/workflow-tasks/be9892e3-53ab-41a5-91f6-da009ffa45da/jobs",
       "status": 200
     },
     {
       "method": "GET",
-      "path": "/api/v1/workflows/10000000-0000-4000-8000-000000000003/authoring",
+      "path": "/api/v1/workflow-tasks/be9892e3-53ab-41a5-91f6-da009ffa45da",
       "status": 200
     },
     {
       "method": "GET",
-      "path": "/api/v1/workflow-tasks/64307424-c96e-4b8f-aa98-a1149aa13331",
-      "status": 200
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1/workflow-tasks/64307424-c96e-4b8f-aa98-a1149aa13331/jobs",
+      "path": "/api/v1/workflow-tasks/be9892e3-53ab-41a5-91f6-da009ffa45da/jobs",
       "status": 200
     },
     {
@@ -379,32 +379,32 @@
     },
     {
       "method": "GET",
-      "path": "/api/v1/workflow-tasks/2e66fa3f-6996-45c2-9ea2-f1e22919ace7",
+      "path": "/api/v1/workflow-tasks/4476c1d7-7e3a-427d-bf7e-30b52abf9a1f",
       "status": 200
     },
     {
       "method": "GET",
-      "path": "/api/v1/workflow-tasks/2e66fa3f-6996-45c2-9ea2-f1e22919ace7/jobs",
+      "path": "/api/v1/workflow-tasks/4476c1d7-7e3a-427d-bf7e-30b52abf9a1f/jobs",
       "status": 200
     },
     {
       "method": "POST",
-      "path": "/api/v1/workflow-tasks/2e66fa3f-6996-45c2-9ea2-f1e22919ace7/commands",
+      "path": "/api/v1/workflow-tasks/4476c1d7-7e3a-427d-bf7e-30b52abf9a1f/commands",
       "status": 201
     },
     {
       "method": "POST",
-      "path": "/api/v1/workflow-tasks/2e66fa3f-6996-45c2-9ea2-f1e22919ace7/commands",
+      "path": "/api/v1/workflow-tasks/4476c1d7-7e3a-427d-bf7e-30b52abf9a1f/commands",
       "status": 201
     },
     {
       "method": "GET",
-      "path": "/api/v1/workflow-tasks/2e66fa3f-6996-45c2-9ea2-f1e22919ace7",
+      "path": "/api/v1/workflow-tasks/4476c1d7-7e3a-427d-bf7e-30b52abf9a1f",
       "status": 200
     },
     {
       "method": "GET",
-      "path": "/api/v1/workflow-tasks/2e66fa3f-6996-45c2-9ea2-f1e22919ace7/jobs",
+      "path": "/api/v1/workflow-tasks/4476c1d7-7e3a-427d-bf7e-30b52abf9a1f/jobs",
       "status": 200
     },
     {
@@ -414,42 +414,42 @@
     },
     {
       "method": "GET",
-      "path": "/api/v1/workflow-tasks/2e66fa3f-6996-45c2-9ea2-f1e22919ace7",
+      "path": "/api/v1/workflow-tasks/4476c1d7-7e3a-427d-bf7e-30b52abf9a1f",
       "status": 200
     },
     {
       "method": "GET",
-      "path": "/api/v1/workflow-tasks/2e66fa3f-6996-45c2-9ea2-f1e22919ace7/jobs",
-      "status": 200
-    },
-    {
-      "method": "POST",
-      "path": "/api/v1/workflow-tasks/2e66fa3f-6996-45c2-9ea2-f1e22919ace7/commands",
-      "status": 201
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1/workflow-tasks/2e66fa3f-6996-45c2-9ea2-f1e22919ace7",
-      "status": 200
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1/workflow-tasks/2e66fa3f-6996-45c2-9ea2-f1e22919ace7/jobs",
+      "path": "/api/v1/workflow-tasks/4476c1d7-7e3a-427d-bf7e-30b52abf9a1f/jobs",
       "status": 200
     },
     {
       "method": "POST",
-      "path": "/api/v1/workflow-tasks/2e66fa3f-6996-45c2-9ea2-f1e22919ace7/commands",
+      "path": "/api/v1/workflow-tasks/4476c1d7-7e3a-427d-bf7e-30b52abf9a1f/commands",
       "status": 201
     },
     {
       "method": "GET",
-      "path": "/api/v1/workflow-tasks/2e66fa3f-6996-45c2-9ea2-f1e22919ace7",
+      "path": "/api/v1/workflow-tasks/4476c1d7-7e3a-427d-bf7e-30b52abf9a1f",
       "status": 200
     },
     {
       "method": "GET",
-      "path": "/api/v1/workflow-tasks/2e66fa3f-6996-45c2-9ea2-f1e22919ace7/jobs",
+      "path": "/api/v1/workflow-tasks/4476c1d7-7e3a-427d-bf7e-30b52abf9a1f/jobs",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/workflow-tasks/4476c1d7-7e3a-427d-bf7e-30b52abf9a1f/commands",
+      "status": 201
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflow-tasks/4476c1d7-7e3a-427d-bf7e-30b52abf9a1f",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflow-tasks/4476c1d7-7e3a-427d-bf7e-30b52abf9a1f/jobs",
       "status": 200
     },
     {
@@ -464,27 +464,12 @@
     },
     {
       "method": "GET",
-      "path": "/api/v1/workflow-tasks?page=1&page_size=1&workflow_uuid=10000000-0000-4000-8000-000000000003",
-      "status": 200
-    },
-    {
-      "method": "GET",
       "path": "/api/v1/events",
       "status": 200
     },
     {
       "method": "GET",
-      "path": "/api/v1/workflows/10000000-0000-4000-8000-000000000003/authoring",
-      "status": 200
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1/workflow-tasks/2e66fa3f-6996-45c2-9ea2-f1e22919ace7",
-      "status": 200
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1/workflow-tasks/2e66fa3f-6996-45c2-9ea2-f1e22919ace7/jobs",
+      "path": "/api/v1/workflow-tasks?page=1&page_size=1&workflow_uuid=10000000-0000-4000-8000-000000000003",
       "status": 200
     },
     {
@@ -494,12 +479,27 @@
     },
     {
       "method": "GET",
-      "path": "/api/v1/workflow-tasks/2e66fa3f-6996-45c2-9ea2-f1e22919ace7",
+      "path": "/api/v1/workflow-tasks/4476c1d7-7e3a-427d-bf7e-30b52abf9a1f",
       "status": 200
     },
     {
       "method": "GET",
-      "path": "/api/v1/workflow-tasks/2e66fa3f-6996-45c2-9ea2-f1e22919ace7/jobs",
+      "path": "/api/v1/workflow-tasks/4476c1d7-7e3a-427d-bf7e-30b52abf9a1f/jobs",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflows/10000000-0000-4000-8000-000000000003/authoring",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflow-tasks/4476c1d7-7e3a-427d-bf7e-30b52abf9a1f",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflow-tasks/4476c1d7-7e3a-427d-bf7e-30b52abf9a1f/jobs",
       "status": 200
     },
     {
@@ -510,13 +510,17 @@
   ],
   "websocketUrls": [],
   "forbiddenRequests": [],
+  "pollingObservation": {
+    "durationMs": 3500,
+    "requests": []
+  },
   "apiChecks": [
     {
       "name": "terminal-race",
-      "taskUuid": "64307424-c96e-4b8f-aa98-a1149aa13331",
+      "taskUuid": "be9892e3-53ab-41a5-91f6-da009ffa45da",
       "command": {
-        "consumed_at": "2026-08-01T07:19:53.976495Z",
-        "create_time": "2026-08-01T07:19:53.975722Z",
+        "consumed_at": "2026-08-01T08:10:07.356506Z",
+        "create_time": "2026-08-01T08:10:07.355745Z",
         "description": "UI1D deterministic terminal race",
         "idempotency_key": "ui1d-terminal-race",
         "meta_data": {
@@ -529,9 +533,9 @@
         "status": "rejected",
         "trace_context": {},
         "type": "cancel",
-        "update_time": "2026-08-01T07:19:53.976495Z",
-        "uuid": "51f67589-dfba-4c55-b99d-c53d52b0b792",
-        "workflow_task_uuid": "64307424-c96e-4b8f-aa98-a1149aa13331"
+        "update_time": "2026-08-01T08:10:07.356506Z",
+        "uuid": "22cc1d00-a539-4bcc-8051-4cb08ee71e8a",
+        "workflow_task_uuid": "be9892e3-53ab-41a5-91f6-da009ffa45da"
       }
     },
     {
@@ -539,13 +543,13 @@
       "accepted": {
         "code": 0,
         "data": {
-          "uuid": "ffd178ca-dbfc-44c9-b935-e387bc11a0f7",
-          "create_time": "2026-08-01T07:19:58.460999Z",
-          "update_time": "2026-08-01T07:19:58.460999Z",
+          "uuid": "fd3e0057-93bd-4d93-bdd8-f774192ab109",
+          "create_time": "2026-08-01T08:10:11.807690Z",
+          "update_time": "2026-08-01T08:10:11.807690Z",
           "meta_data": {},
-          "workflow_task_uuid": "2e66fa3f-6996-45c2-9ea2-f1e22919ace7",
+          "workflow_task_uuid": "4476c1d7-7e3a-427d-bf7e-30b52abf9a1f",
           "type": "step",
-          "idempotency_key": "workflow-ui1b:2e66fa3f-6996-45c2-9ea2-f1e22919ace7:step:1785568798455:1",
+          "idempotency_key": "workflow-ui1b:4476c1d7-7e3a-427d-bf7e-30b52abf9a1f:step:1785571811801:1",
           "status": "pending",
           "result": {},
           "trace_context": {}
@@ -554,19 +558,19 @@
       "replay": {
         "code": 0,
         "data": {
-          "uuid": "ffd178ca-dbfc-44c9-b935-e387bc11a0f7",
-          "create_time": "2026-08-01T07:19:58.460999Z",
-          "update_time": "2026-08-01T07:19:58.470602Z",
+          "uuid": "fd3e0057-93bd-4d93-bdd8-f774192ab109",
+          "create_time": "2026-08-01T08:10:11.807690Z",
+          "update_time": "2026-08-01T08:10:11.857015Z",
           "meta_data": {},
-          "workflow_task_uuid": "2e66fa3f-6996-45c2-9ea2-f1e22919ace7",
+          "workflow_task_uuid": "4476c1d7-7e3a-427d-bf7e-30b52abf9a1f",
           "type": "step",
-          "idempotency_key": "workflow-ui1b:2e66fa3f-6996-45c2-9ea2-f1e22919ace7:step:1785568798455:1",
+          "idempotency_key": "workflow-ui1b:4476c1d7-7e3a-427d-bf7e-30b52abf9a1f:step:1785571811801:1",
           "status": "succeeded",
           "result": {
             "outcome": "applied"
           },
           "trace_context": {},
-          "consumed_at": "2026-08-01T07:19:58.470602Z"
+          "consumed_at": "2026-08-01T08:10:11.857015Z"
         }
       },
       "conflictStatus": 409
@@ -579,14 +583,14 @@
   "applicationErrors": [],
   "pageErrors": [],
   "screenshots": [
-    "/home/changjunhan/Uni-Lab-Core/e2e-artifacts/ui1d-runtime-final-gate/01-applied-original-workbench.png",
-    "/home/changjunhan/Uni-Lab-Core/e2e-artifacts/ui1d-runtime-final-gate/02-terminal-race-sse-disconnected.png",
-    "/home/changjunhan/Uni-Lab-Core/e2e-artifacts/ui1d-runtime-final-gate/03-terminal-race-restored.png",
-    "/home/changjunhan/Uni-Lab-Core/e2e-artifacts/ui1d-runtime-final-gate/04-step-task-and-jobs.png",
-    "/home/changjunhan/Uni-Lab-Core/e2e-artifacts/ui1d-runtime-final-gate/05-step-replay-and-conflict.png",
-    "/home/changjunhan/Uni-Lab-Core/e2e-artifacts/ui1d-runtime-final-gate/06-resume-accepted-and-applied.png",
-    "/home/changjunhan/Uni-Lab-Core/e2e-artifacts/ui1d-runtime-final-gate/07-pause-accepted-and-applied.png",
-    "/home/changjunhan/Uni-Lab-Core/e2e-artifacts/ui1d-runtime-final-gate/08-cancel-terminal-state.png",
-    "/home/changjunhan/Uni-Lab-Core/e2e-artifacts/ui1d-runtime-final-gate/09-reload-restores-latest-task.png"
+    "/home/changjunhan/Uni-Lab-Core/.worktrees/e2e-artifacts/ui1d-runtime-final-gate/01-applied-original-workbench.png",
+    "/home/changjunhan/Uni-Lab-Core/.worktrees/e2e-artifacts/ui1d-runtime-final-gate/02-terminal-race-sse-disconnected.png",
+    "/home/changjunhan/Uni-Lab-Core/.worktrees/e2e-artifacts/ui1d-runtime-final-gate/03-terminal-race-restored.png",
+    "/home/changjunhan/Uni-Lab-Core/.worktrees/e2e-artifacts/ui1d-runtime-final-gate/04-step-task-and-jobs.png",
+    "/home/changjunhan/Uni-Lab-Core/.worktrees/e2e-artifacts/ui1d-runtime-final-gate/05-step-replay-and-conflict.png",
+    "/home/changjunhan/Uni-Lab-Core/.worktrees/e2e-artifacts/ui1d-runtime-final-gate/06-resume-accepted-and-applied.png",
+    "/home/changjunhan/Uni-Lab-Core/.worktrees/e2e-artifacts/ui1d-runtime-final-gate/07-pause-accepted-and-applied.png",
+    "/home/changjunhan/Uni-Lab-Core/.worktrees/e2e-artifacts/ui1d-runtime-final-gate/08-cancel-terminal-state.png",
+    "/home/changjunhan/Uni-Lab-Core/.worktrees/e2e-artifacts/ui1d-runtime-final-gate/09-reload-restores-latest-task.png"
   ]
 }

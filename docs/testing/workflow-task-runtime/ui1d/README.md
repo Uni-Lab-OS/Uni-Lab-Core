@@ -2,29 +2,33 @@
 
 ## Candidate pins
 
-- FE candidate: `Uni-Lab-OS/Uni-Lab-FE@27212c7674f746d0ac941ccf592dd57644983272`
-- FE integration: `Uni-Lab-OS/Uni-Lab-FE@bb0bb249afd0dd6ded0025fb8c34e534aec5c278`
-- Tested OS production candidate: `Uni-Lab-OS/Uni-Lab-OS@3eb8a59014267f3b6161c36dcbc882c4aa3b9e90`
-- OS integration after the documentation-only matrix updates: `Uni-Lab-OS/Uni-Lab-OS@68c364e2e70c228a9598fbe1f4a10510602b51c2`
-- Core gate baseline: `Uni-Lab-OS/Uni-Lab-Core@9a7467cd4d91a008bdd4b8f754d73fafbb3cacc8`
+- FE candidate: `Uni-Lab-OS/uni-lab-fe@b2547ee51fd9d7e6f9f277c407e3503c59cc4085`
+- FE integration: `Uni-Lab-OS/uni-lab-fe@a641fa6fa38b223ec90648a2c308c67d4a57b6fd`
+- Tested OS checkout: `Uni-Lab-OS/Uni-Lab-OS@68c364e2e70c228a9598fbe1f4a10510602b51c2`
+- OS integration after the final documentation-only matrix update:
+  `Uni-Lab-OS/Uni-Lab-OS@b05793d9dfaefecf048c98fb709eca94b722fe27`
+- Core gate baseline: `Uni-Lab-OS/Uni-Lab-Core@0ecb9448ffc4bfb4d05687f5234784f454d6664c`
 
-The production OS tree did not change between the tested candidate and the
-documentation-only matrix update.
+The production OS tree did not change between the tested checkout and the
+documentation-only matrix update. Standards and Spec reviews of the exact FE
+candidate both passed with 0 Blocking and 0 Non-blocking findings.
 
 ## Gate result
 
 - `pnpm typecheck`: passed.
 - `pnpm test`: passed (material 54, pascal-lab-plugin 13, services 34,
-  workflow-editor 51, kernel-web 16, plus desktop icon/installer checks).
+  workflow-editor 51, kernel-web 15, plus desktop icon/installer checks).
 - `pnpm build:web`: passed with known Sass, third-party sourcemap, and chunk
   warnings only.
 - `pnpm build:desktop`: passed.
-- `pnpm test:e2e:workflow`: 7/7 passed against real production OS HTTP/SSE.
-- `pnpm test:e2e:workflow-final-gate`: 1/1 passed against real production OS.
-- Static retired-contract scan: 163 production TypeScript files scanned, 15
-  retired files absent, and zero forbidden Runtime references.
+- `pnpm test:e2e:workflow-debug`: 8/8 passed against real production OS
+  HTTP/SSE, including Authoring, Task Runtime, resilience, and final gate.
+- Static retired-contract scan: 160 production TypeScript files and 2 active
+  E2E fixture/helper files scanned, 19 retired files absent, and zero forbidden
+  Runtime or timer-polling references.
 - Network ledger: 50 requests and 50 responses; zero forbidden requests,
-  WebSocket URLs, application errors, or page errors.
+  WebSocket URLs, application errors, or page errors. A 3.5-second quiet
+  terminal window observed zero Task-list/detail, Jobs, or feedback GETs.
 
 The final gate reused `PersistentWorkflowAuthoringPanel`, `WorkflowDag`,
 `WorkflowDebugger`, `WorkflowOutput`, the existing node start/breakpoint
@@ -45,8 +49,8 @@ workbench or screenshot-only UI.
 
 Machine-readable evidence: [network-ledger.json](network-ledger.json).
 
-## Remaining acceptance gate
+## Acceptance state
 
-UI1D implementation and cross-repository E2E are complete. Exact-SHA
-independent review and Feishu Testing/Accepted reconciliation remain required
-before Core decision `#150` can enter `stage:accepted`.
+UI1D implementation, cross-repository E2E, exact-SHA review, matrix update and
+submodule pins are complete. Core decision `#150` is the authority for the
+Feishu Testing/Accepted synchronization and final repository-ticket closure.
