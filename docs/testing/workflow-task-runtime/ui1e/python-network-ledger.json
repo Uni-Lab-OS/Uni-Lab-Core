@@ -1,0 +1,138 @@
+{
+  "apiUrl": "http://127.0.0.1:42401",
+  "browserErrors": [],
+  "apiRequests": [
+    {
+      "method": "GET",
+      "path": "/api/v1/health",
+      "body": null
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/events",
+      "body": null
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/events",
+      "body": null
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflow-tasks",
+      "body": null
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflows/10000000-0000-4000-8000-000000000001/authoring",
+      "body": null
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflow-tasks",
+      "body": null
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflows/10000000-0000-4000-8000-000000000001/authoring",
+      "body": null
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/workflows/10000000-0000-4000-8000-000000000001/authoring/draft",
+      "body": {
+        "python_source": "from typing import Annotated, Literal\n\nfrom pydantic import Field\nfrom lab.devices import Reactor\nfrom unilabos.registry.placeholder_type import ResourceSlot\nfrom unilabos.workflow.authoring import device, workflow_definition, workflow_output\n\n\nreactor: Reactor = device()\n\n\n@workflow_definition(\n    workflow_uuid=\"10000000-0000-4000-8000-000000000001\",\n    displayname=\"Sample preparation\",\n    description=\"Prepare and analyze one sample.\",\n)\ndef prepare_sample(\n    *,\n    sample: ResourceSlot,\n    cycles: Annotated[int, Field(ge=1, le=10)] = 7,\n    mode: Literal[\"fast\", \"safe\"] = \"safe\",\n    note: Annotated[str | None, Field(max_length=200)] = None,\n):\n    # unilab:node_uuid=20000000-0000-4000-8000-000000000001\n    prepared = reactor.prepare(\n        sample=sample,\n        cycles=cycles,\n        note=note,\n    )\n    # unilab:node_uuid=20000000-0000-4000-8000-000000000002\n    analyzed = reactor.analyze(\n        prepared=prepared.prepared,\n        label=mode,\n    )\n    return workflow_output(\n        sample=prepared.prepared,\n        report=analyzed.report,\n    )\n",
+        "expected_draft_hash": "sha256:a6f4f7f9cce25d3bbc0d1fe1ded1f6db50e1c6517e9e08e9a3e5c7779dff532c",
+        "expected_workflow_revision": 1
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/workflows/10000000-0000-4000-8000-000000000001/authoring/draft",
+      "body": {
+        "python_source": "from typing import Annotated, Literal\nfrom pydantic import Field\nfrom lab.devices import Reactor\nfrom unilabos.registry.placeholder_type import ResourceSlot\nfrom unilabos.workflow.authoring import device, workflow_definition, workflow_output\n\n\nreactor: Reactor = device()\n\n\n@workflow_definition(\n    workflow_uuid='10000000-0000-4000-8000-000000000001',\n    displayname='Sample preparation',\n    description='Prepare and analyze one sample.',\n)\ndef sample_preparation(\n    *,\n    sample: ResourceSlot,\n    cycles: Annotated[int, Field(ge=1, le=10)] = 7,\n    mode: Literal['fast', 'safe'] = 'safe',\n    note: Annotated[str | None, Field(max_length=200)] = None,\n):\n    # unilab:node_uuid=20000000-0000-4000-8000-000000000001\n    prepared = reactor.prepare(cycles=cycles, note=note, sample=sample)\n    # unilab:node_uuid=20000000-0000-4000-8000-000000000002\n    analyzed = reactor.analyze(label=mode, prepared=prepared.prepared)\n    return workflow_output(sample=prepared.prepared, report=analyzed.report)\n",
+        "expected_draft_hash": "sha256:590e13b724bc9b7c1a9b97a19bb6d3c2f98df8e56fee1837e4f7cee173982cc6",
+        "expected_workflow_revision": 1
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/workflows/10000000-0000-4000-8000-000000000001/authoring/apply",
+      "body": {
+        "candidate_hash": "sha256:f2af9278f84a3dba61e777b350aa7c720951035e0759c7cce9ec3406fd5a9071"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflows/10000000-0000-4000-8000-000000000001/authoring",
+      "body": null
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflows/10000000-0000-4000-8000-000000000001/authoring",
+      "body": null
+    }
+  ],
+  "apiResponses": [
+    {
+      "method": "GET",
+      "path": "/api/v1/health",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/events",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/events",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflow-tasks",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflows/10000000-0000-4000-8000-000000000001/authoring",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflow-tasks",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflows/10000000-0000-4000-8000-000000000001/authoring",
+      "status": 200
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/workflows/10000000-0000-4000-8000-000000000001/authoring/draft",
+      "status": 200
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/workflows/10000000-0000-4000-8000-000000000001/authoring/draft",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/workflows/10000000-0000-4000-8000-000000000001/authoring/apply",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflows/10000000-0000-4000-8000-000000000001/authoring",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflows/10000000-0000-4000-8000-000000000001/authoring",
+      "status": 200
+    }
+  ]
+}

@@ -1,0 +1,966 @@
+{
+  "apiUrl": "http://127.0.0.1:42401",
+  "browserErrors": [],
+  "apiRequests": [
+    {
+      "method": "GET",
+      "path": "/api/v1/health",
+      "body": null
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/events",
+      "body": null
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/events",
+      "body": null
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflow-tasks",
+      "body": null
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflows/10000000-0000-4000-8000-000000000001/authoring",
+      "body": null
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflow-tasks",
+      "body": null
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflows/10000000-0000-4000-8000-000000000001/authoring",
+      "body": null
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflows/10000000-0000-4000-8000-000000000001/authoring",
+      "body": null
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/authoring/generate-python",
+      "body": {
+        "workflow_uuid": "10000000-0000-4000-8000-000000000001",
+        "revision": 2,
+        "source_uri": "package://production_lab/workflows/demo.py",
+        "graph": {
+          "workflow": {
+            "uuid": "10000000-0000-4000-8000-000000000001",
+            "create_time": "2026-08-01T12:26:16.256169Z",
+            "update_time": "2026-08-01T12:26:18.075653Z",
+            "meta_data": {
+              "unilab": {
+                "input_contract": {
+                  "parameters": [
+                    {
+                      "name": "sample",
+                      "required": true,
+                      "schema": {
+                        "$slot": "ResourceSlot"
+                      }
+                    },
+                    {
+                      "default": 7,
+                      "name": "cycles",
+                      "required": false,
+                      "schema": {
+                        "maximum": 10,
+                        "minimum": 1,
+                        "type": "integer"
+                      }
+                    },
+                    {
+                      "default": "safe",
+                      "name": "mode",
+                      "required": false,
+                      "schema": {
+                        "enum": [
+                          "fast",
+                          "safe"
+                        ],
+                        "type": "string"
+                      }
+                    },
+                    {
+                      "default": null,
+                      "name": "note",
+                      "required": false,
+                      "schema": {
+                        "anyOf": [
+                          {
+                            "maxLength": 200,
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      }
+                    }
+                  ],
+                  "version": 1
+                },
+                "output_bindings": {
+                  "report": {
+                    "kind": "node_output",
+                    "source_handle_uuid": "a34c78d9-9376-475b-a798-53fd3aba990b",
+                    "workflow_node_uuid": "20000000-0000-4000-8000-000000000002"
+                  },
+                  "sample": {
+                    "kind": "node_output",
+                    "source_handle_uuid": "f64b28a6-5fa1-4e45-8adc-cd862542c899",
+                    "workflow_node_uuid": "20000000-0000-4000-8000-000000000001"
+                  }
+                },
+                "output_contract": {
+                  "outputs": [
+                    {
+                      "implicit": false,
+                      "name": "sample",
+                      "schema": {
+                        "$slot": "ResourceSlot"
+                      }
+                    },
+                    {
+                      "implicit": false,
+                      "name": "report",
+                      "schema": {
+                        "type": "string"
+                      }
+                    }
+                  ],
+                  "version": 1
+                }
+              }
+            },
+            "description": "Prepare and analyze one sample.",
+            "name": "Sample preparation",
+            "tags": [],
+            "revision": 2
+          },
+          "nodes": [
+            {
+              "uuid": "20000000-0000-4000-8000-000000000001",
+              "create_time": "2026-08-01T12:26:18.076914Z",
+              "update_time": "2026-08-01T12:26:18.076914Z",
+              "meta_data": {
+                "unilab": {
+                  "input_bindings": {
+                    "32044387-eecc-41c4-b911-8929bf7e6bbe": {
+                      "parameter": "note"
+                    },
+                    "53238df0-3278-426e-9b85-e7d1b25262aa": {
+                      "parameter": "cycles"
+                    },
+                    "94bb4d0f-da6c-4791-90fe-91007cbd1530": {
+                      "parameter": "sample"
+                    }
+                  }
+                }
+              },
+              "workflow_uuid": "10000000-0000-4000-8000-000000000001",
+              "name": "imported_json_node",
+              "status": "idle",
+              "type": "compute",
+              "pose": {},
+              "param": {},
+              "execution_policy": {},
+              "disabled": false,
+              "minimized": false,
+              "workflow_node_template_uuid": "3ffd9d5f-0b9a-44db-8eb3-07d7f585317c",
+              "action_name": "prepare"
+            },
+            {
+              "uuid": "20000000-0000-4000-8000-000000000002",
+              "create_time": "2026-08-01T12:26:18.076914Z",
+              "update_time": "2026-08-01T12:26:18.076914Z",
+              "meta_data": {
+                "unilab": {
+                  "input_bindings": {
+                    "828b29c8-b716-4f81-8846-23090bf7b3f2": {
+                      "parameter": "mode"
+                    }
+                  }
+                }
+              },
+              "workflow_uuid": "10000000-0000-4000-8000-000000000001",
+              "name": "analyzed",
+              "status": "idle",
+              "type": "compute",
+              "pose": {},
+              "param": {},
+              "execution_policy": {},
+              "disabled": false,
+              "minimized": false,
+              "workflow_node_template_uuid": "31e9a116-5a98-44db-978f-8850e1ffb6b2",
+              "action_name": "analyze"
+            }
+          ],
+          "edges": [
+            {
+              "uuid": "4dbfa793-3a3b-5309-8bb4-75676ddd56ea",
+              "create_time": "2026-08-01T12:26:18.076914Z",
+              "update_time": "2026-08-01T12:26:18.076914Z",
+              "meta_data": {},
+              "source_node_uuid": "20000000-0000-4000-8000-000000000001",
+              "target_node_uuid": "20000000-0000-4000-8000-000000000002",
+              "source_handle_uuid": "f64b28a6-5fa1-4e45-8adc-cd862542c899",
+              "target_handle_uuid": "82b16e0f-94d7-4174-8ac3-92df47372450"
+            }
+          ],
+          "node_templates": [
+            {
+              "uuid": "3ffd9d5f-0b9a-44db-8eb3-07d7f585317c",
+              "create_time": "2026-08-01T12:26:16.256847Z",
+              "update_time": "2026-08-01T12:26:16.256847Z",
+              "meta_data": {
+                "catalog_owner": "backend"
+              },
+              "description": "prepare action",
+              "resource_template_uuid": "31000000-0000-4000-8000-000000000001",
+              "name": "prepare",
+              "display_name": "Prepare",
+              "goal": {},
+              "goal_default": {},
+              "feedback": {},
+              "result": {},
+              "type": "action",
+              "node_type": "compute",
+              "class": "lab.devices:Reactor"
+            },
+            {
+              "uuid": "31e9a116-5a98-44db-978f-8850e1ffb6b2",
+              "create_time": "2026-08-01T12:26:16.257128Z",
+              "update_time": "2026-08-01T12:26:16.257128Z",
+              "meta_data": {
+                "catalog_owner": "backend"
+              },
+              "description": "analyze action",
+              "resource_template_uuid": "31000000-0000-4000-8000-000000000001",
+              "name": "analyze",
+              "display_name": "Analyze",
+              "goal": {},
+              "goal_default": {},
+              "feedback": {},
+              "result": {},
+              "type": "action",
+              "node_type": "compute",
+              "class": "lab.devices:Reactor"
+            }
+          ],
+          "handle_templates": [
+            {
+              "uuid": "94bb4d0f-da6c-4791-90fe-91007cbd1530",
+              "create_time": "2026-08-01T12:26:16.256942Z",
+              "update_time": "2026-08-01T12:26:16.256942Z",
+              "meta_data": {
+                "contract": "declared"
+              },
+              "description": "sample contract",
+              "workflow_node_template_uuid": "3ffd9d5f-0b9a-44db-8eb3-07d7f585317c",
+              "handle_key": "sample",
+              "io_type": "target",
+              "display_name": "Sample",
+              "type": "ResourceSlot",
+              "required": true,
+              "data_source": "executor",
+              "data_key": "sample"
+            },
+            {
+              "uuid": "53238df0-3278-426e-9b85-e7d1b25262aa",
+              "create_time": "2026-08-01T12:26:16.256992Z",
+              "update_time": "2026-08-01T12:26:16.256992Z",
+              "meta_data": {
+                "contract": "declared"
+              },
+              "description": "cycles contract",
+              "workflow_node_template_uuid": "3ffd9d5f-0b9a-44db-8eb3-07d7f585317c",
+              "handle_key": "cycles",
+              "io_type": "target",
+              "display_name": "Cycles",
+              "type": "integer",
+              "required": true,
+              "data_source": "executor",
+              "data_key": "cycles"
+            },
+            {
+              "uuid": "32044387-eecc-41c4-b911-8929bf7e6bbe",
+              "create_time": "2026-08-01T12:26:16.257019Z",
+              "update_time": "2026-08-01T12:26:16.257019Z",
+              "meta_data": {
+                "contract": "declared"
+              },
+              "description": "note contract",
+              "workflow_node_template_uuid": "3ffd9d5f-0b9a-44db-8eb3-07d7f585317c",
+              "handle_key": "note",
+              "io_type": "target",
+              "display_name": "Note",
+              "type": "string",
+              "required": false,
+              "data_source": "executor",
+              "data_key": "note"
+            },
+            {
+              "uuid": "7c40580e-1047-44dc-bfbe-f647aaaf760c",
+              "create_time": "2026-08-01T12:26:16.257045Z",
+              "update_time": "2026-08-01T12:26:16.257045Z",
+              "meta_data": {
+                "contract": "declared"
+              },
+              "description": "ready contract",
+              "workflow_node_template_uuid": "3ffd9d5f-0b9a-44db-8eb3-07d7f585317c",
+              "handle_key": "ready",
+              "io_type": "target",
+              "display_name": "Ready",
+              "type": "any",
+              "required": false,
+              "data_source": "dependency",
+              "data_key": "ready"
+            },
+            {
+              "uuid": "f64b28a6-5fa1-4e45-8adc-cd862542c899",
+              "create_time": "2026-08-01T12:26:16.257063Z",
+              "update_time": "2026-08-01T12:26:16.257063Z",
+              "meta_data": {
+                "contract": "declared"
+              },
+              "description": "prepared contract",
+              "workflow_node_template_uuid": "3ffd9d5f-0b9a-44db-8eb3-07d7f585317c",
+              "handle_key": "prepared",
+              "io_type": "source",
+              "display_name": "Prepared",
+              "type": "ResourceSlot",
+              "required": false,
+              "data_source": "executor",
+              "data_key": "prepared"
+            },
+            {
+              "uuid": "5c34a720-f72e-4d42-9834-d644ade6ec4f",
+              "create_time": "2026-08-01T12:26:16.257082Z",
+              "update_time": "2026-08-01T12:26:16.257082Z",
+              "meta_data": {
+                "contract": "declared"
+              },
+              "description": "report contract",
+              "workflow_node_template_uuid": "3ffd9d5f-0b9a-44db-8eb3-07d7f585317c",
+              "handle_key": "report",
+              "io_type": "source",
+              "display_name": "Report",
+              "type": "string",
+              "required": false,
+              "data_source": "executor",
+              "data_key": "report"
+            },
+            {
+              "uuid": "9eeb1a3f-1ea7-4774-94a1-bd82d2f6f881",
+              "create_time": "2026-08-01T12:26:16.257102Z",
+              "update_time": "2026-08-01T12:26:16.257102Z",
+              "meta_data": {
+                "contract": "declared"
+              },
+              "description": "ready contract",
+              "workflow_node_template_uuid": "3ffd9d5f-0b9a-44db-8eb3-07d7f585317c",
+              "handle_key": "ready",
+              "io_type": "source",
+              "display_name": "Ready",
+              "type": "any",
+              "required": false,
+              "data_source": "dependency",
+              "data_key": "ready"
+            },
+            {
+              "uuid": "82b16e0f-94d7-4174-8ac3-92df47372450",
+              "create_time": "2026-08-01T12:26:16.257154Z",
+              "update_time": "2026-08-01T12:26:16.257154Z",
+              "meta_data": {
+                "contract": "declared"
+              },
+              "description": "prepared contract",
+              "workflow_node_template_uuid": "31e9a116-5a98-44db-978f-8850e1ffb6b2",
+              "handle_key": "prepared",
+              "io_type": "target",
+              "display_name": "Prepared",
+              "type": "ResourceSlot",
+              "required": true,
+              "data_source": "executor",
+              "data_key": "prepared"
+            },
+            {
+              "uuid": "828b29c8-b716-4f81-8846-23090bf7b3f2",
+              "create_time": "2026-08-01T12:26:16.257174Z",
+              "update_time": "2026-08-01T12:26:16.257174Z",
+              "meta_data": {
+                "contract": "declared"
+              },
+              "description": "label contract",
+              "workflow_node_template_uuid": "31e9a116-5a98-44db-978f-8850e1ffb6b2",
+              "handle_key": "label",
+              "io_type": "target",
+              "display_name": "Label",
+              "type": "string",
+              "required": true,
+              "data_source": "executor",
+              "data_key": "label"
+            },
+            {
+              "uuid": "35afcf90-8c9b-4c71-8533-8f4d585fe5dc",
+              "create_time": "2026-08-01T12:26:16.257196Z",
+              "update_time": "2026-08-01T12:26:16.257196Z",
+              "meta_data": {
+                "contract": "declared"
+              },
+              "description": "ready contract",
+              "workflow_node_template_uuid": "31e9a116-5a98-44db-978f-8850e1ffb6b2",
+              "handle_key": "ready",
+              "io_type": "target",
+              "display_name": "Ready",
+              "type": "any",
+              "required": false,
+              "data_source": "dependency",
+              "data_key": "ready"
+            },
+            {
+              "uuid": "a34c78d9-9376-475b-a798-53fd3aba990b",
+              "create_time": "2026-08-01T12:26:16.257211Z",
+              "update_time": "2026-08-01T12:26:16.257211Z",
+              "meta_data": {
+                "contract": "declared"
+              },
+              "description": "report contract",
+              "workflow_node_template_uuid": "31e9a116-5a98-44db-978f-8850e1ffb6b2",
+              "handle_key": "report",
+              "io_type": "source",
+              "display_name": "Report",
+              "type": "string",
+              "required": false,
+              "data_source": "executor",
+              "data_key": "report"
+            },
+            {
+              "uuid": "09da294f-04dd-4dbe-a4e4-bd50d2ac4b2c",
+              "create_time": "2026-08-01T12:26:16.257228Z",
+              "update_time": "2026-08-01T12:26:16.257228Z",
+              "meta_data": {
+                "contract": "declared"
+              },
+              "description": "ready contract",
+              "workflow_node_template_uuid": "31e9a116-5a98-44db-978f-8850e1ffb6b2",
+              "handle_key": "ready",
+              "io_type": "source",
+              "display_name": "Ready",
+              "type": "any",
+              "required": false,
+              "data_source": "dependency",
+              "data_key": "ready"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/authoring/generate-python",
+      "body": {
+        "workflow_uuid": "10000000-0000-4000-8000-000000000001",
+        "revision": 2,
+        "source_uri": "package://production_lab/workflows/demo.py",
+        "graph": {
+          "workflow": {
+            "uuid": "10000000-0000-4000-8000-000000000001",
+            "create_time": "2026-08-01T12:26:16.256169Z",
+            "update_time": "2026-08-01T12:26:18.075653Z",
+            "meta_data": {
+              "unilab": {
+                "input_contract": {
+                  "parameters": [
+                    {
+                      "name": "sample",
+                      "required": true,
+                      "schema": {
+                        "$slot": "ResourceSlot"
+                      }
+                    },
+                    {
+                      "default": 7,
+                      "name": "cycles",
+                      "required": false,
+                      "schema": {
+                        "maximum": 10,
+                        "minimum": 1,
+                        "type": "integer"
+                      }
+                    },
+                    {
+                      "default": "safe",
+                      "name": "mode",
+                      "required": false,
+                      "schema": {
+                        "enum": [
+                          "fast",
+                          "safe"
+                        ],
+                        "type": "string"
+                      }
+                    },
+                    {
+                      "default": null,
+                      "name": "note",
+                      "required": false,
+                      "schema": {
+                        "anyOf": [
+                          {
+                            "maxLength": 200,
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      }
+                    }
+                  ],
+                  "version": 1
+                },
+                "output_bindings": {
+                  "report": {
+                    "kind": "node_output",
+                    "source_handle_uuid": "a34c78d9-9376-475b-a798-53fd3aba990b",
+                    "workflow_node_uuid": "20000000-0000-4000-8000-000000000002"
+                  },
+                  "sample": {
+                    "kind": "node_output",
+                    "source_handle_uuid": "f64b28a6-5fa1-4e45-8adc-cd862542c899",
+                    "workflow_node_uuid": "20000000-0000-4000-8000-000000000001"
+                  }
+                },
+                "output_contract": {
+                  "outputs": [
+                    {
+                      "implicit": false,
+                      "name": "sample",
+                      "schema": {
+                        "$slot": "ResourceSlot"
+                      }
+                    },
+                    {
+                      "implicit": false,
+                      "name": "report",
+                      "schema": {
+                        "type": "string"
+                      }
+                    }
+                  ],
+                  "version": 1
+                }
+              }
+            },
+            "description": "Prepare and analyze one sample.",
+            "name": "Sample preparation",
+            "tags": [],
+            "revision": 2
+          },
+          "nodes": [
+            {
+              "uuid": "20000000-0000-4000-8000-000000000001",
+              "create_time": "2026-08-01T12:26:18.076914Z",
+              "update_time": "2026-08-01T12:26:18.076914Z",
+              "meta_data": {
+                "unilab": {
+                  "input_bindings": {
+                    "32044387-eecc-41c4-b911-8929bf7e6bbe": {
+                      "parameter": "note"
+                    },
+                    "53238df0-3278-426e-9b85-e7d1b25262aa": {
+                      "parameter": "cycles"
+                    },
+                    "94bb4d0f-da6c-4791-90fe-91007cbd1530": {
+                      "parameter": "sample"
+                    }
+                  }
+                }
+              },
+              "workflow_uuid": "10000000-0000-4000-8000-000000000001",
+              "name": "imported_json_node",
+              "status": "idle",
+              "type": "compute",
+              "pose": {},
+              "param": {},
+              "execution_policy": {},
+              "disabled": false,
+              "minimized": false,
+              "workflow_node_template_uuid": "3ffd9d5f-0b9a-44db-8eb3-07d7f585317c",
+              "action_name": "prepare"
+            },
+            {
+              "uuid": "20000000-0000-4000-8000-000000000002",
+              "create_time": "2026-08-01T12:26:18.076914Z",
+              "update_time": "2026-08-01T12:26:18.076914Z",
+              "meta_data": {
+                "unilab": {
+                  "input_bindings": {
+                    "828b29c8-b716-4f81-8846-23090bf7b3f2": {
+                      "parameter": "mode"
+                    }
+                  }
+                }
+              },
+              "workflow_uuid": "10000000-0000-4000-8000-000000000001",
+              "name": "analyzed",
+              "status": "idle",
+              "type": "compute",
+              "pose": {},
+              "param": {},
+              "execution_policy": {},
+              "disabled": false,
+              "minimized": false,
+              "workflow_node_template_uuid": "31e9a116-5a98-44db-978f-8850e1ffb6b2",
+              "action_name": "analyze"
+            }
+          ],
+          "edges": [
+            {
+              "uuid": "4dbfa793-3a3b-5309-8bb4-75676ddd56ea",
+              "create_time": "2026-08-01T12:26:18.076914Z",
+              "update_time": "2026-08-01T12:26:18.076914Z",
+              "meta_data": {},
+              "source_node_uuid": "20000000-0000-4000-8000-000000000001",
+              "target_node_uuid": "20000000-0000-4000-8000-000000000002",
+              "source_handle_uuid": "f64b28a6-5fa1-4e45-8adc-cd862542c899",
+              "target_handle_uuid": "82b16e0f-94d7-4174-8ac3-92df47372450"
+            }
+          ],
+          "node_templates": [
+            {
+              "uuid": "3ffd9d5f-0b9a-44db-8eb3-07d7f585317c",
+              "create_time": "2026-08-01T12:26:16.256847Z",
+              "update_time": "2026-08-01T12:26:16.256847Z",
+              "meta_data": {
+                "catalog_owner": "backend"
+              },
+              "description": "prepare action",
+              "resource_template_uuid": "31000000-0000-4000-8000-000000000001",
+              "name": "prepare",
+              "display_name": "Prepare",
+              "goal": {},
+              "goal_default": {},
+              "feedback": {},
+              "result": {},
+              "type": "action",
+              "node_type": "compute",
+              "class": "lab.devices:Reactor"
+            },
+            {
+              "uuid": "31e9a116-5a98-44db-978f-8850e1ffb6b2",
+              "create_time": "2026-08-01T12:26:16.257128Z",
+              "update_time": "2026-08-01T12:26:16.257128Z",
+              "meta_data": {
+                "catalog_owner": "backend"
+              },
+              "description": "analyze action",
+              "resource_template_uuid": "31000000-0000-4000-8000-000000000001",
+              "name": "analyze",
+              "display_name": "Analyze",
+              "goal": {},
+              "goal_default": {},
+              "feedback": {},
+              "result": {},
+              "type": "action",
+              "node_type": "compute",
+              "class": "lab.devices:Reactor"
+            }
+          ],
+          "handle_templates": [
+            {
+              "uuid": "94bb4d0f-da6c-4791-90fe-91007cbd1530",
+              "create_time": "2026-08-01T12:26:16.256942Z",
+              "update_time": "2026-08-01T12:26:16.256942Z",
+              "meta_data": {
+                "contract": "declared"
+              },
+              "description": "sample contract",
+              "workflow_node_template_uuid": "3ffd9d5f-0b9a-44db-8eb3-07d7f585317c",
+              "handle_key": "sample",
+              "io_type": "target",
+              "display_name": "Sample",
+              "type": "ResourceSlot",
+              "required": true,
+              "data_source": "executor",
+              "data_key": "sample"
+            },
+            {
+              "uuid": "53238df0-3278-426e-9b85-e7d1b25262aa",
+              "create_time": "2026-08-01T12:26:16.256992Z",
+              "update_time": "2026-08-01T12:26:16.256992Z",
+              "meta_data": {
+                "contract": "declared"
+              },
+              "description": "cycles contract",
+              "workflow_node_template_uuid": "3ffd9d5f-0b9a-44db-8eb3-07d7f585317c",
+              "handle_key": "cycles",
+              "io_type": "target",
+              "display_name": "Cycles",
+              "type": "integer",
+              "required": true,
+              "data_source": "executor",
+              "data_key": "cycles"
+            },
+            {
+              "uuid": "32044387-eecc-41c4-b911-8929bf7e6bbe",
+              "create_time": "2026-08-01T12:26:16.257019Z",
+              "update_time": "2026-08-01T12:26:16.257019Z",
+              "meta_data": {
+                "contract": "declared"
+              },
+              "description": "note contract",
+              "workflow_node_template_uuid": "3ffd9d5f-0b9a-44db-8eb3-07d7f585317c",
+              "handle_key": "note",
+              "io_type": "target",
+              "display_name": "Note",
+              "type": "string",
+              "required": false,
+              "data_source": "executor",
+              "data_key": "note"
+            },
+            {
+              "uuid": "7c40580e-1047-44dc-bfbe-f647aaaf760c",
+              "create_time": "2026-08-01T12:26:16.257045Z",
+              "update_time": "2026-08-01T12:26:16.257045Z",
+              "meta_data": {
+                "contract": "declared"
+              },
+              "description": "ready contract",
+              "workflow_node_template_uuid": "3ffd9d5f-0b9a-44db-8eb3-07d7f585317c",
+              "handle_key": "ready",
+              "io_type": "target",
+              "display_name": "Ready",
+              "type": "any",
+              "required": false,
+              "data_source": "dependency",
+              "data_key": "ready"
+            },
+            {
+              "uuid": "f64b28a6-5fa1-4e45-8adc-cd862542c899",
+              "create_time": "2026-08-01T12:26:16.257063Z",
+              "update_time": "2026-08-01T12:26:16.257063Z",
+              "meta_data": {
+                "contract": "declared"
+              },
+              "description": "prepared contract",
+              "workflow_node_template_uuid": "3ffd9d5f-0b9a-44db-8eb3-07d7f585317c",
+              "handle_key": "prepared",
+              "io_type": "source",
+              "display_name": "Prepared",
+              "type": "ResourceSlot",
+              "required": false,
+              "data_source": "executor",
+              "data_key": "prepared"
+            },
+            {
+              "uuid": "5c34a720-f72e-4d42-9834-d644ade6ec4f",
+              "create_time": "2026-08-01T12:26:16.257082Z",
+              "update_time": "2026-08-01T12:26:16.257082Z",
+              "meta_data": {
+                "contract": "declared"
+              },
+              "description": "report contract",
+              "workflow_node_template_uuid": "3ffd9d5f-0b9a-44db-8eb3-07d7f585317c",
+              "handle_key": "report",
+              "io_type": "source",
+              "display_name": "Report",
+              "type": "string",
+              "required": false,
+              "data_source": "executor",
+              "data_key": "report"
+            },
+            {
+              "uuid": "9eeb1a3f-1ea7-4774-94a1-bd82d2f6f881",
+              "create_time": "2026-08-01T12:26:16.257102Z",
+              "update_time": "2026-08-01T12:26:16.257102Z",
+              "meta_data": {
+                "contract": "declared"
+              },
+              "description": "ready contract",
+              "workflow_node_template_uuid": "3ffd9d5f-0b9a-44db-8eb3-07d7f585317c",
+              "handle_key": "ready",
+              "io_type": "source",
+              "display_name": "Ready",
+              "type": "any",
+              "required": false,
+              "data_source": "dependency",
+              "data_key": "ready"
+            },
+            {
+              "uuid": "82b16e0f-94d7-4174-8ac3-92df47372450",
+              "create_time": "2026-08-01T12:26:16.257154Z",
+              "update_time": "2026-08-01T12:26:16.257154Z",
+              "meta_data": {
+                "contract": "declared"
+              },
+              "description": "prepared contract",
+              "workflow_node_template_uuid": "31e9a116-5a98-44db-978f-8850e1ffb6b2",
+              "handle_key": "prepared",
+              "io_type": "target",
+              "display_name": "Prepared",
+              "type": "ResourceSlot",
+              "required": true,
+              "data_source": "executor",
+              "data_key": "prepared"
+            },
+            {
+              "uuid": "828b29c8-b716-4f81-8846-23090bf7b3f2",
+              "create_time": "2026-08-01T12:26:16.257174Z",
+              "update_time": "2026-08-01T12:26:16.257174Z",
+              "meta_data": {
+                "contract": "declared"
+              },
+              "description": "label contract",
+              "workflow_node_template_uuid": "31e9a116-5a98-44db-978f-8850e1ffb6b2",
+              "handle_key": "label",
+              "io_type": "target",
+              "display_name": "Label",
+              "type": "string",
+              "required": true,
+              "data_source": "executor",
+              "data_key": "label"
+            },
+            {
+              "uuid": "35afcf90-8c9b-4c71-8533-8f4d585fe5dc",
+              "create_time": "2026-08-01T12:26:16.257196Z",
+              "update_time": "2026-08-01T12:26:16.257196Z",
+              "meta_data": {
+                "contract": "declared"
+              },
+              "description": "ready contract",
+              "workflow_node_template_uuid": "31e9a116-5a98-44db-978f-8850e1ffb6b2",
+              "handle_key": "ready",
+              "io_type": "target",
+              "display_name": "Ready",
+              "type": "any",
+              "required": false,
+              "data_source": "dependency",
+              "data_key": "ready"
+            },
+            {
+              "uuid": "a34c78d9-9376-475b-a798-53fd3aba990b",
+              "create_time": "2026-08-01T12:26:16.257211Z",
+              "update_time": "2026-08-01T12:26:16.257211Z",
+              "meta_data": {
+                "contract": "declared"
+              },
+              "description": "report contract",
+              "workflow_node_template_uuid": "31e9a116-5a98-44db-978f-8850e1ffb6b2",
+              "handle_key": "report",
+              "io_type": "source",
+              "display_name": "Report",
+              "type": "string",
+              "required": false,
+              "data_source": "executor",
+              "data_key": "report"
+            },
+            {
+              "uuid": "09da294f-04dd-4dbe-a4e4-bd50d2ac4b2c",
+              "create_time": "2026-08-01T12:26:16.257228Z",
+              "update_time": "2026-08-01T12:26:16.257228Z",
+              "meta_data": {
+                "contract": "declared"
+              },
+              "description": "ready contract",
+              "workflow_node_template_uuid": "31e9a116-5a98-44db-978f-8850e1ffb6b2",
+              "handle_key": "ready",
+              "io_type": "source",
+              "display_name": "Ready",
+              "type": "any",
+              "required": false,
+              "data_source": "dependency",
+              "data_key": "ready"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/workflows/10000000-0000-4000-8000-000000000001/authoring/draft",
+      "body": {
+        "python_source": "from typing import Annotated, Literal\nfrom pydantic import Field\nfrom lab.devices import Reactor\nfrom unilabos.registry.placeholder_type import ResourceSlot\nfrom unilabos.workflow.authoring import device, workflow_definition, workflow_output\n\n\nreactor: Reactor = device()\n\n\n@workflow_definition(\n    workflow_uuid='10000000-0000-4000-8000-000000000001',\n    displayname='Sample preparation',\n    description='Prepare and analyze one sample.',\n)\ndef sample_preparation(\n    *,\n    sample: ResourceSlot,\n    cycles: Annotated[int, Field(ge=1, le=10)] = 7,\n    mode: Literal['fast', 'safe'] = 'safe',\n    note: Annotated[str | None, Field(max_length=200)] = None,\n):\n    # unilab:node_uuid=20000000-0000-4000-8000-000000000001\n    imported_json_node = reactor.prepare(cycles=cycles, note=note, sample=sample)\n    # unilab:node_uuid=20000000-0000-4000-8000-000000000002\n    analyzed = reactor.analyze(label=mode, prepared=imported_json_node.prepared)\n    return workflow_output(sample=imported_json_node.prepared, report=analyzed.report)\n",
+        "expected_draft_hash": "sha256:b447e35d8cff4df1c686b258a43500397293a4a53de00af9d85f0a5483177866",
+        "expected_workflow_revision": 2
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/workflows/10000000-0000-4000-8000-000000000001/authoring/apply",
+      "body": {
+        "candidate_hash": "sha256:e1bc53c8ac4c9e66e2d5d045be6ead218682a054c9187dc7efdf27e12d756c74"
+      }
+    }
+  ],
+  "apiResponses": [
+    {
+      "method": "GET",
+      "path": "/api/v1/health",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/events",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/events",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflow-tasks",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflows/10000000-0000-4000-8000-000000000001/authoring",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflow-tasks",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflows/10000000-0000-4000-8000-000000000001/authoring",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflows/10000000-0000-4000-8000-000000000001/authoring",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/authoring/generate-python",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/authoring/generate-python",
+      "status": 200
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/workflows/10000000-0000-4000-8000-000000000001/authoring/draft",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/workflows/10000000-0000-4000-8000-000000000001/authoring/apply",
+      "status": 200
+    }
+  ]
+}

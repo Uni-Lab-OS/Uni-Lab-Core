@@ -1,0 +1,88 @@
+{
+  "apiUrl": "http://127.0.0.1:42401",
+  "browserErrors": [],
+  "apiRequests": [
+    {
+      "method": "GET",
+      "path": "/api/v1/health",
+      "body": null
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/events",
+      "body": null
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/events",
+      "body": null
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflow-tasks",
+      "body": null
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflows/10000000-0000-4000-8000-000000000001/authoring",
+      "body": null
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflow-tasks",
+      "body": null
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflows/10000000-0000-4000-8000-000000000001/authoring",
+      "body": null
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflows/10000000-0000-4000-8000-000000000001/authoring",
+      "body": null
+    }
+  ],
+  "apiResponses": [
+    {
+      "method": "GET",
+      "path": "/api/v1/health",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/events",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/events",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflow-tasks",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflows/10000000-0000-4000-8000-000000000001/authoring",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflow-tasks",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflows/10000000-0000-4000-8000-000000000001/authoring",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflows/10000000-0000-4000-8000-000000000001/authoring",
+      "status": 200
+    }
+  ]
+}
