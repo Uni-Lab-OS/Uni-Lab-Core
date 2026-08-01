@@ -5,8 +5,8 @@
 - FE candidate: `Uni-Lab-OS/uni-lab-fe@b2547ee51fd9d7e6f9f277c407e3503c59cc4085`
 - FE integration: `Uni-Lab-OS/uni-lab-fe@a641fa6fa38b223ec90648a2c308c67d4a57b6fd`
 - Tested OS checkout: `Uni-Lab-OS/Uni-Lab-OS@68c364e2e70c228a9598fbe1f4a10510602b51c2`
-- OS integration after the final documentation-only matrix update:
-  `Uni-Lab-OS/Uni-Lab-OS@b05793d9dfaefecf048c98fb709eca94b722fe27`
+- OS integration after the Accepted-state documentation-only matrix update:
+  `Uni-Lab-OS/Uni-Lab-OS@91b00dd030483058a6d0aafc42f143de829cc1bc`
 - Core gate baseline: `Uni-Lab-OS/Uni-Lab-Core@0ecb9448ffc4bfb4d05687f5234784f454d6664c`
 
 The production OS tree did not change between the tested checkout and the
