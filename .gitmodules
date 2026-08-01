@@ -1,0 +1,6 @@
+[submodule "Uni-Lab-OS"]
+	path = Uni-Lab-OS
+	url = git@github.com:Uni-Lab-OS/Uni-Lab-OS.git
+[submodule "uni-lab-fe"]
+	path = uni-lab-fe
+	url = git@github.com:Uni-Lab-OS/uni-lab-fe.git
