@@ -1,0 +1,592 @@
+{
+  "pins": {
+    "fe": "27212c7674f746d0ac941ccf592dd57644983272",
+    "os": "3eb8a59014267f3b6161c36dcbc882c4aa3b9e90",
+    "coreBaseline": "9a7467cd4d91a008bdd4b8f754d73fafbb3cacc8"
+  },
+  "runtimeRequests": [
+    {
+      "method": "GET",
+      "path": "/api/v1/health",
+      "lastEventId": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/events",
+      "lastEventId": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/events",
+      "lastEventId": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflow-tasks?page=1&page_size=1&workflow_uuid=10000000-0000-4000-8000-000000000003",
+      "lastEventId": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflows/10000000-0000-4000-8000-000000000003/authoring",
+      "lastEventId": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflow-tasks?page=1&page_size=1&workflow_uuid=10000000-0000-4000-8000-000000000003",
+      "lastEventId": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflows/10000000-0000-4000-8000-000000000003/authoring",
+      "lastEventId": ""
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/authoring/generate-python",
+      "lastEventId": ""
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/authoring/generate-python",
+      "lastEventId": ""
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/workflows/10000000-0000-4000-8000-000000000003/authoring/draft",
+      "lastEventId": ""
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/workflows/10000000-0000-4000-8000-000000000003/authoring/apply",
+      "lastEventId": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/events",
+      "lastEventId": "3"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/events",
+      "lastEventId": "3"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflows/10000000-0000-4000-8000-000000000003/authoring",
+      "lastEventId": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflow-tasks?page=1&page_size=1&workflow_uuid=10000000-0000-4000-8000-000000000003",
+      "lastEventId": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflow-tasks/64307424-c96e-4b8f-aa98-a1149aa13331",
+      "lastEventId": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflow-tasks/64307424-c96e-4b8f-aa98-a1149aa13331/jobs",
+      "lastEventId": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflows/10000000-0000-4000-8000-000000000003/authoring",
+      "lastEventId": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflow-tasks/64307424-c96e-4b8f-aa98-a1149aa13331",
+      "lastEventId": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflow-tasks/64307424-c96e-4b8f-aa98-a1149aa13331/jobs",
+      "lastEventId": ""
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/authoring/generate-python",
+      "lastEventId": ""
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/workflows/10000000-0000-4000-8000-000000000003/authoring/draft",
+      "lastEventId": ""
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/workflows/10000000-0000-4000-8000-000000000003/authoring/apply",
+      "lastEventId": ""
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/workflow-tasks",
+      "lastEventId": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflow-tasks/2e66fa3f-6996-45c2-9ea2-f1e22919ace7",
+      "lastEventId": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflow-tasks/2e66fa3f-6996-45c2-9ea2-f1e22919ace7/jobs",
+      "lastEventId": ""
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/workflow-tasks/2e66fa3f-6996-45c2-9ea2-f1e22919ace7/commands",
+      "lastEventId": ""
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/workflow-tasks/2e66fa3f-6996-45c2-9ea2-f1e22919ace7/commands",
+      "lastEventId": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflows/10000000-0000-4000-8000-000000000003/authoring",
+      "lastEventId": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflow-tasks/2e66fa3f-6996-45c2-9ea2-f1e22919ace7",
+      "lastEventId": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflow-tasks/2e66fa3f-6996-45c2-9ea2-f1e22919ace7/jobs",
+      "lastEventId": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflow-tasks/2e66fa3f-6996-45c2-9ea2-f1e22919ace7",
+      "lastEventId": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflow-tasks/2e66fa3f-6996-45c2-9ea2-f1e22919ace7/jobs",
+      "lastEventId": ""
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/workflow-tasks/2e66fa3f-6996-45c2-9ea2-f1e22919ace7/commands",
+      "lastEventId": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflow-tasks/2e66fa3f-6996-45c2-9ea2-f1e22919ace7",
+      "lastEventId": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflow-tasks/2e66fa3f-6996-45c2-9ea2-f1e22919ace7/jobs",
+      "lastEventId": ""
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/workflow-tasks/2e66fa3f-6996-45c2-9ea2-f1e22919ace7/commands",
+      "lastEventId": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflow-tasks/2e66fa3f-6996-45c2-9ea2-f1e22919ace7",
+      "lastEventId": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflow-tasks/2e66fa3f-6996-45c2-9ea2-f1e22919ace7/jobs",
+      "lastEventId": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/health",
+      "lastEventId": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/events",
+      "lastEventId": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/events",
+      "lastEventId": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflow-tasks?page=1&page_size=1&workflow_uuid=10000000-0000-4000-8000-000000000003",
+      "lastEventId": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflows/10000000-0000-4000-8000-000000000003/authoring",
+      "lastEventId": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflow-tasks/2e66fa3f-6996-45c2-9ea2-f1e22919ace7",
+      "lastEventId": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflow-tasks/2e66fa3f-6996-45c2-9ea2-f1e22919ace7/jobs",
+      "lastEventId": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflows/10000000-0000-4000-8000-000000000003/authoring",
+      "lastEventId": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflow-tasks/2e66fa3f-6996-45c2-9ea2-f1e22919ace7",
+      "lastEventId": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflow-tasks/2e66fa3f-6996-45c2-9ea2-f1e22919ace7/jobs",
+      "lastEventId": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflows/10000000-0000-4000-8000-000000000003/authoring",
+      "lastEventId": ""
+    }
+  ],
+  "runtimeResponses": [
+    {
+      "method": "GET",
+      "path": "/api/v1/health",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/events",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/events",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflow-tasks?page=1&page_size=1&workflow_uuid=10000000-0000-4000-8000-000000000003",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflows/10000000-0000-4000-8000-000000000003/authoring",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflow-tasks?page=1&page_size=1&workflow_uuid=10000000-0000-4000-8000-000000000003",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflows/10000000-0000-4000-8000-000000000003/authoring",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/authoring/generate-python",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/authoring/generate-python",
+      "status": 200
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/workflows/10000000-0000-4000-8000-000000000003/authoring/draft",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/workflows/10000000-0000-4000-8000-000000000003/authoring/apply",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/events",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/events",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflow-tasks?page=1&page_size=1&workflow_uuid=10000000-0000-4000-8000-000000000003",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflows/10000000-0000-4000-8000-000000000003/authoring",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflow-tasks/64307424-c96e-4b8f-aa98-a1149aa13331",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflow-tasks/64307424-c96e-4b8f-aa98-a1149aa13331/jobs",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflows/10000000-0000-4000-8000-000000000003/authoring",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflow-tasks/64307424-c96e-4b8f-aa98-a1149aa13331",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflow-tasks/64307424-c96e-4b8f-aa98-a1149aa13331/jobs",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/authoring/generate-python",
+      "status": 200
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/workflows/10000000-0000-4000-8000-000000000003/authoring/draft",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/workflows/10000000-0000-4000-8000-000000000003/authoring/apply",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/workflow-tasks",
+      "status": 201
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflow-tasks/2e66fa3f-6996-45c2-9ea2-f1e22919ace7",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflow-tasks/2e66fa3f-6996-45c2-9ea2-f1e22919ace7/jobs",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/workflow-tasks/2e66fa3f-6996-45c2-9ea2-f1e22919ace7/commands",
+      "status": 201
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/workflow-tasks/2e66fa3f-6996-45c2-9ea2-f1e22919ace7/commands",
+      "status": 201
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflow-tasks/2e66fa3f-6996-45c2-9ea2-f1e22919ace7",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflow-tasks/2e66fa3f-6996-45c2-9ea2-f1e22919ace7/jobs",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflows/10000000-0000-4000-8000-000000000003/authoring",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflow-tasks/2e66fa3f-6996-45c2-9ea2-f1e22919ace7",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflow-tasks/2e66fa3f-6996-45c2-9ea2-f1e22919ace7/jobs",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/workflow-tasks/2e66fa3f-6996-45c2-9ea2-f1e22919ace7/commands",
+      "status": 201
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflow-tasks/2e66fa3f-6996-45c2-9ea2-f1e22919ace7",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflow-tasks/2e66fa3f-6996-45c2-9ea2-f1e22919ace7/jobs",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/workflow-tasks/2e66fa3f-6996-45c2-9ea2-f1e22919ace7/commands",
+      "status": 201
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflow-tasks/2e66fa3f-6996-45c2-9ea2-f1e22919ace7",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflow-tasks/2e66fa3f-6996-45c2-9ea2-f1e22919ace7/jobs",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/health",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/events",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflow-tasks?page=1&page_size=1&workflow_uuid=10000000-0000-4000-8000-000000000003",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/events",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflows/10000000-0000-4000-8000-000000000003/authoring",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflow-tasks/2e66fa3f-6996-45c2-9ea2-f1e22919ace7",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflow-tasks/2e66fa3f-6996-45c2-9ea2-f1e22919ace7/jobs",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflows/10000000-0000-4000-8000-000000000003/authoring",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflow-tasks/2e66fa3f-6996-45c2-9ea2-f1e22919ace7",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflow-tasks/2e66fa3f-6996-45c2-9ea2-f1e22919ace7/jobs",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflows/10000000-0000-4000-8000-000000000003/authoring",
+      "status": 200
+    }
+  ],
+  "websocketUrls": [],
+  "forbiddenRequests": [],
+  "apiChecks": [
+    {
+      "name": "terminal-race",
+      "taskUuid": "64307424-c96e-4b8f-aa98-a1149aa13331",
+      "command": {
+        "consumed_at": "2026-08-01T07:19:53.976495Z",
+        "create_time": "2026-08-01T07:19:53.975722Z",
+        "description": "UI1D deterministic terminal race",
+        "idempotency_key": "ui1d-terminal-race",
+        "meta_data": {
+          "source": "ui1d-final-gate"
+        },
+        "result": {
+          "error_code": "invalid_transition",
+          "outcome": "rejected"
+        },
+        "status": "rejected",
+        "trace_context": {},
+        "type": "cancel",
+        "update_time": "2026-08-01T07:19:53.976495Z",
+        "uuid": "51f67589-dfba-4c55-b99d-c53d52b0b792",
+        "workflow_task_uuid": "64307424-c96e-4b8f-aa98-a1149aa13331"
+      }
+    },
+    {
+      "name": "command-replay-and-conflict",
+      "accepted": {
+        "code": 0,
+        "data": {
+          "uuid": "ffd178ca-dbfc-44c9-b935-e387bc11a0f7",
+          "create_time": "2026-08-01T07:19:58.460999Z",
+          "update_time": "2026-08-01T07:19:58.460999Z",
+          "meta_data": {},
+          "workflow_task_uuid": "2e66fa3f-6996-45c2-9ea2-f1e22919ace7",
+          "type": "step",
+          "idempotency_key": "workflow-ui1b:2e66fa3f-6996-45c2-9ea2-f1e22919ace7:step:1785568798455:1",
+          "status": "pending",
+          "result": {},
+          "trace_context": {}
+        }
+      },
+      "replay": {
+        "code": 0,
+        "data": {
+          "uuid": "ffd178ca-dbfc-44c9-b935-e387bc11a0f7",
+          "create_time": "2026-08-01T07:19:58.460999Z",
+          "update_time": "2026-08-01T07:19:58.470602Z",
+          "meta_data": {},
+          "workflow_task_uuid": "2e66fa3f-6996-45c2-9ea2-f1e22919ace7",
+          "type": "step",
+          "idempotency_key": "workflow-ui1b:2e66fa3f-6996-45c2-9ea2-f1e22919ace7:step:1785568798455:1",
+          "status": "succeeded",
+          "result": {
+            "outcome": "applied"
+          },
+          "trace_context": {},
+          "consumed_at": "2026-08-01T07:19:58.470602Z"
+        }
+      },
+      "conflictStatus": 409
+    }
+  ],
+  "expectedNetworkDiagnostics": [
+    "Failed to load resource: net::ERR_INCOMPLETE_CHUNKED_ENCODING",
+    "Failed to load resource: net::ERR_INCOMPLETE_CHUNKED_ENCODING"
+  ],
+  "applicationErrors": [],
+  "pageErrors": [],
+  "screenshots": [
+    "/home/changjunhan/Uni-Lab-Core/e2e-artifacts/ui1d-runtime-final-gate/01-applied-original-workbench.png",
+    "/home/changjunhan/Uni-Lab-Core/e2e-artifacts/ui1d-runtime-final-gate/02-terminal-race-sse-disconnected.png",
+    "/home/changjunhan/Uni-Lab-Core/e2e-artifacts/ui1d-runtime-final-gate/03-terminal-race-restored.png",
+    "/home/changjunhan/Uni-Lab-Core/e2e-artifacts/ui1d-runtime-final-gate/04-step-task-and-jobs.png",
+    "/home/changjunhan/Uni-Lab-Core/e2e-artifacts/ui1d-runtime-final-gate/05-step-replay-and-conflict.png",
+    "/home/changjunhan/Uni-Lab-Core/e2e-artifacts/ui1d-runtime-final-gate/06-resume-accepted-and-applied.png",
+    "/home/changjunhan/Uni-Lab-Core/e2e-artifacts/ui1d-runtime-final-gate/07-pause-accepted-and-applied.png",
+    "/home/changjunhan/Uni-Lab-Core/e2e-artifacts/ui1d-runtime-final-gate/08-cancel-terminal-state.png",
+    "/home/changjunhan/Uni-Lab-Core/e2e-artifacts/ui1d-runtime-final-gate/09-reload-restores-latest-task.png"
+  ]
+}
