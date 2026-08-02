@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "workflow_uuid": "10000000-0000-4000-8000-000000000007",
+  "workflow_revision": 2,
+  "invocation_uuid": "20000000-0000-4000-8000-000000000062",
+  "internal_node_uuids": [
+    "8a61ec15-a10e-50e4-8204-29ab0ac44a1e"
+  ],
+  "boundary_edges": [
+    {
+      "source_node_uuid": "20000000-0000-4000-8000-000000000062",
+      "source_handle_uuid": "7dcddd19-4d17-4d26-b972-10e1e79216b8",
+      "target_node_uuid": "20000000-0000-4000-8000-000000000064",
+      "target_handle_uuid": "4e6a9139-a0fb-47ef-bdd4-1d913e242966"
+    },
+    {
+      "source_node_uuid": "20000000-0000-4000-8000-000000000063",
+      "source_handle_uuid": "3123e5e1-b092-4845-aec8-93ac30ca2875",
+      "target_node_uuid": "20000000-0000-4000-8000-000000000062",
+      "target_handle_uuid": "9c392d75-674e-4924-98b5-2f8480f3973c"
+    }
+  ],
+  "toggle_requests": [],
+  "toggle_authoring_mutations": 0,
+  "toggle_runtime_requests": 0,
+  "websocket_count": 0,
+  "application_error_count": 0,
+  "page_error_count": 0,
+  "reload_reset_to_collapsed": true,
+  "graph_unchanged": true,
+  "python_unchanged": true
+}
