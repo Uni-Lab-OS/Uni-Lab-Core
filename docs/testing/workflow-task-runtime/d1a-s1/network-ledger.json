@@ -1,0 +1,234 @@
+{
+  "apiUrl": "http://127.0.0.1:32849",
+  "exactShas": {
+    "core": "12ef72cc9a72e77581dae3e9eda7b6828ddee674",
+    "os": "2c65cd139605985047d5ecf82592c8850636cbd9",
+    "fe": "b502e4379250f7b5d3b3ed7506d4476b50353538"
+  },
+  "task": {
+    "taskUuid": "d52d83a2-a5a7-4a9f-a3e8-f9ac02de98d1",
+    "jobUuid": "757b8ee8-0c9e-4151-bbb4-8abdc551cb38"
+  },
+  "schedulerWireChecks": {
+    "timeline": {
+      "path": "/api/v1/timeline",
+      "status": 200,
+      "publicJobUuid": "757b8ee8-0c9e-4151-bbb4-8abdc551cb38",
+      "opaqueNodeIdentity": "757b8ee8-0c9e-4151-bbb4-8abdc551cb38",
+      "internalSourceFields": 0
+    },
+    "monitorSnapshot": {
+      "path": "/api/v1/monitor/snapshot",
+      "status": 200,
+      "containsPublicJobUuid": true,
+      "internalSourceFields": 0
+    }
+  },
+  "browserRequests": [
+    {
+      "method": "GET",
+      "path": "/api/v1/health",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/devices",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflow-node-templates",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflow-node-templates/538e0eec-3efe-4cb6-abc1-fc580974f241",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/device-action-tasks",
+      "body": {
+        "authority_id": "os-local",
+        "template_catalog_fingerprint": "sha256:4a7580ea12d44afe59bf8b8597fbeb443f76ac0589c24d96865251cba9c74da0",
+        "workflow_node_template_uuid": "538e0eec-3efe-4cb6-abc1-fc580974f241",
+        "device_id": "D1ADevice1",
+        "input": {
+          "duration_seconds": 3
+        },
+        "idempotency_key": "6bad5dfc-dd2b-4ada-b2bb-f9cd0ed57495",
+        "description": "设备页单动作运行"
+      },
+      "status": 201
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/devices",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/device-action-tasks/d52d83a2-a5a7-4a9f-a3e8-f9ac02de98d1",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/events",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/device-action-tasks/d52d83a2-a5a7-4a9f-a3e8-f9ac02de98d1",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/health",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/devices",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/health",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/health",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/devices",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/health",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/device-action-tasks/d52d83a2-a5a7-4a9f-a3e8-f9ac02de98d1",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflow-node-jobs/757b8ee8-0c9e-4151-bbb4-8abdc551cb38/feedback",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/devices",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/health",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/device-action-tasks/d52d83a2-a5a7-4a9f-a3e8-f9ac02de98d1",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflow-node-jobs/757b8ee8-0c9e-4151-bbb4-8abdc551cb38/feedback",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/devices",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/device-action-tasks",
+      "body": {
+        "authority_id": "os-local",
+        "template_catalog_fingerprint": "sha256:4a7580ea12d44afe59bf8b8597fbeb443f76ac0589c24d96865251cba9c74da0",
+        "workflow_node_template_uuid": "538e0eec-3efe-4cb6-abc1-fc580974f241",
+        "device_id": "D1ADevice1",
+        "input": {
+          "duration_seconds": 1
+        },
+        "idempotency_key": "8ab27f15-9453-4176-97ac-0c5b330595f4",
+        "description": "设备页单动作运行"
+      },
+      "status": 201
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/devices",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/device-action-tasks/7daafd57-eb47-4d7a-97cb-38068c431c2f",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/events",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflow-node-jobs/485d144c-fb71-4e0d-82da-7431a55df1ed/feedback",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/device-action-tasks/7daafd57-eb47-4d7a-97cb-38068c431c2f",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/device-action-tasks/7daafd57-eb47-4d7a-97cb-38068c431c2f",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/device-action-tasks/7daafd57-eb47-4d7a-97cb-38068c431c2f",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflow-node-jobs/485d144c-fb71-4e0d-82da-7431a55df1ed/feedback",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/devices",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/health",
+      "status": 200
+    }
+  ],
+  "websocketUrls": [],
+  "browserErrors": [],
+  "forbiddenRoutes": {
+    "legacyRuntimeRuns": 0,
+    "legacyRuntimeEvents": 0,
+    "frontendDirectEdgeWebSocket": 0,
+    "systemWorkflowRead": 0
+  },
+  "screenshots": [
+    "01-parameter-and-busy-holder.png",
+    "02-original-action-form-ready.png",
+    "03-durable-pending-accepted.png",
+    "04-running-feedback-event-stream.png",
+    "05-device-busy-during-run.png",
+    "06-terminal-result-in-original-panel.png",
+    "07-free-and-rerun-enabled.png",
+    "08-second-formal-run-succeeded.png"
+  ]
+}
