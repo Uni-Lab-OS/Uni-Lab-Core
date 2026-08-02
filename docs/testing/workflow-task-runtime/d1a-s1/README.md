@@ -2,13 +2,14 @@
 
 ## Published pins
 
-- Private OS dev: `Uni-Lab-OS/Uni-Lab-OS:dev@f660fd83dd8008c3947d75241a1e222f30ad7852`
+- Private OS dev: `Uni-Lab-OS/Uni-Lab-OS:dev@5588b6b697c50533057a0200e0ca8b5174443ca5`
 - Private OS dev production merge: `f4d9c1e4fb007ff26c8a867d0d2e1f43eafd404b`
 - OS integration merge: `Uni-Lab-OS/Uni-Lab-OS@25e71d1aeff1e13e9ab3405c2302cf5a4bf15b7a`
 - Current OS integration documentation successor: `cf6f81da8bf41950c8779555c60a7b7349184fbe`
 - OS aligned E2E checkout: `2c65cd139605985047d5ecf82592c8850636cbd9`
 - OS D1A code commit: `305a5caceda42acfe0d835263cd2e51cc6fc497d`
-- Current FE integration/Core pin: `Uni-Lab-OS/uni-lab-fe@0bf83ea93de9aff5a10f0419a3322cff27b48595`
+- D1A exact FE integration/Core pin: `Uni-Lab-OS/uni-lab-fe@0bf83ea93de9aff5a10f0419a3322cff27b48595`
+- Current FE integration successor: `d2e83fe801c846b0166d9918d08de4f72d0b81af`
 - D1A FE integration merge: `b963a33d0a589a12b1e2aa16a9e0d05929ee4ff7`
 - FE aligned E2E checkout: `b502e4379250f7b5d3b3ed7506d4476b50353538`
 - FE D1A code commit: `a380bf81666509b8a5bfe7a7c84af43576828dd9`
@@ -19,8 +20,9 @@ non-squash, two-parent provenance. The private dev first preserves its existing
 Constructor packaging commit and the restored public-dev base, then merges the
 full private integration line. Relative to the previously gated release tree,
 the private production merge adds only those three pre-existing packaging
-files; `f660fd83` then corrects two publication documents. D1A production and
-test blobs are unchanged.
+files; the subsequent private-dev commits only correct publication documents
+and record the waived physical-device gate. D1A production and test blobs are
+unchanged.
 
 ## Gate result
 
@@ -30,8 +32,11 @@ test blobs are unchanged.
 - OS direct D1A suite: `30 passed`.
 - D1A-aligned FE material/services/pascal/workflow-editor/kernel/desktop suites:
   262 tests.
-- Current FE integration successor: 286 tests; workspace typecheck, Web build
-  and Desktop build passed. It contains the D1A non-squash integration merge.
+- D1A-published FE integration: 286 tests; workspace typecheck, Web build and
+  Desktop build passed.
+- Current FE integration successor contains the D1A pin unchanged. Its D1A
+  services, device UI and Desktop runtime targeted suites pass 37/37; its
+  unrelated I1 round remains independently gated and is not part of this pin.
 - FE workspace typecheck, Web build and Desktop build: passed.
 - Final real OS-to-browser E2E: 1/1 passed in 18.8 seconds.
 - Independent exact-SHA review: Standards 0 Blocking / 1 Non-blocking;
@@ -65,6 +70,6 @@ Machine-readable evidence: [network ledger](network-ledger.json). Runtime log:
 ## Acceptance state
 
 Software implementation, integration publication, exact-SHA review and Core
-evidence pin are complete. Real physical device/ROS and Feishu acceptance remain
-open under Core `#162/#163`; therefore D1A-S1 is `stage:testing`, not
-`stage:accepted`.
+evidence pin are complete. The user confirmed that a real physical device/ROS
+run is not a D1A acceptance gate. Feishu acceptance remains open under Core
+`#162/#163`; therefore D1A-S1 is `stage:testing`, not `stage:accepted`.
