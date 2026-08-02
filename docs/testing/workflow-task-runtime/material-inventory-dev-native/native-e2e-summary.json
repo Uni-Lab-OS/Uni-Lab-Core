@@ -1,0 +1,70 @@
+{
+  "result": "deepmodeling-dev-native-e2e-passed",
+  "testedRevisions": {
+    "osDev": "5cd7913a4b6a2dbbd85c8e055e7851a6e5c60773",
+    "feIntegration": "65588b75272747a48bc260dc28ddf799ef229280",
+    "szlabMain": "305b0cf2baacb24a6d34d4ec306ef6ba2177e513"
+  },
+  "startup": {
+    "os": "unilab CLI, workspace PackageCatalog, ROS backend, FastAPI bridge, edge scheduler, test mode",
+    "fe": "Vite development server",
+    "browser": "Xvfb headed Chromium with SwiftShader WebGL"
+  },
+  "screenshots": [
+    {
+      "path": "01-szlab-materials-2_5d.png",
+      "sha256": "6e61d634bc68e7821d1bbda1abc4b498d3fa36a7e715bf1130092177d2ffad8a"
+    },
+    {
+      "path": "02-szlab-materials-3d.png",
+      "sha256": "e82c58570de594901268e5c495b9dc8157e763d8e10f852b4a4c9d1004dda20a"
+    }
+  ],
+  "graphNodes": 21,
+  "shapeDeclarations": 12,
+  "materialCount": 21,
+  "specCount": 13,
+  "vialCount": 2,
+  "beakerCount": 2,
+  "viewerBox": {
+    "x": 324,
+    "y": 127,
+    "width": 1356,
+    "height": 923
+  },
+  "apiRequests": [
+    "GET http://127.0.0.1:18148/api/v1/material-shapes",
+    "GET http://127.0.0.1:18148/api/v1/materials/graph"
+  ],
+  "observedApiAndModelResponses": [
+    {
+      "status": 200,
+      "url": "http://127.0.0.1:18148/api/v1/health"
+    },
+    {
+      "status": 200,
+      "url": "http://127.0.0.1:18148/api/v1/health"
+    },
+    {
+      "status": 200,
+      "url": "http://127.0.0.1:18148/api/v1/health"
+    },
+    {
+      "status": 200,
+      "url": "http://127.0.0.1:18148/api/v1/materials/graph"
+    },
+    {
+      "status": 200,
+      "url": "http://127.0.0.1:18148/api/v1/material-shapes"
+    },
+    {
+      "status": 200,
+      "url": "http://127.0.0.1:18148/api/v1/health"
+    },
+    {
+      "status": 200,
+      "url": "http://127.0.0.1:18148/api/v1/health"
+    }
+  ],
+  "browserErrors": []
+}
