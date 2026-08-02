@@ -7,7 +7,8 @@
 - OS integration merge: `Uni-Lab-OS/Uni-Lab-OS@25e71d1aeff1e13e9ab3405c2302cf5a4bf15b7a`
 - OS aligned E2E checkout: `2c65cd139605985047d5ecf82592c8850636cbd9`
 - OS D1A code commit: `305a5caceda42acfe0d835263cd2e51cc6fc497d`
-- FE integration merge: `Uni-Lab-OS/uni-lab-fe@b963a33d0a589a12b1e2aa16a9e0d05929ee4ff7`
+- Current FE integration/Core pin: `Uni-Lab-OS/uni-lab-fe@0bf83ea93de9aff5a10f0419a3322cff27b48595`
+- D1A FE integration merge: `b963a33d0a589a12b1e2aa16a9e0d05929ee4ff7`
 - FE aligned E2E checkout: `b502e4379250f7b5d3b3ed7506d4476b50353538`
 - FE D1A code commit: `a380bf81666509b8a5bfe7a7c84af43576828dd9`
 - Core publication baseline: `886cbc556597fbbe4699043af6fbe342d4e737ba`
@@ -24,7 +25,10 @@ production and test blobs were unchanged by those target merges.
 - OS aligned candidate: `2347 passed, 4 skipped`.
 - Canonical OS dev merge: `2347 passed, 4 skipped`.
 - OS direct D1A suite: `30 passed`.
-- FE material/services/pascal/workflow-editor/kernel/desktop suites: 262 tests.
+- D1A-aligned FE material/services/pascal/workflow-editor/kernel/desktop suites:
+  262 tests.
+- Current FE integration successor: 286 tests; workspace typecheck, Web build
+  and Desktop build passed. It contains the D1A non-squash integration merge.
 - FE workspace typecheck, Web build and Desktop build: passed.
 - Final real OS-to-browser E2E: 1/1 passed in 18.8 seconds.
 - Independent exact-SHA review: Standards 0 Blocking / 1 Non-blocking;
