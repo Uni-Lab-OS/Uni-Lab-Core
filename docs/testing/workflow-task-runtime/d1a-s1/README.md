@@ -9,7 +9,7 @@
 - OS aligned E2E checkout: `2c65cd139605985047d5ecf82592c8850636cbd9`
 - OS D1A code commit: `305a5caceda42acfe0d835263cd2e51cc6fc497d`
 - D1A exact FE integration/Core pin: `Uni-Lab-OS/uni-lab-fe@0bf83ea93de9aff5a10f0419a3322cff27b48595`
-- Current FE integration successor: `d2e83fe801c846b0166d9918d08de4f72d0b81af`
+- Verified FE integration successor: `bd66e720a7cb25c9b39df57674f9b6ef9289b227`
 - D1A FE integration merge: `b963a33d0a589a12b1e2aa16a9e0d05929ee4ff7`
 - FE aligned E2E checkout: `b502e4379250f7b5d3b3ed7506d4476b50353538`
 - FE D1A code commit: `a380bf81666509b8a5bfe7a7c84af43576828dd9`
@@ -34,7 +34,7 @@ unchanged.
   262 tests.
 - D1A-published FE integration: 286 tests; workspace typecheck, Web build and
   Desktop build passed.
-- Current FE integration successor contains the D1A pin unchanged. Its D1A
+- The verified FE integration successor contains the D1A pin unchanged. Its D1A
   services, device UI and Desktop runtime targeted suites pass 37/37; its
   unrelated I1 round remains independently gated and is not part of this pin.
 - FE workspace typecheck, Web build and Desktop build: passed.
