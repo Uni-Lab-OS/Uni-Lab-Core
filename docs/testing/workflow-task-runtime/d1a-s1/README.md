@@ -2,8 +2,8 @@
 
 ## Published pins
 
-- Canonical OS dev: `deepmodeling/Uni-Lab-OS:dev@2b55cecf744f0358967cf645c95a97bfda619da3`
-- Tested OS dev production merge: `b3190ca8a99f5be2cdc4c9943771728bf98dc10f`
+- Private OS dev: `Uni-Lab-OS/Uni-Lab-OS:dev@f660fd83dd8008c3947d75241a1e222f30ad7852`
+- Private OS dev production merge: `f4d9c1e4fb007ff26c8a867d0d2e1f43eafd404b`
 - OS integration merge: `Uni-Lab-OS/Uni-Lab-OS@25e71d1aeff1e13e9ab3405c2302cf5a4bf15b7a`
 - Current OS integration documentation successor: `cf6f81da8bf41950c8779555c60a7b7349184fbe`
 - OS aligned E2E checkout: `2c65cd139605985047d5ecf82592c8850636cbd9`
@@ -14,17 +14,19 @@
 - FE D1A code commit: `a380bf81666509b8a5bfe7a7c84af43576828dd9`
 - Core publication baseline: `886cbc556597fbbe4699043af6fbe342d4e737ba`
 
-Both integration commits and the canonical OS dev commits preserve non-squash,
-two-parent provenance. The canonical dev successors after `b3190ca8` change
-only this round's implementation report and migration matrix; the production
-tree remains the tested `b3190ca8` merge. The OS/FE aligned candidates were
-rebased by merge onto the latest integration targets before the final gate;
-D1A production and test blobs were unchanged by those target merges.
+The OS/FE integration commits and the private OS dev production commit preserve
+non-squash, two-parent provenance. The private dev first preserves its existing
+Constructor packaging commit and the restored public-dev base, then merges the
+full private integration line. Relative to the previously gated release tree,
+the private production merge adds only those three pre-existing packaging
+files; `f660fd83` then corrects two publication documents. D1A production and
+test blobs are unchanged.
 
 ## Gate result
 
 - OS aligned candidate: `2347 passed, 4 skipped`.
-- Canonical OS dev merge: `2347 passed, 4 skipped`.
+- Private OS dev production composition: same gated production tree; its only
+  additional files are the pre-existing Constructor packaging assets.
 - OS direct D1A suite: `30 passed`.
 - D1A-aligned FE material/services/pascal/workflow-editor/kernel/desktop suites:
   262 tests.
