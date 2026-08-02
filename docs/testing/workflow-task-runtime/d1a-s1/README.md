@@ -2,7 +2,8 @@
 
 ## Published pins
 
-- Canonical OS dev: `deepmodeling/Uni-Lab-OS:dev@b3190ca8a99f5be2cdc4c9943771728bf98dc10f`
+- Canonical OS dev: `deepmodeling/Uni-Lab-OS:dev@8e6dec6f6cb5bdfc76653e28f421f78c53ba893d`
+- Tested OS dev production merge: `b3190ca8a99f5be2cdc4c9943771728bf98dc10f`
 - OS integration merge: `Uni-Lab-OS/Uni-Lab-OS@25e71d1aeff1e13e9ab3405c2302cf5a4bf15b7a`
 - OS aligned E2E checkout: `2c65cd139605985047d5ecf82592c8850636cbd9`
 - OS D1A code commit: `305a5caceda42acfe0d835263cd2e51cc6fc497d`
@@ -11,10 +12,12 @@
 - FE D1A code commit: `a380bf81666509b8a5bfe7a7c84af43576828dd9`
 - Core publication baseline: `886cbc556597fbbe4699043af6fbe342d4e737ba`
 
-Both integration commits and the canonical OS dev commit preserve non-squash,
-two-parent provenance. The OS/FE aligned candidates were rebased by merge onto
-the latest integration targets before the final gate; D1A production and test
-blobs were unchanged by those target merges.
+Both integration commits and the canonical OS dev commits preserve non-squash,
+two-parent provenance. The `8e6dec6f` dev successor changes only this round's
+implementation report and migration matrix after publication; its production
+tree is the tested `b3190ca8` merge. The OS/FE aligned candidates were rebased
+by merge onto the latest integration targets before the final gate; D1A
+production and test blobs were unchanged by those target merges.
 
 ## Gate result
 
