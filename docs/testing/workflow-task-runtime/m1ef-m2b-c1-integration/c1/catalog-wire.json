@@ -1,0 +1,549 @@
+{
+  "list": {
+    "code": 0,
+    "data": {
+      "authority": {
+        "authority_id": "fe-d117-e2e-local",
+        "kind": "local"
+      },
+      "catalog_fingerprint": "sha256:79413290fd97b34aa0bd6a3cd29ed4e67bd628d144d629cde2caa41288a9b913",
+      "items": [
+        {
+          "uuid": "09399f22-0817-4c4b-bdd2-ef058aedd66b",
+          "name": "workflow:10000000-0000-4000-8000-000000000006",
+          "display_name": "C1 Published child",
+          "type": "workflow",
+          "node_type": "workflow",
+          "resource_template": {
+            "uuid": "fee29b0b-d370-4270-b565-9b360ef6bb2e",
+            "name": "fee29b0b-d370-4270-b565-9b360ef6bb2e",
+            "display_name": "fee29b0b-d370-4270-b565-9b360ef6bb2e"
+          }
+        },
+        {
+          "uuid": "c29f1bdc-2e6d-4f1c-ac5f-ded0b8f1110e",
+          "name": "group",
+          "display_name": "Group",
+          "type": "group",
+          "node_type": "group",
+          "resource_template": {
+            "uuid": "fee29b0b-d370-4270-b565-9b360ef6bb2e",
+            "name": "fee29b0b-d370-4270-b565-9b360ef6bb2e",
+            "display_name": "fee29b0b-d370-4270-b565-9b360ef6bb2e"
+          }
+        },
+        {
+          "uuid": "dd0644f3-5885-4f6a-9674-7dea749fc230",
+          "name": "material_source",
+          "display_name": "Material Source",
+          "type": "material_source",
+          "node_type": "material_source",
+          "resource_template": {
+            "uuid": "fee29b0b-d370-4270-b565-9b360ef6bb2e",
+            "name": "host_node",
+            "display_name": "Host Node"
+          }
+        },
+        {
+          "uuid": "bdc16ad4-153c-4e21-9729-90077cd72890",
+          "name": "measure",
+          "display_name": "Measure",
+          "type": "UniLabJsonCommand",
+          "node_type": "device",
+          "resource_template": {
+            "uuid": "4c5375e3-14a0-4d54-8d4b-b73d2b877551",
+            "name": "community.c1_lifecycle.measurement_device",
+            "display_name": "Measurement device"
+          }
+        }
+      ],
+      "total": 4,
+      "page": 1,
+      "page_size": 100
+    }
+  },
+  "details": [
+    {
+      "code": 0,
+      "data": {
+        "authority": {
+          "authority_id": "fe-d117-e2e-local",
+          "kind": "local"
+        },
+        "catalog_fingerprint": "sha256:79413290fd97b34aa0bd6a3cd29ed4e67bd628d144d629cde2caa41288a9b913",
+        "template": {
+          "uuid": "09399f22-0817-4c4b-bdd2-ef058aedd66b",
+          "description": "PackageCatalog-backed child with one internal action.",
+          "meta_data": {
+            "unilab": {
+              "framework_owner_only": true,
+              "workflow_source": {
+                "definition_content_hash": "sha256:6666666666666666666666666666666666666666666666666666666666666666",
+                "definition_fqid": "production_lab.workflows.published_child",
+                "kind": "package",
+                "module": "production_lab.workflows.composite_child",
+                "package_catalog_digest": "sha256:b21cc153515489594881eba8af0c6b9d179e6e4b9cffa8baf37ad2e74908ae8b",
+                "symbol": "published_child"
+              }
+            }
+          },
+          "resource_template_uuid": "fee29b0b-d370-4270-b565-9b360ef6bb2e",
+          "name": "workflow:10000000-0000-4000-8000-000000000006",
+          "display_name": "C1 Published child",
+          "class": "production_lab.workflows.composite_child:published_child",
+          "goal": {
+            "value": "value"
+          },
+          "goal_default": {},
+          "feedback": {},
+          "result": {
+            "result": "result"
+          },
+          "schema": {
+            "additionalProperties": false,
+            "properties": {
+              "goal": {
+                "additionalProperties": false,
+                "properties": {
+                  "value": {
+                    "type": "number"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "type": "object"
+              },
+              "result": {
+                "additionalProperties": false,
+                "properties": {
+                  "result": {
+                    "type": "number"
+                  }
+                },
+                "required": [
+                  "result"
+                ],
+                "type": "object"
+              }
+            },
+            "required": [
+              "goal",
+              "result"
+            ],
+            "type": "object",
+            "x-unilabos-workflow-contract": {
+              "applied_source_hash": "sha256:12b4b9d9e96f2eb20eacf2ad57948236a8ee4e716fc0b2e84fbca5402c88fb99",
+              "compatibility_version": 1,
+              "composition_allow_transparent": false,
+              "contract_digest": "sha256:689aaac733eba27d13279d242a71fc3c8bc41f0c144d41261dc160a52b46a1cf",
+              "input_order": [
+                "value"
+              ],
+              "output_order": [
+                "result"
+              ],
+              "version": 1,
+              "workflow_revision": 2,
+              "workflow_uuid": "10000000-0000-4000-8000-000000000006"
+            }
+          },
+          "type": "workflow",
+          "icon": null,
+          "header": null,
+          "footer": null,
+          "node_type": "workflow",
+          "create_time": "2026-08-02T20:38:53.732067Z",
+          "update_time": "2026-08-02T20:38:53.822772Z"
+        },
+        "handles": [
+          {
+            "uuid": "37ca2ba0-84ec-4d61-872a-38839eccbc5d",
+            "description": "Lexical source-order dependency",
+            "meta_data": {
+              "unilab": {
+                "allowed_resource_template_uuids": null,
+                "editor_control": "variable_selector",
+                "implicit_passthrough": false,
+                "structural_role": "ready",
+                "value_schema": {
+                  "type": "boolean"
+                }
+              }
+            },
+            "workflow_node_template_uuid": "09399f22-0817-4c4b-bdd2-ef058aedd66b",
+            "handle_key": "ready",
+            "io_type": "source",
+            "display_name": "Ready",
+            "type": "boolean",
+            "required": false,
+            "data_source": "dependency",
+            "data_key": "ready",
+            "create_time": "2026-08-02T20:38:53.732200Z",
+            "update_time": "2026-08-02T20:38:53.822893Z"
+          },
+          {
+            "uuid": "752977bb-5b86-4ee2-bbff-30db89f311ce",
+            "description": "",
+            "meta_data": {
+              "unilab": {
+                "allowed_resource_template_uuids": null,
+                "editor_control": "variable_selector",
+                "implicit_passthrough": false,
+                "value_schema": {
+                  "type": "number"
+                }
+              }
+            },
+            "workflow_node_template_uuid": "09399f22-0817-4c4b-bdd2-ef058aedd66b",
+            "handle_key": "result",
+            "io_type": "source",
+            "display_name": "result",
+            "type": "number",
+            "required": false,
+            "data_source": "result",
+            "data_key": "result",
+            "create_time": "2026-08-02T20:38:53.732156Z",
+            "update_time": "2026-08-02T20:38:53.822851Z"
+          },
+          {
+            "uuid": "dd2717c4-f62d-4bd0-8122-108bc848207e",
+            "description": "Lexical source-order dependency",
+            "meta_data": {
+              "unilab": {
+                "allowed_resource_template_uuids": null,
+                "editor_control": "variable_selector",
+                "implicit_passthrough": false,
+                "structural_role": "ready",
+                "value_schema": {
+                  "type": "boolean"
+                }
+              }
+            },
+            "workflow_node_template_uuid": "09399f22-0817-4c4b-bdd2-ef058aedd66b",
+            "handle_key": "ready",
+            "io_type": "target",
+            "display_name": "Ready",
+            "type": "boolean",
+            "required": false,
+            "data_source": "dependency",
+            "data_key": "ready",
+            "create_time": "2026-08-02T20:38:53.732177Z",
+            "update_time": "2026-08-02T20:38:53.822872Z"
+          },
+          {
+            "uuid": "dd8cc1c8-1956-4fe3-aa68-51452499d76c",
+            "description": "",
+            "meta_data": {
+              "unilab": {
+                "allowed_resource_template_uuids": null,
+                "editor_control": "variable_selector",
+                "implicit_passthrough": false,
+                "value_schema": {
+                  "type": "number"
+                }
+              }
+            },
+            "workflow_node_template_uuid": "09399f22-0817-4c4b-bdd2-ef058aedd66b",
+            "handle_key": "value",
+            "io_type": "target",
+            "display_name": "value",
+            "type": "number",
+            "required": true,
+            "data_source": "goal",
+            "data_key": "value",
+            "create_time": "2026-08-02T20:38:53.732132Z",
+            "update_time": "2026-08-02T20:38:53.822828Z"
+          }
+        ]
+      }
+    },
+    {
+      "code": 0,
+      "data": {
+        "authority": {
+          "authority_id": "fe-d117-e2e-local",
+          "kind": "local"
+        },
+        "catalog_fingerprint": "sha256:79413290fd97b34aa0bd6a3cd29ed4e67bd628d144d629cde2caa41288a9b913",
+        "template": {
+          "uuid": "c29f1bdc-2e6d-4f1c-ac5f-ded0b8f1110e",
+          "description": "Presentation group for Workflow authoring",
+          "meta_data": {
+            "unilab": {
+              "authority_id": "fe-d117-e2e-local",
+              "framework_owner_only": true,
+              "source_fqid": "unilabos.workflow.authoring:group"
+            }
+          },
+          "resource_template_uuid": "fee29b0b-d370-4270-b565-9b360ef6bb2e",
+          "name": "group",
+          "display_name": "Group",
+          "class": "unilabos.workflow.authoring:group",
+          "goal": {},
+          "goal_default": {},
+          "feedback": {},
+          "result": {},
+          "schema": null,
+          "type": "group",
+          "icon": null,
+          "header": null,
+          "footer": null,
+          "node_type": "group",
+          "create_time": "2026-08-02T20:38:53.642976Z",
+          "update_time": "2026-08-02T20:38:53.822744Z"
+        },
+        "handles": []
+      }
+    },
+    {
+      "code": 0,
+      "data": {
+        "authority": {
+          "authority_id": "fe-d117-e2e-local",
+          "kind": "local"
+        },
+        "catalog_fingerprint": "sha256:79413290fd97b34aa0bd6a3cd29ed4e67bd628d144d629cde2caa41288a9b913",
+        "template": {
+          "uuid": "dd0644f3-5885-4f6a-9674-7dea749fc230",
+          "description": "Declare one material at an OS-owned mount",
+          "meta_data": {
+            "unilab": {
+              "authority_id": "fe-d117-e2e-local",
+              "resource_template": {
+                "display_name": "Host Node",
+                "name": "host_node",
+                "uuid": "fee29b0b-d370-4270-b565-9b360ef6bb2e"
+              },
+              "source_fqid": "unilabos.workflow.authoring:material_source"
+            }
+          },
+          "resource_template_uuid": "fee29b0b-d370-4270-b565-9b360ef6bb2e",
+          "name": "material_source",
+          "display_name": "Material Source",
+          "class": "unilabos.workflow.authoring:material_source",
+          "goal": {},
+          "goal_default": {},
+          "feedback": {},
+          "result": {},
+          "schema": null,
+          "type": "material_source",
+          "icon": null,
+          "header": null,
+          "footer": null,
+          "node_type": "material_source",
+          "create_time": "2026-08-02T20:38:53.642932Z",
+          "update_time": "2026-08-02T20:38:53.822694Z"
+        },
+        "handles": [
+          {
+            "uuid": "e3c606e5-ff4f-4a96-999c-d56633e76f0a",
+            "description": "The selected or newly declared material",
+            "meta_data": {},
+            "workflow_node_template_uuid": "dd0644f3-5885-4f6a-9674-7dea749fc230",
+            "handle_key": "material",
+            "io_type": "source",
+            "display_name": "Material",
+            "type": "ResourceSlot",
+            "required": false,
+            "data_source": "executor",
+            "data_key": "material",
+            "create_time": "2026-08-02T20:38:53.642957Z",
+            "update_time": "2026-08-02T20:38:53.822721Z"
+          }
+        ]
+      }
+    },
+    {
+      "code": 0,
+      "data": {
+        "authority": {
+          "authority_id": "fe-d117-e2e-local",
+          "kind": "local"
+        },
+        "catalog_fingerprint": "sha256:79413290fd97b34aa0bd6a3cd29ed4e67bd628d144d629cde2caa41288a9b913",
+        "template": {
+          "uuid": "bdc16ad4-153c-4e21-9729-90077cd72890",
+          "description": "Measure one value",
+          "meta_data": {
+            "unilab": {
+              "authority_id": "fe-d117-e2e-local",
+              "resource_template": {
+                "display_name": "Measurement device",
+                "name": "community.c1_lifecycle.measurement_device",
+                "uuid": "4c5375e3-14a0-4d54-8d4b-b73d2b877551"
+              },
+              "source_fqid": "community.c1_lifecycle.measurement_device.measure"
+            }
+          },
+          "resource_template_uuid": "4c5375e3-14a0-4d54-8d4b-b73d2b877551",
+          "name": "measure",
+          "display_name": "Measure",
+          "class": "c1_lifecycle.device:MeasurementDevice",
+          "goal": {
+            "value": "value"
+          },
+          "goal_default": {},
+          "feedback": {},
+          "result": {
+            "result": "result"
+          },
+          "schema": {
+            "additionalProperties": false,
+            "properties": {
+              "goal": {
+                "additionalProperties": false,
+                "properties": {
+                  "value": {
+                    "type": "number"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "type": "object"
+              },
+              "result": {
+                "additionalProperties": false,
+                "properties": {
+                  "result": {
+                    "type": "number"
+                  }
+                },
+                "required": [
+                  "result"
+                ],
+                "type": "object"
+              }
+            },
+            "required": [
+              "goal",
+              "result"
+            ],
+            "type": "object",
+            "x-unilabos-action-contract": {
+              "input_order": [
+                "value"
+              ],
+              "output_order": [
+                "result"
+              ],
+              "resource_template_symbols": {
+                "goal": {},
+                "result": {}
+              },
+              "version": 1
+            }
+          },
+          "type": "UniLabJsonCommand",
+          "icon": null,
+          "header": null,
+          "footer": null,
+          "node_type": "device",
+          "create_time": "2026-08-02T20:38:53.642670Z",
+          "update_time": "2026-08-02T20:38:53.822516Z"
+        },
+        "handles": [
+          {
+            "uuid": "1894b42f-6bc2-4c9d-8ade-a3ad5e709ed7",
+            "description": "",
+            "meta_data": {
+              "unilab": {
+                "allowed_resource_template_uuids": null,
+                "editor_control": "variable_selector",
+                "implicit_passthrough": false,
+                "value_schema": {
+                  "type": "number"
+                }
+              }
+            },
+            "workflow_node_template_uuid": "bdc16ad4-153c-4e21-9729-90077cd72890",
+            "handle_key": "value",
+            "io_type": "target",
+            "display_name": "value",
+            "type": "number",
+            "required": true,
+            "data_source": "goal",
+            "data_key": "value",
+            "create_time": "2026-08-02T20:38:53.642801Z",
+            "update_time": "2026-08-02T20:38:53.822588Z"
+          },
+          {
+            "uuid": "54db40e3-3fb2-48d7-8410-06e8f45aa63d",
+            "description": "Lexical source-order dependency",
+            "meta_data": {
+              "unilab": {
+                "allowed_resource_template_uuids": null,
+                "editor_control": "variable_selector",
+                "implicit_passthrough": false,
+                "structural_role": "ready",
+                "value_schema": {
+                  "type": "boolean"
+                }
+              }
+            },
+            "workflow_node_template_uuid": "bdc16ad4-153c-4e21-9729-90077cd72890",
+            "handle_key": "ready",
+            "io_type": "source",
+            "display_name": "Ready",
+            "type": "boolean",
+            "required": false,
+            "data_source": "dependency",
+            "data_key": "ready",
+            "create_time": "2026-08-02T20:38:53.642911Z",
+            "update_time": "2026-08-02T20:38:53.822666Z"
+          },
+          {
+            "uuid": "62814c79-248e-435a-9e17-4dcb7fcce5a2",
+            "description": "",
+            "meta_data": {
+              "unilab": {
+                "allowed_resource_template_uuids": null,
+                "editor_control": "variable_selector",
+                "implicit_passthrough": false,
+                "value_schema": {
+                  "type": "number"
+                }
+              }
+            },
+            "workflow_node_template_uuid": "bdc16ad4-153c-4e21-9729-90077cd72890",
+            "handle_key": "result",
+            "io_type": "source",
+            "display_name": "result",
+            "type": "number",
+            "required": false,
+            "data_source": "result",
+            "data_key": "result",
+            "create_time": "2026-08-02T20:38:53.642858Z",
+            "update_time": "2026-08-02T20:38:53.822619Z"
+          },
+          {
+            "uuid": "b99a9a52-fabd-4d5d-9863-c9fa1c47b782",
+            "description": "Lexical source-order dependency",
+            "meta_data": {
+              "unilab": {
+                "allowed_resource_template_uuids": null,
+                "editor_control": "variable_selector",
+                "implicit_passthrough": false,
+                "structural_role": "ready",
+                "value_schema": {
+                  "type": "boolean"
+                }
+              }
+            },
+            "workflow_node_template_uuid": "bdc16ad4-153c-4e21-9729-90077cd72890",
+            "handle_key": "ready",
+            "io_type": "target",
+            "display_name": "Ready",
+            "type": "boolean",
+            "required": false,
+            "data_source": "dependency",
+            "data_key": "ready",
+            "create_time": "2026-08-02T20:38:53.642886Z",
+            "update_time": "2026-08-02T20:38:53.822643Z"
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "source": {
+    "repository": "Uni-Lab-OS",
+    "branch": "integration/workflow-task-runtime",
+    "head": "31ca092a4c1a7385d636fbf4500585b7a48ee854"
+  },
+  "native_task": {
+    "task_uuid": "4d75c338-f344-4a5a-927f-c8ed014b642a",
+    "job_uuid": "c5b17826-127f-4d87-9d52-fb54e64c97e7",
+    "status": "failed",
+    "job_status": "failed",
+    "cleanup_status": "settled",
+    "error_code": "invalid_device_action_result"
+  },
+  "inventory_authority": {
+    "claim_uuid": "b56f6c1e-81b0-54b2-8739-976093624f01",
+    "claim_state": "released",
+    "fencing_token": 1,
+    "changeset_uuid": "75c4ae17-13d6-584a-a28c-1bd6865ce545",
+    "changeset_outcome": "failed",
+    "release_proof_kind": "terminal_settled",
+    "unsettled_claim_count": 0
+  },
+  "restart": {
+    "task_identity_unchanged": true,
+    "job_identity_unchanged": true,
+    "terminal_state_unchanged": true,
+    "original_job_redispatch_count": 0
+  },
+  "contention": {
+    "independent_processes": 2,
+    "acquired": 1,
+    "blocked": 1,
+    "winner_release_proof_kind": "not_submitted",
+    "unsettled_claim_count": 0
+  }
+}

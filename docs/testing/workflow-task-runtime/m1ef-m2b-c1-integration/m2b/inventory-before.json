@@ -1,0 +1,89 @@
+{
+  "materials": [
+    {
+      "uuid": "97539b08-24de-5003-8b2e-9eb6e983c68a",
+      "create_time": "2026-08-02T20:46:21.444125Z",
+      "update_time": "2026-08-02T20:46:21.444125Z",
+      "deleted_at": null,
+      "description": null,
+      "meta_data": {
+        "source": "resource-tree-set",
+        "source_graph": "graph.json",
+        "source_node_id": "m2b_mount",
+        "source_runtime_uuid": "64000000-0000-4000-8000-0000000002b0"
+      },
+      "resource_template_uuid": "67009619-7e1f-41d8-8135-8367e323f367",
+      "parent_uuid": null,
+      "class": "m2b_mount",
+      "barcode": "",
+      "name": "Stacker A",
+      "config": {
+        "category": "stacker",
+        "rendering": {
+          "categories": [
+            "storage",
+            "stacker"
+          ],
+          "dimensions_mm": [
+            360,
+            300,
+            720
+          ],
+          "kind": "stacker"
+        },
+        "size_x": 360,
+        "size_y": 300,
+        "size_z": 720
+      },
+      "data": {},
+      "disposition": null,
+      "material_kind": "device",
+      "version": 1
+    }
+  ],
+  "sites": [
+    {
+      "uuid": "1962ab7c-b006-5e44-a1bd-9b1fde81d529",
+      "create_time": "2026-08-02T20:46:21.444125Z",
+      "update_time": "2026-08-02T20:46:21.444125Z",
+      "meta_data": {
+        "source": "resource-tree-set",
+        "source_node_id": "slot_a"
+      },
+      "material_uuid": "97539b08-24de-5003-8b2e-9eb6e983c68a",
+      "name": "Slot 1",
+      "sort_order": 0,
+      "allowed_resource_template_uuids": [],
+      "position_x": 0,
+      "position_y": 0,
+      "position_z": 40,
+      "depth": 24,
+      "length": 100,
+      "width": 100,
+      "version": 1
+    },
+    {
+      "uuid": "56dfa4a8-06b8-5750-bff9-b2290766a57d",
+      "create_time": "2026-08-02T20:46:21.444125Z",
+      "update_time": "2026-08-02T20:46:21.444125Z",
+      "meta_data": {
+        "source": "resource-tree-set",
+        "source_node_id": "slot_b"
+      },
+      "material_uuid": "97539b08-24de-5003-8b2e-9eb6e983c68a",
+      "name": "Slot 2",
+      "sort_order": 1,
+      "allowed_resource_template_uuids": [],
+      "position_x": 120,
+      "position_y": 0,
+      "position_z": 40,
+      "depth": 24,
+      "length": 100,
+      "width": 100,
+      "version": 1
+    }
+  ],
+  "material_reservations": [],
+  "inventory_lots": [],
+  "snapshot_sequence": 1
+}

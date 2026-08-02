@@ -1,0 +1,150 @@
+{
+  "uuid": "955c9c8c-1730-486c-ab12-e24bb8bf488c",
+  "create_time": "2026-08-02T20:46:24.446217Z",
+  "update_time": "2026-08-02T20:46:24.448865Z",
+  "meta_data": {},
+  "workflow_uuid": "65000000-0000-4000-8000-0000000002b0",
+  "status": "admission_blocked",
+  "workflow_snapshot": {
+    "edges": [],
+    "handle_templates": [
+      {
+        "create_time": "2026-08-02T20:46:21.436144Z",
+        "data_key": "material",
+        "data_source": "executor",
+        "description": "The selected or newly declared material",
+        "display_name": "Material",
+        "handle_key": "material",
+        "io_type": "source",
+        "meta_data": {},
+        "required": false,
+        "type": "ResourceSlot",
+        "update_time": "2026-08-02T20:46:23.936798Z",
+        "uuid": "8513c38e-5068-4dac-bf6b-6a7ebc89a233",
+        "workflow_node_template_uuid": "ce4477e3-93f0-4aa0-9ac1-1c6f7413f8e0"
+      }
+    ],
+    "node_templates": [
+      {
+        "class": "unilabos.workflow.authoring:material_source",
+        "create_time": "2026-08-02T20:46:21.436046Z",
+        "description": "Declare one material at an OS-owned mount",
+        "display_name": "Material Source",
+        "feedback": {},
+        "goal": {},
+        "goal_default": {},
+        "meta_data": {
+          "unilab": {
+            "authority_id": "os-local",
+            "resource_template": {
+              "display_name": "host_node",
+              "name": "host_node",
+              "uuid": "c2e400c3-cd86-4b08-ac37-ce7d7e43988b"
+            },
+            "source_fqid": "unilabos.workflow.authoring:material_source"
+          }
+        },
+        "name": "material_source",
+        "node_type": "material_source",
+        "resource_template_uuid": "c2e400c3-cd86-4b08-ac37-ce7d7e43988b",
+        "result": {},
+        "type": "material_source",
+        "update_time": "2026-08-02T20:46:23.936715Z",
+        "uuid": "ce4477e3-93f0-4aa0-9ac1-1c6f7413f8e0"
+      }
+    ],
+    "nodes": [
+      {
+        "create_time": "2026-08-02T20:46:23.935592Z",
+        "disabled": false,
+        "execution_policy": {},
+        "meta_data": {
+          "unilab": {
+            "input_bindings": {}
+          }
+        },
+        "minimized": false,
+        "name": "sample",
+        "param": {
+          "flow_role": "reagent",
+          "material_uuid": null,
+          "mode": "create_new",
+          "mount": {
+            "uuid": "97539b08-24de-5003-8b2e-9eb6e983c68a"
+          },
+          "resource_template_uuid": "ce9b9dd3-29bf-4d66-9509-ab73257b6d1f",
+          "site": "1962ab7c-b006-5e44-a1bd-9b1fde81d529",
+          "slot_range": null
+        },
+        "pose": {},
+        "status": "idle",
+        "type": "material_source",
+        "update_time": "2026-08-02T20:46:23.935592Z",
+        "uuid": "66000000-0000-4000-8000-0000000002b0",
+        "workflow_node_template_uuid": "ce4477e3-93f0-4aa0-9ac1-1c6f7413f8e0",
+        "workflow_uuid": "65000000-0000-4000-8000-0000000002b0"
+      }
+    ],
+    "workflow": {
+      "create_time": "2026-08-02T20:46:21.444729Z",
+      "description": "Create one Plate96 through Task-wide Inventory admission.",
+      "meta_data": {
+        "package_catalog_digest": "sha256:cb89e9b19388f71f5eae3aba06cab1f3f4b30f138c87b61b0e6fdb7ffeb400ef",
+        "package_fqid": "community.m2b_native_e2e.m2b_native_material_source",
+        "unilab": {
+          "input_contract": {
+            "parameters": [],
+            "version": 1
+          },
+          "output_bindings": {},
+          "output_contract": {
+            "outputs": [],
+            "version": 1
+          }
+        }
+      },
+      "name": "M2B Native MaterialSource",
+      "revision": 2,
+      "tags": [
+        "package",
+        "m2b_native_e2e"
+      ],
+      "update_time": "2026-08-02T20:46:23.934894Z",
+      "uuid": "65000000-0000-4000-8000-0000000002b0"
+    }
+  },
+  "execution_plan": {
+    "edges": [],
+    "nodes": [
+      {
+        "execution_policy": {},
+        "inputs": [],
+        "kind": "material_source",
+        "param": {
+          "flow_role": "reagent",
+          "material_uuid": null,
+          "mode": "create_new",
+          "mount": {
+            "uuid": "97539b08-24de-5003-8b2e-9eb6e983c68a"
+          },
+          "resource_template_uuid": "ce9b9dd3-29bf-4d66-9509-ab73257b6d1f",
+          "site": "1962ab7c-b006-5e44-a1bd-9b1fde81d529",
+          "slot_range": null
+        },
+        "source_handle_uuids": [
+          "8513c38e-5068-4dac-bf6b-6a7ebc89a233"
+        ],
+        "topological_index": 0,
+        "uuid": "66000000-0000-4000-8000-0000000002b0"
+      }
+    ],
+    "run_mode": "normal"
+  },
+  "run_mode": "normal",
+  "control_status": "active",
+  "cleanup_status": "none",
+  "trace_context": {},
+  "input": {},
+  "output": {},
+  "error_info": []
+}

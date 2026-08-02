@@ -1,0 +1,7 @@
+{
+  "code": "material_source_conflict",
+  "message": "MaterialSource 与 mount/Site 静态事实冲突",
+  "fixedMaterialUuid": "ff7ba922-9e36-44f7-a5ef-83d7cca53746",
+  "actualSiteUuid": "1962ab7c-b006-5e44-a1bd-9b1fde81d529",
+  "rejectedSiteUuid": "56dfa4a8-06b8-5750-bff9-b2290766a57d"
+}

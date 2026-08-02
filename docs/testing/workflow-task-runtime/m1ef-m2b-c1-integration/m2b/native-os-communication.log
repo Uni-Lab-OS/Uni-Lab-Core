@@ -1,0 +1,5 @@
+# ws_comm_2026-08-03 04-46-20.log
+26-08-03 [04:46:20,901639] [INFO] [CommLogger] 通信日志已初始化，文件: /tmp/unilab-m2b-native-cli-jayDwg/unilabos_data/logs/ws_comm_2026-08-03 04-46-20.log [MainThread] [configure_comm_logger:326] [unilabos.comm.log]
+26-08-03 [04:46:21,421760] [INFO] [MessageProcessor] Initialized for URL: wss://leap-lab.bohrium.com/api/v1/ws/schedule [MainThread] [__init__:493] [unilabos.comm.ws_client]
+26-08-03 [04:46:21,421837] [IO] [QueueProcessor] Initialized [MainThread] [__init__:1492] [unilabos.comm.ws_client]
+26-08-03 [04:46:21,421860] [INFO] [WebSocketClient] Client_id: 6489d1ca-ae6b-4f78-8594-9bfddc2ea350 [MainThread] [__init__:1676] [unilabos.comm.ws_client]

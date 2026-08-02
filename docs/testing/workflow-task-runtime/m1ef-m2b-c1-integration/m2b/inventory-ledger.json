@@ -1,0 +1,48 @@
+{
+  "entries": [
+    {
+      "ledger_id": 1,
+      "occurred_at": 1785703581444,
+      "op_type": "material_graph.bootstrapped",
+      "aggregate_type": "material_graph",
+      "aggregate_id": "graph.json",
+      "delta_json": "{\"source_id\": \"graph.json\", \"fingerprint\": \"sha256:dc37b5aa5896620b454d880a653d8a3232bf35b1d58aba4cd41b3dfbb8d4b619\", \"material_count\": 1, \"site_count\": 2}",
+      "actor": "",
+      "reason": "",
+      "causation_id": ""
+    },
+    {
+      "ledger_id": 2,
+      "occurred_at": 1785703584168,
+      "op_type": "material.created",
+      "aggregate_type": "material",
+      "aggregate_id": "ff7ba922-9e36-44f7-a5ef-83d7cca53746",
+      "delta_json": "{\"material\": {\"uuid\": \"ff7ba922-9e36-44f7-a5ef-83d7cca53746\", \"create_time\": \"2026-08-02T20:46:24.167998Z\", \"update_time\": \"2026-08-02T20:46:24.167998Z\", \"deleted_at\": null, \"description\": null, \"meta_data\": {}, \"resource_template_uuid\": \"ce9b9dd3-29bf-4d66-9509-ab73257b6d1f\", \"parent_uuid\": null, \"class\": \"m2b_native_e2e.resources:plate_96\", \"barcode\": \"\", \"name\": \"m2b_native_e2e.resources:plate_96\", \"config\": {}, \"data\": {}, \"disposition\": \"active\", \"material_kind\": \"business\", \"version\": 1}}",
+      "actor": "",
+      "reason": "",
+      "causation_id": "11454127-20f5-5d23-b035-41d58413c783"
+    },
+    {
+      "ledger_id": 3,
+      "occurred_at": 1785703584168,
+      "op_type": "site.occupancy_updated",
+      "aggregate_type": "site",
+      "aggregate_id": "1962ab7c-b006-5e44-a1bd-9b1fde81d529",
+      "delta_json": "{\"site\": {\"uuid\": \"1962ab7c-b006-5e44-a1bd-9b1fde81d529\", \"create_time\": \"2026-08-02T20:46:21.444125Z\", \"update_time\": \"2026-08-02T20:46:24.167998Z\", \"meta_data\": {\"source\": \"resource-tree-set\", \"source_node_id\": \"slot_a\"}, \"material_uuid\": \"97539b08-24de-5003-8b2e-9eb6e983c68a\", \"name\": \"Slot 1\", \"sort_order\": 0, \"allowed_resource_template_uuids\": [], \"position_x\": 0.0, \"position_y\": 0.0, \"position_z\": 40.0, \"depth\": 24.0, \"length\": 100.0, \"width\": 100.0, \"version\": 2, \"occupied_material_uuid\": \"ff7ba922-9e36-44f7-a5ef-83d7cca53746\"}}",
+      "actor": "",
+      "reason": "",
+      "causation_id": "11454127-20f5-5d23-b035-41d58413c783"
+    },
+    {
+      "ledger_id": 4,
+      "occurred_at": 1785703584168,
+      "op_type": "material_reservation.admitted",
+      "aggregate_type": "material_reservation",
+      "aggregate_id": "0fc92259-46fc-534c-bb2a-cebb3660ea5c",
+      "delta_json": "{\"workflow_task_uuid\": \"7bcba15c-007e-4ba3-aabd-94847574b3a4\", \"set_fingerprint\": \"sha256:0fc8a9a69c416b2f324846c590ba08dc779598f45e326e2e5c3463ab261d46b3\", \"material_uuids\": [\"ff7ba922-9e36-44f7-a5ef-83d7cca53746\"]}",
+      "actor": "",
+      "reason": "",
+      "causation_id": "11454127-20f5-5d23-b035-41d58413c783"
+    }
+  ]
+}

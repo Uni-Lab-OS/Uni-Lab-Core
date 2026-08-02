@@ -1,0 +1,126 @@
+{
+  "materials": [
+    {
+      "uuid": "97539b08-24de-5003-8b2e-9eb6e983c68a",
+      "create_time": "2026-08-02T20:46:21.444125Z",
+      "update_time": "2026-08-02T20:46:21.444125Z",
+      "deleted_at": null,
+      "description": null,
+      "meta_data": {
+        "source": "resource-tree-set",
+        "source_graph": "graph.json",
+        "source_node_id": "m2b_mount",
+        "source_runtime_uuid": "64000000-0000-4000-8000-0000000002b0"
+      },
+      "resource_template_uuid": "67009619-7e1f-41d8-8135-8367e323f367",
+      "parent_uuid": null,
+      "class": "m2b_mount",
+      "barcode": "",
+      "name": "Stacker A",
+      "config": {
+        "category": "stacker",
+        "rendering": {
+          "categories": [
+            "storage",
+            "stacker"
+          ],
+          "dimensions_mm": [
+            360,
+            300,
+            720
+          ],
+          "kind": "stacker"
+        },
+        "size_x": 360,
+        "size_y": 300,
+        "size_z": 720
+      },
+      "data": {},
+      "disposition": null,
+      "material_kind": "device",
+      "version": 1
+    },
+    {
+      "uuid": "ff7ba922-9e36-44f7-a5ef-83d7cca53746",
+      "create_time": "2026-08-02T20:46:24.167998Z",
+      "update_time": "2026-08-02T20:46:24.167998Z",
+      "deleted_at": null,
+      "description": null,
+      "meta_data": {},
+      "resource_template_uuid": "ce9b9dd3-29bf-4d66-9509-ab73257b6d1f",
+      "parent_uuid": null,
+      "class": "m2b_native_e2e.resources:plate_96",
+      "barcode": "",
+      "name": "m2b_native_e2e.resources:plate_96",
+      "config": {},
+      "data": {},
+      "disposition": "active",
+      "material_kind": "business",
+      "version": 1
+    }
+  ],
+  "sites": [
+    {
+      "uuid": "1962ab7c-b006-5e44-a1bd-9b1fde81d529",
+      "create_time": "2026-08-02T20:46:21.444125Z",
+      "update_time": "2026-08-02T20:46:24.167998Z",
+      "meta_data": {
+        "source": "resource-tree-set",
+        "source_node_id": "slot_a"
+      },
+      "material_uuid": "97539b08-24de-5003-8b2e-9eb6e983c68a",
+      "name": "Slot 1",
+      "sort_order": 0,
+      "allowed_resource_template_uuids": [],
+      "position_x": 0,
+      "position_y": 0,
+      "position_z": 40,
+      "depth": 24,
+      "length": 100,
+      "width": 100,
+      "version": 2,
+      "occupied_material_uuid": "ff7ba922-9e36-44f7-a5ef-83d7cca53746"
+    },
+    {
+      "uuid": "56dfa4a8-06b8-5750-bff9-b2290766a57d",
+      "create_time": "2026-08-02T20:46:21.444125Z",
+      "update_time": "2026-08-02T20:46:21.444125Z",
+      "meta_data": {
+        "source": "resource-tree-set",
+        "source_node_id": "slot_b"
+      },
+      "material_uuid": "97539b08-24de-5003-8b2e-9eb6e983c68a",
+      "name": "Slot 2",
+      "sort_order": 1,
+      "allowed_resource_template_uuids": [],
+      "position_x": 120,
+      "position_y": 0,
+      "position_z": 40,
+      "depth": 24,
+      "length": 100,
+      "width": 100,
+      "version": 1
+    }
+  ],
+  "material_reservations": [
+    {
+      "uuid": "0fc92259-46fc-534c-bb2a-cebb3660ea5c",
+      "workflow_task_uuid": "7bcba15c-007e-4ba3-aabd-94847574b3a4",
+      "set_fingerprint": "sha256:0fc8a9a69c416b2f324846c590ba08dc779598f45e326e2e5c3463ab261d46b3",
+      "status": "active",
+      "create_time": "2026-08-02T20:46:24.167998Z",
+      "released_at": null,
+      "members": [
+        {
+          "reservation_uuid": "0fc92259-46fc-534c-bb2a-cebb3660ea5c",
+          "material_uuid": "ff7ba922-9e36-44f7-a5ef-83d7cca53746",
+          "root_material_uuid": "ff7ba922-9e36-44f7-a5ef-83d7cca53746",
+          "acquired_version": 1,
+          "released_at": null
+        }
+      ]
+    }
+  ],
+  "inventory_lots": [],
+  "snapshot_sequence": 4
+}

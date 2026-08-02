@@ -1,0 +1,125 @@
+{
+  "assertion": "exactly one independent process acquired the S09 device Claim, one was blocked, and the winner was released with durable no-send proof",
+  "audit_claim_count": 1,
+  "cleanup": {
+    "claim": {
+      "acquired_at": "2026-08-02T20:51:47.696138Z",
+      "attempt": 1,
+      "create_time": "2026-08-02T20:51:47.696138Z",
+      "fencing_token": 1,
+      "members": [
+        {
+          "acquired_version": 1,
+          "expected_version": 1,
+          "released_at": "2026-08-02T20:51:47.714285Z",
+          "resource_kind": "device_material",
+          "resource_uuid": "dc534dcf-d6fa-5cb0-a46a-3743a1df8236"
+        }
+      ],
+      "release_command_uuid": "f86080ea-ad43-5351-878c-0a5258d2e8dc",
+      "release_proof_fingerprint": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "release_proof_kind": "not_submitted",
+      "release_reason": "independent contention winner was never dispatched",
+      "released_at": "2026-08-02T20:51:47.714285Z",
+      "running_at": null,
+      "set_fingerprint": "sha256:4fa70c89606638c1f6338dd2a5672cd1350b9e610eeffc7b95e121be836f172a",
+      "state": "released",
+      "terminal_changeset_uuid": null,
+      "uncertainty_reason": null,
+      "update_time": "2026-08-02T20:51:47.714285Z",
+      "uuid": "368e5447-f878-5727-a623-dd7e94d98660",
+      "workflow_node_job_uuid": "b1000000-0000-4000-8000-000000000922",
+      "workflow_task_uuid": "91000000-0000-4000-8000-000000000922",
+      "workflow_terminal_fingerprint": null
+    },
+    "command_uuid": "86000000-0000-4000-8000-000000000922",
+    "diagnostics": [
+      {
+        "actor_identity": "e2e:scheduler",
+        "evidence_fingerprint": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+        "evidence_kind": "coordinator_no_send",
+        "material_changeset_fingerprint": null,
+        "material_changeset_uuid": null,
+        "observed_at": "2026-08-02T20:51:47.714013+00:00",
+        "reason": "independent contention winner was never dispatched",
+        "resolution": "confirmed_not_dispatched",
+        "workflow_terminal_fingerprint": null
+      }
+    ],
+    "outbox_sequence": 4,
+    "schema_version": 1,
+    "status": "released"
+  },
+  "client_results": [
+    {
+      "command_uuid": "82000000-0000-4000-8000-000000000922",
+      "index": 20,
+      "job_uuid": "b1000000-0000-4000-8000-000000000922",
+      "pid": 354112,
+      "result": {
+        "claim": {
+          "acquired_at": "2026-08-02T20:51:47.696138Z",
+          "attempt": 1,
+          "create_time": "2026-08-02T20:51:47.696138Z",
+          "fencing_token": 1,
+          "members": [
+            {
+              "acquired_version": 1,
+              "expected_version": 1,
+              "released_at": null,
+              "resource_kind": "device_material",
+              "resource_uuid": "dc534dcf-d6fa-5cb0-a46a-3743a1df8236"
+            }
+          ],
+          "release_command_uuid": null,
+          "release_proof_fingerprint": null,
+          "release_proof_kind": null,
+          "release_reason": null,
+          "released_at": null,
+          "running_at": null,
+          "set_fingerprint": "sha256:4fa70c89606638c1f6338dd2a5672cd1350b9e610eeffc7b95e121be836f172a",
+          "state": "reserved",
+          "terminal_changeset_uuid": null,
+          "uncertainty_reason": null,
+          "update_time": "2026-08-02T20:51:47.696138Z",
+          "uuid": "368e5447-f878-5727-a623-dd7e94d98660",
+          "workflow_node_job_uuid": "b1000000-0000-4000-8000-000000000922",
+          "workflow_task_uuid": "91000000-0000-4000-8000-000000000922",
+          "workflow_terminal_fingerprint": null
+        },
+        "command_uuid": "82000000-0000-4000-8000-000000000922",
+        "diagnostics": [],
+        "outbox_sequence": 2,
+        "schema_version": 1,
+        "status": "acquired"
+      },
+      "task_uuid": "91000000-0000-4000-8000-000000000922"
+    },
+    {
+      "command_uuid": "82000000-0000-4000-8000-000000000923",
+      "index": 21,
+      "job_uuid": "b1000000-0000-4000-8000-000000000923",
+      "pid": 354113,
+      "result": {
+        "claim": null,
+        "command_uuid": "82000000-0000-4000-8000-000000000923",
+        "diagnostics": [
+          {
+            "blocking_claim_uuid": "368e5447-f878-5727-a623-dd7e94d98660",
+            "code": "claim_blocked"
+          }
+        ],
+        "outbox_sequence": null,
+        "schema_version": 1,
+        "status": "blocked"
+      },
+      "task_uuid": "91000000-0000-4000-8000-000000000923"
+    }
+  ],
+  "device": {
+    "class": "szlab_mixer_pipetting_station",
+    "resource_template_uuid": "350e69d5-9675-40de-979a-db5609de1fce",
+    "uuid": "dc534dcf-d6fa-5cb0-a46a-3743a1df8236"
+  },
+  "unsettled_claim_count": 0
+}

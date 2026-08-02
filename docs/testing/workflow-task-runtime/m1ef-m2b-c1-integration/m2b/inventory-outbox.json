@@ -1,0 +1,12 @@
+{
+  "before": {
+    "max_sequence": 1,
+    "acked_sequence": 0,
+    "backlog": 1
+  },
+  "after": {
+    "max_sequence": 4,
+    "acked_sequence": 0,
+    "backlog": 4
+  }
+}

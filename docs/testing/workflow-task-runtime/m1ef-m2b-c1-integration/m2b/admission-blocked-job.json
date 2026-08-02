@@ -1,0 +1,30 @@
+{
+  "uuid": "7b2d9dd8-170d-405e-9fc7-ba1adaee1887",
+  "create_time": "2026-08-02T20:46:24.446217Z",
+  "update_time": "2026-08-02T20:46:24.446217Z",
+  "meta_data": {},
+  "workflow_task_uuid": "955c9c8c-1730-486c-ab12-e24bb8bf488c",
+  "workflow_node_uuid": "66000000-0000-4000-8000-0000000002b0",
+  "feedback_sequence": 0,
+  "topological_index": 0,
+  "executor_kind": "material_source",
+  "execution_policy": {},
+  "execution_timeout_seconds": 0,
+  "status": "pending",
+  "attempt": 1,
+  "param": {
+    "flow_role": "reagent",
+    "material_uuid": null,
+    "mode": "create_new",
+    "mount": {
+      "uuid": "97539b08-24de-5003-8b2e-9eb6e983c68a"
+    },
+    "resource_template_uuid": "ce9b9dd3-29bf-4d66-9509-ab73257b6d1f",
+    "site": "1962ab7c-b006-5e44-a1bd-9b1fde81d529",
+    "slot_range": null
+  },
+  "feedback_data": {},
+  "return_info": {},
+  "control_data": {},
+  "error_info": []
+}

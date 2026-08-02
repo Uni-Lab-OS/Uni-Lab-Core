@@ -1,0 +1,36 @@
+{
+  "uuid": "eb3edc46-c229-4a4b-8e2c-3900efbf51ec",
+  "create_time": "2026-08-02T20:46:24.165122Z",
+  "update_time": "2026-08-02T20:46:24.168884Z",
+  "meta_data": {},
+  "workflow_task_uuid": "7bcba15c-007e-4ba3-aabd-94847574b3a4",
+  "workflow_node_uuid": "66000000-0000-4000-8000-0000000002b0",
+  "feedback_sequence": 0,
+  "topological_index": 0,
+  "executor_kind": "material_source",
+  "execution_policy": {},
+  "execution_timeout_seconds": 0,
+  "status": "succeeded",
+  "attempt": 1,
+  "param": {
+    "flow_role": "reagent",
+    "material_uuid": null,
+    "mode": "create_new",
+    "mount": {
+      "uuid": "97539b08-24de-5003-8b2e-9eb6e983c68a"
+    },
+    "resource_template_uuid": "ce9b9dd3-29bf-4d66-9509-ab73257b6d1f",
+    "site": "1962ab7c-b006-5e44-a1bd-9b1fde81d529",
+    "slot_range": null
+  },
+  "feedback_data": {},
+  "return_info": {
+    "material": {
+      "resource_template_uuid": "ce9b9dd3-29bf-4d66-9509-ab73257b6d1f",
+      "uuid": "ff7ba922-9e36-44f7-a5ef-83d7cca53746"
+    }
+  },
+  "control_data": {},
+  "error_info": [],
+  "finished_at": "2026-08-02T20:46:24.168884Z"
+}
