@@ -80,7 +80,7 @@ Python / 规范 JSON / 结构化画布
 | D3-08 | 已接受 | 选择 A：任意已登记设备作者句柄只消费已发布目录的 `init_param_schema.config`；现代 `@device` 由带类型的 `__init__` 静态生成，作者句柄不另建合同。 |
 | D3-09～13 | 已接受 | 全部选择 A：公开参数使用封闭类型闭集；唯一外部输入规范化为候选启用请求（Activation Request）；v1 仅文件启动；实例部署字段与 `InitParam` 分离；敏感配置（Secret）只接受 `SecretRef`。 |
 | D3-14～15 | 已接受 | 全部选择 A：Uni-Lab OS 原子持久化内容寻址候选启用快照（Activation Snapshot）；候选启用解析器（Activation Resolver）只公开 `prepare_activation(...)` 深模块接口。 |
-| D4 | 待确认 | 嵌套公开边界、可查看性、可寻址性和设备注册表（Device Registry）投影细节。 |
+| D4-01～07 | 已接受 | 全部选择 A：exact 嵌套闭包与确定性实例身份；封闭 `private`/`exported` 和显式 `re_export`；候选可查看性与候选可寻址性分离；公共能力只允许收窄；定义、目录、设备注册表与运行时投影权威分离；前端展开只影响视图；完整定义与公共合同使用双摘要。 |
 | D5 | 部分接受 | v1 使用动作形态的组合工作流调用（CompositeWorkflowInvocation），在任务创建前静态展开；并发容量仍待确认。 |
 | G1 | 待确认 | 遗留启动 JSON、trusted-exec 原型和真实 SZLab 夹具的迁移与退役门。 |
 
@@ -394,23 +394,51 @@ Authoring Draft
 草稿（Draft）可变；候选定义（Candidate）是绑定草稿 revision、诊断和规范摘要的不可变编译结果；已发布定义（Published Definition）是唯一可被引用或启用的不可变 revision。发布以 CAS 锁定草稿，
 重新编译精确闭包并验证 digest 固定点后原子提交定义、公共合同、source map 与目录。任一步失败均保留
 旧 Published 与可诊断 Draft，不产生部分发布。Draft/Candidate 不进入设备注册表（Device Registry）；Published 才能产生
-候选复合设备投影（Composite Device Projection）。设备注册表（Device Registry）只投影公共合同、
-展示信息和活跃实例状态，不成为候选装配拓扑（Assembly Topology）的第二写权威。
+候选复合设备投影（Composite Device Projection）。
 
-一个已发布定义可以作为另一个候选工作单元定义（WorkCell Definition）的内部成员：
+D4-05 与 D4-07 把四类权威和两个摘要分开：
 
-- 外层固定引用内层 exact revision/content digest，不复制一份可独立编辑的定义；
-- 每层实例 alias 形成稳定 namespace，同一内层定义可以实例化多次；
-- 发布前递归计算定义闭包并拒绝直接或间接循环；
+- 不可变 Published 制品拥有完整候选装配拓扑（Assembly Topology）、精确依赖闭包、完整检查图和 source map；
+- PackageCatalog 只索引定义 fqid、revision、`definition_digest`、`public_contract_digest` 和公共合同；
+- 设备注册表（Device Registry）只保存从 Published 制品派生的候选复合设备投影（Composite Device Projection），不成为装配图的第二写权威；
+- 候选启用运行时拥有活跃候选工作单元实例（WorkCell Instance）的状态，设备注册表（Device Registry）只接收只读实例投影；前端不拥有上述事实；
+- `definition_digest` 覆盖完整定义、私有实现和 exact dependency closure；`public_contract_digest` 只覆盖可寻址公共边界；
+- 私有实现变化必须产生新 revision 和 `definition_digest`，但公共合同不变时可以保留 `public_contract_digest`；外层仍须显式 re-link/re-publish；
+- 摘要不同只证明内容不同，兼容性由结构化合同比较判断，不能把 digest 差异直接解释为破坏性变化。
+
+一个已发布定义可以作为另一个候选工作单元定义（WorkCell Definition）的内部成员。D4-01 接受以下
+闭包与身份合同：
+
+- 每条嵌套边固定内层 `definition_fqid`、revision、`definition_digest` 和外层稳定 `member_id`，不复制一份可独立编辑的定义；
+- 完整 `member_id` 路径形成稳定 namespace，同一内层定义可以实例化多次；
+- 子成员运行 UUID 以根候选工作单元实例（WorkCell Instance）UUID 与完整 `member_id` 路径确定性 UUIDv5 派生；同一实例重启保持稳定，不同实例隔离；
+- 发布前按精确定义 revision 身份递归计算闭包并拒绝直接或间接循环；
 - 外层只能连接内层公共端口、公共库位（Site）或显式导出成员；
 - 内层升级不改写已发布外层，外层必须显式 re-link、preview、validate、publish。
 
 外层为内层实例声明的 `pose` 相对外层父节点；内层成员继续相对内层根。世界位姿只通过上述矩阵合同
 递归派生，不把内层定义拍平成绝对坐标，也不把候选启用图（Activation Graph）的根世界位姿写回定义。
 
-候选可查看性（Inspectability）与候选可寻址性（Addressability）必须分离：授权维护者可以展开
-私有成员用于诊断，但外层工作流（Workflow）仍不能直接寻址该成员。精确权限和 public/export/
-re-export 合同由 [#185](https://github.com/Uni-Lab-OS/Uni-Lab-Core/issues/185) 冻结。
+D4-02 与 D4-03 规定：
+
+- 本地符号的可见性是封闭的 `private | exported`；外层 `re_export` 是显式命名映射，只能转导内层已经 `exported` 的符号；
+- 通配符、自动传递导出、重名、目标缺失和把 `private` 提权都在发布前失败；
+- 候选可查看性（Inspectability，候选术语）与候选可寻址性（Addressability，候选术语）严格分离；
+- 授权维护者可以按需读取私有成员的只读诊断投影，但不会因此获得可供外层工作流（Workflow）、连接或初始化绑定使用的地址；
+- 只有显式公共边界拥有稳定可寻址句柄；v1 不提供绕过公共边界的诊断直控。
+
+D4-04 使用显式公共导出表：
+
+- 公共端口保持方向和类型兼容；
+- 公共库位（Site）使用稳定外部句柄一对一映射一个已经导出的内部库位（Site）；
+- 公共动作（Action）只能导出已发布内部动作（Action）或工作流支持动作（Workflow-backed Action）；
+- 能力收窄可以绑定或隐藏已经固定的输入、缩小枚举/数值范围和减少能力集合，但不得扩大输入域、改变单位或方向、重解释效果语义或凭空增加内部能力；
+- 任一公共映射缺失、不兼容或越权都拒绝发布。
+
+D4-06 规定 Palette 只列出 Published 定义。折叠/展开是用户界面视图状态，不进入规范定义摘要，也不
+改变物理 `pose`、运行拓扑或可寻址性。授权私有检查图只读、按需加载；活跃实例状态作为独立运行时
+叠层显示。源码导航使用“定义摘要 + package 内相对路径 + source span”，禁止个人绝对路径，并从公共
+投影稳定定位到对应定义源码。
 
 ## 6. 启动参数与候选启用快照（Activation Snapshot）
 
