@@ -11,6 +11,32 @@ PLC-Sim 和领域设备包不随桌面端打包。用户在桌面端选择源码
 
 ## 新命令
 
+日常使用直接运行根 `package.json` 中的平台别名：
+
+| 命令 | 目标平台 |
+| --- | --- |
+| `pnpm build:linux` | Linux x86_64 |
+| `pnpm build:mac` | macOS Apple Silicon |
+| `pnpm build:mac-intel` | macOS Intel |
+| `pnpm build:win` | Windows x86_64 |
+
+例如，在 Apple Silicon Mac 上打包完整的 Runtime 和桌面端：
+
+```bash
+pnpm build:mac
+```
+
+这些短命令默认从当前 OS 源码读取 Runtime 版本，也可以继续附加统一入口参数。例如只重打
+Linux Electron 安装包：
+
+```bash
+pnpm build:linux \
+  --runtime-version 0.11.3 \
+  --runtime-installer artifacts/runtime-installer/linux-64/Uni-Lab-OS-0.11.3-linux-64.sh
+```
+
+需要显式指定平台、用于 CI 或脚本集成时，仍可使用通用形式。
+
 在包含 `Uni-Lab-OS` 和 `uni-lab-fe` 子模块的 Uni-Lab-Core 根目录执行：
 
 ```bash
