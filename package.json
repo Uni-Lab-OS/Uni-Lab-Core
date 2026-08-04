@@ -1,0 +1,9 @@
+{
+  "name": "uni-lab-core-integration",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "package:unified": "node scripts/package-unified.mjs",
+    "test:package:unified": "node --test scripts/package-unified.test.mjs"
+  }
+}
