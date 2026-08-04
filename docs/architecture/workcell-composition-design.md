@@ -1,10 +1,10 @@
 # 候选工作单元（WorkCell）组合定义、启动与分层动作设计
 
 > 状态：协议定义中（Protocol Definition）  
-> 合同草案版本：`workcell-composition-draft-20260804-d3-05`  
+> 合同草案版本：`workcell-composition-draft-20260804-d3-06`  
 > 父地图：[Core #181](https://github.com/Uni-Lab-OS/Uni-Lab-Core/issues/181)  
 > 历史来源：#181 拆票前最后一份完整正文（2026-08-04 17:18，Asia/Shanghai）  
-> 对齐范围：已纳入 D1–D3 的已接受决策，截止 D3-05；D4、D5 与迁移细节仍是候选设计。
+> 对齐范围：已纳入 D1–D3 的已接受决策，截止 D3-06；D4、D5 与迁移细节仍是候选设计。
 
 本文是候选工作单元（WorkCell）功能的独立、长期可维护设计文档。GitHub Issue 继续拥有
 决策状态、负责人、讨论和验收权威；本文负责保存整体设计及各协议面的共同背景。若本文与已接受的
@@ -68,6 +68,7 @@ Python / 规范 JSON / 结构化画布
 | D3-03 | 已接受 | 选择 A：一次启用最多接受一个外部覆盖对象；多个外部来源同时出现时失败，不做隐式叠加或优先级合并。 |
 | D3-04 | 已接受 | 选择 A：Phase 0 仅实现 Python-only 零外部参数路径；完整 v1 保留 D3-03 的单一外部来源合同。 |
 | D3-05 | 已接受 | 复用 `-g/--graph` 作为唯一启动定义来源参数，不新增 `--workcell`。 |
+| D3-06 | 已接受 | 选择 A：`-g/--graph` 严格按 `.py`、`.json`、`.graphml` 后缀分派；未知或无后缀失败，不做内容探测。 |
 | D4 | 待确认 | 嵌套公开边界、可查看性、可寻址性和设备注册表（Device Registry）投影细节。 |
 | D5 | 部分接受 | v1 使用动作形态的组合工作流调用（CompositeWorkflowInvocation），在任务创建前静态展开；并发容量仍待确认。 |
 | G1 | 待确认 | 遗留启动 JSON、trusted-exec 原型和真实 SZLab 夹具的迁移与退役门。 |
@@ -313,7 +314,9 @@ unilab \
 
 - `-g` 与 `--graph` 是同一参数的短/长形式，不能再增加并行启动来源参数；
 - 文件必须位于显式 workspace 内并经过 containment/symlink 检查；
-- Python、遗留 JSON/GraphML 与未来目录引用的精确识别规则继续由 [#184](https://github.com/Uni-Lab-OS/Uni-Lab-Core/issues/184) Grill；
+- `.py` 进入受限 AST 候选工作单元定义（WorkCell Definition）编译器，不 import/exec 作者源码；
+- `.json` 进入遗留 JSON 解析器，`.graphml` 进入遗留 GraphML 解析器；
+- 未知或无后缀直接失败，不做内容探测，也不把其他格式回退为 GraphML；
 - Phase 0 出现任何外部参数输入时必须明确失败；
 - `--config` 继续只配置 Uni-Lab OS 进程，不进入候选工作单元初始化合同；
 - params 输入是 closed object，未知字段失败；命令行不得携带敏感配置（Secret）明文；
@@ -406,13 +409,14 @@ v1 已接受运行模型：
 3. 零公开参数：只用 `workcell.py` 启动，不创建空 params 记录，但生成并持久化快照；
 4. 全部参数有默认值：不提供参数输入，快照记录规范化默认值及来源；
 5. Phase 0 提供外部参数输入：在 driver 构造前明确失败，不能静默忽略；
-6. 完整 v1 多个外部参数来源同时出现：失败且不按来源优先级隐式合并；
-7. 私有 PLC 地址：外部深路径覆盖失败；需要现场变化时必须提升为公开 `InitParam`；
-8. Secret Provider 不可用：在 driver 构造前失败，错误和快照不泄漏明文；
-9. 内层 definition 升级：不改变外层已发布 revision，必须显式 re-link/re-publish；
-10. 两个工作流任务（WorkflowTask）并发调用同一实例：在 D5 容量合同冻结前失败关闭或使用明确单容量策略；
-11. 内部取料后断电：相关物料、库位（Site）、作业执行占用（JobExecutionClaim）和栅栏保留不确定性并进入核对；
-12. 遗留 JSON 含动态 `data`：测试 seed、一次性 bootstrap 与运行时权威事实分别迁移，重启不得覆盖库存权威。
+6. `-g/--graph` 输入未知或无后缀：在读取为任一图格式前失败，不能内容猜测或回退为 GraphML；
+7. 完整 v1 多个外部参数来源同时出现：失败且不按来源优先级隐式合并；
+8. 私有 PLC 地址：外部深路径覆盖失败；需要现场变化时必须提升为公开 `InitParam`；
+9. Secret Provider 不可用：在 driver 构造前失败，错误和快照不泄漏明文；
+10. 内层 definition 升级：不改变外层已发布 revision，必须显式 re-link/re-publish；
+11. 两个工作流任务（WorkflowTask）并发调用同一实例：在 D5 容量合同冻结前失败关闭或使用明确单容量策略；
+12. 内部取料后断电：相关物料、库位（Site）、作业执行占用（JobExecutionClaim）和栅栏保留不确定性并进入核对；
+13. 遗留 JSON 含动态 `data`：测试 seed、一次性 bootstrap 与运行时权威事实分别迁移，重启不得覆盖库存权威。
 
 ## 12. 非目标
 
@@ -451,6 +455,7 @@ Frontier、Blocked、Fog 和跨票冲突。详细决策写入对应子议题，�
 - [ ] 零覆盖不创建空 params 记录，但始终生成持久、脱敏候选启用快照（Activation Snapshot）；
 - [ ] 一次启用最多接受一个外部覆盖对象；多个来源同时出现时在硬件副作用前失败；
 - [ ] Phase 0 通过 `-g/--graph` 启动 Python 定义，外部参数输入明确失败且仍持久化默认值快照；
+- [ ] `-g/--graph` 只接受 `.py`、`.json`、`.graphml`；未知或无后缀失败，`.py` 不 import/exec；
 - [ ] 已发布定义进入设备注册表（Device Registry）/Palette，Draft/Candidate 不进入；
 - [ ] 工作流支持动作（Workflow-backed Action）保留 `implementation.kind`，静态进入唯一执行计划；
 - [ ] 断电、部分物理成功、取消和执行未知不触发盲目物理重放（Blind Physical Replay）；
