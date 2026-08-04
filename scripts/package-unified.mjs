@@ -13,6 +13,9 @@ import { fileURLToPath } from 'node:url'
 const repositoryRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const osDirectory = join(repositoryRoot, 'Uni-Lab-OS')
 const frontendDirectory = join(repositoryRoot, 'uni-lab-fe')
+const artifactsDirectory = resolve(
+  process.env.UNILAB_ARTIFACTS_DIRECTORY ?? join(repositoryRoot, 'artifacts')
+)
 
 const PLATFORM_ALIASES = new Map([
   ['linux', 'linux-64'],
@@ -56,12 +59,15 @@ function main() {
 
   requireNativeHost(targetPlatform)
   if (!runtimeInstaller) {
-    const localChannelDirectory = join(
-      repositoryRoot,
-      'artifacts',
-      'runtime-conda',
-      targetPlatform
-    )
+    const condaExecutable = process.env.UNILAB_CONDA_EXE
+      ? resolve(process.env.UNILAB_CONDA_EXE)
+      : null
+    if (!condaExecutable || !existsSync(condaExecutable)) {
+      throw new Error(
+        '缺少 UNILAB_CONDA_EXE：Unix 请指向 micromamba，Windows 请指向兼容的 conda-standalone'
+      )
+    }
+    const localChannelDirectory = join(artifactsDirectory, 'runtime-conda')
     mkdirSync(localChannelDirectory, { recursive: true })
     run(
       process.env.UNILAB_RATTLER_BUILD_COMMAND ?? 'rattler-build',
@@ -146,8 +152,7 @@ function main() {
       process.env
     )
     const outputDirectory = join(
-      repositoryRoot,
-      'artifacts',
+      artifactsDirectory,
       'runtime-installer',
       targetPlatform
     )
@@ -158,6 +163,8 @@ function main() {
         join(osDirectory, '.conda', 'constructor'),
         '--platform',
         targetPlatform,
+        '--conda-exe',
+        condaExecutable,
         '--output-dir',
         outputDirectory
       ],
@@ -178,7 +185,8 @@ function main() {
   }
 
   run(
-    process.platform === 'win32' ? 'pnpm.cmd' : 'pnpm',
+    process.env.UNILAB_PNPM_COMMAND
+      ?? (process.platform === 'win32' ? 'pnpm.cmd' : 'pnpm'),
     [
       '--dir',
       frontendDirectory,
