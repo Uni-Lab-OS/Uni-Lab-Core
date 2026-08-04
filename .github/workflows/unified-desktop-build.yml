@@ -1,0 +1,183 @@
+name: Unified Offline Desktop Installers
+
+on:
+  workflow_dispatch:
+    inputs:
+      platforms:
+        description: '逗号分隔：win-64, linux/linux-64, osx/osx-64, osx-arm64'
+        required: false
+        default: 'linux-64,osx-64,osx-arm64,win-64'
+        type: string
+      runtime_version:
+        description: '已发布到 Uni-Lab Conda channel 的 Runtime 版本'
+        required: true
+        default: '0.11.3'
+        type: string
+      release_mode:
+        description: 'production 强制平台签名；development 明确标记未签名'
+        required: true
+        default: development
+        type: choice
+        options:
+          - development
+          - production
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            platform: linux-64
+          - os: macos-15-intel
+            platform: osx-64
+          - os: macos-latest
+            platform: osx-arm64
+          - os: windows-latest
+            platform: win-64
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash -l {0}
+    steps:
+      - name: Select platform
+        id: select
+        env:
+          REQUESTED_PLATFORMS: ${{ inputs.platforms }}
+          TARGET_PLATFORM: ${{ matrix.platform }}
+        run: |
+          enabled=false
+          IFS=',' read -ra requested <<< "$REQUESTED_PLATFORMS"
+          for item in "${requested[@]}"; do
+            item="${item//[[:space:]]/}"
+            case "$item" in
+              linux) item=linux-64 ;;
+              osx) item=osx-64 ;;
+            esac
+            if [[ "$item" == "$TARGET_PLATFORM" ]]; then enabled=true; fi
+          done
+          echo "enabled=$enabled" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/checkout@v6
+        if: steps.select.outputs.enabled == 'true'
+        with:
+          submodules: recursive
+
+      - uses: pnpm/action-setup@v4
+        if: steps.select.outputs.enabled == 'true'
+        with:
+          version: 10.13.1
+
+      - uses: actions/setup-node@v6
+        if: steps.select.outputs.enabled == 'true'
+        with:
+          node-version: '22'
+          cache: pnpm
+          cache-dependency-path: uni-lab-fe/pnpm-lock.yaml
+
+      - uses: conda-incubator/setup-miniconda@v4
+        if: steps.select.outputs.enabled == 'true'
+        with:
+          miniforge-version: latest
+          use-mamba: true
+          activate-environment: constructor-build
+          auto-update-conda: false
+          channels: conda-forge
+          channel-priority: strict
+
+      - name: Install build dependencies
+        if: steps.select.outputs.enabled == 'true'
+        run: |
+          mamba install -n constructor-build --override-channels -c conda-forge constructor=3.16.1 rattler-build=0.72.2 -y
+          pnpm --dir uni-lab-fe install --frozen-lockfile
+
+      - name: Require production signing material
+        if: steps.select.outputs.enabled == 'true' && inputs.release_mode == 'production'
+        env:
+          TARGET_PLATFORM: ${{ matrix.platform }}
+          CSC_LINK_VALUE: ${{ secrets.CSC_LINK }}
+          CSC_PASSWORD_VALUE: ${{ secrets.CSC_KEY_PASSWORD }}
+          APPLE_ID_VALUE: ${{ secrets.APPLE_ID }}
+          APPLE_PASSWORD_VALUE: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
+          APPLE_TEAM_VALUE: ${{ secrets.APPLE_TEAM_ID }}
+          LINUX_GPG_KEY_VALUE: ${{ secrets.LINUX_GPG_PRIVATE_KEY }}
+          LINUX_GPG_PASSWORD_VALUE: ${{ secrets.LINUX_GPG_PASSPHRASE }}
+        run: |
+          case "$TARGET_PLATFORM" in
+            linux-64)
+              test -n "$LINUX_GPG_KEY_VALUE" && test -n "$LINUX_GPG_PASSWORD_VALUE"
+              ;;
+            win-64)
+              test -n "$CSC_LINK_VALUE" && test -n "$CSC_PASSWORD_VALUE"
+              ;;
+            osx-64|osx-arm64)
+              test -n "$CSC_LINK_VALUE" && test -n "$CSC_PASSWORD_VALUE"
+              test -n "$APPLE_ID_VALUE" && test -n "$APPLE_PASSWORD_VALUE" && test -n "$APPLE_TEAM_VALUE"
+              ;;
+          esac
+
+      - name: Build unified offline installer
+        if: steps.select.outputs.enabled == 'true'
+        env:
+          UNILABOS_INSTALLER_VERSION: ${{ inputs.runtime_version }}
+          UNILABOS_INSTALLER_PACKAGE: unilabos
+          CSC_LINK: ${{ inputs.release_mode == 'production' && secrets.CSC_LINK || '' }}
+          CSC_KEY_PASSWORD: ${{ inputs.release_mode == 'production' && secrets.CSC_KEY_PASSWORD || '' }}
+          APPLE_ID: ${{ inputs.release_mode == 'production' && secrets.APPLE_ID || '' }}
+          APPLE_APP_SPECIFIC_PASSWORD: ${{ inputs.release_mode == 'production' && secrets.APPLE_APP_SPECIFIC_PASSWORD || '' }}
+          APPLE_TEAM_ID: ${{ inputs.release_mode == 'production' && secrets.APPLE_TEAM_ID || '' }}
+          CSC_IDENTITY_AUTO_DISCOVERY: ${{ inputs.release_mode == 'production' && 'true' || 'false' }}
+        run: |
+          node scripts/package-unified.mjs \
+            --platform "${{ matrix.platform }}" \
+            --runtime-version "${{ inputs.runtime_version }}"
+
+      - name: Sign and verify production artifact
+        if: steps.select.outputs.enabled == 'true' && inputs.release_mode == 'production'
+        env:
+          TARGET_PLATFORM: ${{ matrix.platform }}
+          LINUX_GPG_KEY_VALUE: ${{ secrets.LINUX_GPG_PRIVATE_KEY }}
+          LINUX_GPG_PASSWORD_VALUE: ${{ secrets.LINUX_GPG_PASSPHRASE }}
+        run: |
+          case "$TARGET_PLATFORM" in
+            linux-64)
+              printf '%s' "$LINUX_GPG_KEY_VALUE" | gpg --batch --import
+              for artifact in uni-lab-fe/apps/desktop/release/*.AppImage; do
+                gpg --batch --yes --pinentry-mode loopback \
+                  --passphrase "$LINUX_GPG_PASSWORD_VALUE" \
+                  --armor --detach-sign "$artifact"
+                gpg --verify "$artifact.asc" "$artifact"
+              done
+              ;;
+            osx-64|osx-arm64)
+              xcrun stapler validate uni-lab-fe/apps/desktop/release/*.dmg
+              spctl --assess --type open --context context:primary-signature \
+                --verbose=2 uni-lab-fe/apps/desktop/release/*.dmg
+              ;;
+            win-64)
+              powershell -NoProfile -Command '$files = Get-ChildItem "uni-lab-fe/apps/desktop/release/*-setup.exe"; if (-not $files) { throw "Signed installer missing" }; foreach ($file in $files) { $signature = Get-AuthenticodeSignature $file.FullName; if ($signature.Status -ne "Valid") { throw "Invalid Authenticode signature: $($file.Name) $($signature.Status)" } }'
+              ;;
+          esac
+
+      - name: Mark development artifacts
+        if: steps.select.outputs.enabled == 'true' && inputs.release_mode == 'development'
+        run: echo "UNSIGNED DEVELOPMENT BUILD" > uni-lab-fe/apps/desktop/release/DEVELOPMENT-BUILD.txt
+
+      - name: Write SHA-256 manifest
+        if: steps.select.outputs.enabled == 'true'
+        working-directory: uni-lab-fe/apps/desktop/release
+        run: |
+          find . -maxdepth 1 -type f ! -name SHA256SUMS -print0 \
+            | sort -z \
+            | xargs -0 shasum -a 256 > SHA256SUMS
+
+      - uses: actions/upload-artifact@v6
+        if: steps.select.outputs.enabled == 'true'
+        with:
+          name: Uni-Lab-unified-${{ matrix.platform }}-${{ inputs.release_mode }}
+          path: |
+            uni-lab-fe/apps/desktop/release/*
+            artifacts/runtime-installer/${{ matrix.platform }}/*
+          if-no-files-found: error
+          retention-days: 30
