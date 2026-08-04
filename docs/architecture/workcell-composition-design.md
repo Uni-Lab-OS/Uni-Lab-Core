@@ -1,10 +1,10 @@
 # 候选工作单元（WorkCell）组合定义、启动与分层动作设计
 
 > 状态：协议定义中（Protocol Definition）
-> 合同草案版本：`workcell-composition-draft-20260804-d2-material`
+> 合同草案版本：`workcell-composition-draft-20260805-d2-provisioning-deferred`
 > 父地图：[Core #181](https://github.com/Uni-Lab-OS/Uni-Lab-Core/issues/181)
 > 历史来源：#181 拆票前最后一份完整正文（2026-08-04 17:18，Asia/Shanghai）
-> 对齐范围：已纳入 D1–D3 的已接受决策；D1 与 D3 已全部冻结；D2-04、D2-06 的动态物料边界与预置机制已经冻结，D2 其余 5 项及 D4、D5、迁移细节仍是候选设计。
+> 对齐范围：已纳入 D1–D3 的已接受决策；D1 与 D3 已全部冻结；D2-04 的动态物料边界已经冻结，D2-06 的真实物料预置执行链已明确推迟到 v2+，D2 其余 5 项及 D4、D5、迁移细节仍是候选设计。
 
 本文是候选工作单元（WorkCell）功能的独立、长期可维护设计文档。GitHub Issue 继续拥有
 决策状态、负责人、讨论和验收权威；本文负责保存整体设计及各协议面的共同背景。若本文与已接受的
@@ -66,7 +66,7 @@ Python / 规范 JSON / 结构化画布
 | D2-01 | 已接受方向 | 物理位置和旋转进入 v1；候选局部位姿（LocalPose）与 `ui_layout` 分离。 |
 | D2-02 | 已接受方向 | 内部相对位姿归定义；候选工作单元实例（WorkCell Instance）的根世界位姿归候选启用图（Activation Graph）。 |
 | D2-04 | 已接受 | 选择 A：定义拥有固定结构、物料设计约束和只读投影；库存权威（Inventory Authority）独占真实物料（Material）与库位占用（SiteOccupancy）动态事实。 |
-| D2-06 | 已接受 | 选择 A：定义只生成预置计划；操作者显式授权后，由单一库存权威（Inventory Authority）按稳定 `command_id`、请求摘要和持久回执原子执行；启动和重启都不自动执行。 |
+| D2-06 | 已决策延期 | v1 只描述和校验物料设计预期，不生成或执行真实物料预置命令；`command_id`、请求摘要、整批事务与持久回执的执行链推迟到 v2+。 |
 | D3-01 | 已接受 | `workcell.py` 是必需作者制品；参数输入是按需存在的覆盖层；每次启用都生成候选启用快照（Activation Snapshot）。 |
 | D3-02 | 已接受 | 选择 A：零覆盖不创建空 params 文件或持久记录；“无覆盖”以参数输入缺席表示，候选启用快照（Activation Snapshot）仍须持久化。 |
 | D3-03 | 已接受 | 选择 A：一次启用最多接受一个外部覆盖对象；多个外部来源同时出现时失败，不做隐式叠加或优先级合并。 |
@@ -128,8 +128,16 @@ Python / 规范 JSON / 结构化画布
 （WorkflowTask）是否可开始由任务物料准入（TaskMaterialAdmission）判定。安全必需且不可动态缺失的
 固定反应器、废液桶等必须建模为固定结构成员或启用前置条件。
 
-首次真实物料预置采用显式授权、可安全重试且逻辑效果至多一次的机制，而不是 `executed=true`
-布尔标志：
+v1 只允许候选工作单元定义（WorkCell Definition）保存和校验模板、预期数量与目标库位（Site）等
+设计预期，并在创作或检查界面展示差异。它不生成可执行的真实物料预置命令，不创建或移动真实物料
+（Material），不写库位占用（SiteOccupancy），不扩展 `processed_command`，也不在候选启用快照
+（Activation Snapshot）中记录预置命令或回执引用。首次安装所需的真实物料继续由操作者通过现有库存
+权威（Inventory Authority）接口准备；候选工作单元（WorkCell）启用、重启和定义升级始终零物料写入。
+
+#### 推迟到 v2+ 的目标机制
+
+以下首次真实物料预置机制保留为 v2+ 候选目标，不属于 v1 实现范围或接受门。未来若重开，应采用
+显式授权、可安全重试且逻辑效果至多一次的机制，而不是 `executed=true` 布尔标志：
 
 1. 编译精确已发布定义，生成只含模板、数量和目标库位的规范计划及 `provisioning_digest`；生成计划
    本身没有副作用，候选工作单元启用也不会自动提交该计划。
@@ -158,8 +166,8 @@ Python / 规范 JSON / 结构化画布
 
 当前 Uni-Lab OS 的 `processed_command` 已具备 `command_id` 主键、同一事务内认领/业务写入/台账/
 事务发件箱（Outbox）/结果持久化和重放返回，可作为实现接缝。它目前尚未持久化 `request_digest`，
-因此实施本合同前必须补齐“同身份不同内容拒绝”校验，并增加整批预置的领域命令和持久回执；不能直接
-把现有单物料命令循环调用后宣称整批原子。
+因此未来实施 v2+ 预置合同前必须补齐“同身份不同内容拒绝”校验，并增加整批预置的领域命令和持久
+回执；不能直接把现有单物料命令循环调用后宣称整批原子。这些改造均不得成为 v1 交付依赖。
 
 ## 4. 创作模型
 
@@ -410,7 +418,6 @@ unilab \
   -> 降低为候选启用图（Activation Graph）
   -> 原子持久化候选启用快照（Activation Snapshot）
   -> 返回 PreparedActivation 或稳定 ActivationDiagnostics
-  -> 生成可选物料预置计划（无副作用，不自动授权或执行）
   -> import/initialize selected drivers
 ```
 
@@ -419,7 +426,7 @@ Uni-Lab OS 是候选启用快照（Activation Snapshot）的本地写权威：�
 非敏感值及来源、Secret 引用版本和候选启用图（Activation Graph）digest。输入变化要求显式重新启用；
 重启只自动复用完全相同的 digest。Phase 0 收到外部输入可保留默认解析快照，但必须标记不可启用且不
 产生 launch plan。诊断固定为 `code/path/source_span/message/hint`；任一失败都不得留下部分 driver、
-部分设备注册表（Device Registry）实例或部分物料 bootstrap。
+部分设备注册表（Device Registry）实例或任何真实物料（Material）/库位占用（SiteOccupancy）写入。
 
 ## 7. 分层动作（Action）
 
@@ -497,7 +504,7 @@ v1 已接受运行模型：
 10. 内层 definition 升级：不改变外层已发布 revision，必须显式 re-link/re-publish；
 11. 两个工作流任务（WorkflowTask）并发调用同一实例：在 D5 容量合同冻结前失败关闭或使用明确单容量策略；
 12. 内部取料后断电：相关物料、库位（Site）、作业执行占用（JobExecutionClaim）和栅栏保留不确定性并进入核对；
-13. 遗留 JSON 含动态 `data`：测试 seed、一次性 bootstrap 与运行时权威事实分别迁移，重启不得覆盖库存权威。
+13. 遗留 JSON 含动态 `data`：测试 seed、推迟到 v2+ 的预置候选与运行时权威事实分别迁移，v1 不执行预置且重启不得覆盖库存权威。
 
 ## 12. 非目标
 
@@ -508,6 +515,7 @@ v1 已接受运行模型：
 - 不自动公开全部内部成员或内部动作（Action）；
 - 不根据工作流（Workflow）节点数量自动发布动作（Action）；
 - 不在 v1 支持 `optional`、`variant`、动态拓扑或运行时改图；
+- 不在 v1 生成或执行真实物料预置命令，也不为其增加 `command_id`、请求摘要、整批事务或回执存储；
 - 不在 driver、ROS callback 或前端中运行第二个 planner/调度器（Scheduler）；
 - 不在本功能重定义动作合同、工作流组合、物料权威或调度权威。
 
@@ -537,6 +545,7 @@ Frontier、Blocked、Fog 和跨票冲突。详细决策写入对应子议题，�
 - [ ] 一次启用最多接受一个外部覆盖对象；多个来源同时出现时在硬件副作用前失败；
 - [ ] Phase 0 通过 `-g/--graph` 启动 Python 定义，外部参数输入明确失败且仍持久化默认值快照；
 - [ ] `-g/--graph` 只接受 `.py`、`.json`、`.graphml`；未知或无后缀失败，`.py` 不 import/exec 且只有一个顶层 `@workcell` 根定义；
+- [ ] v1 可展示和校验物料设计预期，但候选工作单元（WorkCell）启用、重启和定义升级均不创建/移动真实物料（Material）或写库位占用（SiteOccupancy）；
 - [ ] 已发布定义进入设备注册表（Device Registry）/Palette，Draft/Candidate 不进入；
 - [ ] 工作流支持动作（Workflow-backed Action）保留 `implementation.kind`，静态进入唯一执行计划；
 - [ ] 断电、部分物理成功、取消和执行未知不触发盲目物理重放（Blind Physical Replay）；
