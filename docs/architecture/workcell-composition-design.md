@@ -1,10 +1,10 @@
 # 候选工作单元（WorkCell）组合定义、启动与分层动作设计
 
 > 状态：协议定义中（Protocol Definition）
-> 合同草案版本：`workcell-composition-draft-20260804-d3-15`
+> 合同草案版本：`workcell-composition-draft-20260804-d1-11`
 > 父地图：[Core #181](https://github.com/Uni-Lab-OS/Uni-Lab-Core/issues/181)
 > 历史来源：#181 拆票前最后一份完整正文（2026-08-04 17:18，Asia/Shanghai）
-> 对齐范围：已纳入 D1–D3 的已接受决策，D3-01～D3-15 已全部冻结；D4、D5 与迁移细节仍是候选设计。
+> 对齐范围：已纳入 D1–D3 的已接受决策；D1 仅 D1-08 待确认，D3-01～D3-15 已全部冻结；D4、D5 与迁移细节仍是候选设计。
 
 本文是候选工作单元（WorkCell）功能的独立、长期可维护设计文档。GitHub Issue 继续拥有
 决策状态、负责人、讨论和验收权威；本文负责保存整体设计及各协议面的共同背景。若本文与已接受的
@@ -60,6 +60,9 @@ Python / 规范 JSON / 结构化画布
 | D1-03 | 已接受 | 保留 `@workcell` 函数语法，Python 定义文件可以直接作为 `-g/--graph` 启动输入。 |
 | D1-04 | 已接受 | Python 与规范 JSON/结构化画布允许双向语义创作；同一草稿同一时刻只有一种可写模式。 |
 | D1-05 | 已接受 | 不承诺源码字节无损；发布前必须满足 `graph -> Python -> graph` 规范 digest 固定点。 |
+| D1-06～07 | 已接受 | 全部选择 A：受限 Python 使用失败关闭 AST allowlist；定义身份为 PackageCatalog fqid、单调 revision 与 digest，`id=` 是稳定 `member_id`。 |
+| D1-08 | 待确认 | 规范 JSON、引用闭包、字段级集合顺序、source map 与诊断；现有启动 JSON 仅作为遗留兼容输入证据。 |
+| D1-09～11 | 已接受 | 全部选择 A：单草稿 CAS/完整语义 diff；显式 `.py` 与 clean-wheel parity；Draft → Candidate → Published 原子失败关闭。 |
 | D2-01 | 已接受方向 | 物理位置和旋转进入 v1；候选局部位姿（LocalPose）与 `ui_layout` 分离。 |
 | D2-02 | 已接受方向 | 内部相对位姿归定义；候选工作单元实例（WorkCell Instance）的根世界位姿归候选启用图（Activation Graph）。 |
 | D3-01 | 已接受 | `workcell.py` 是必需作者制品；参数输入是按需存在的覆盖层；每次启用都生成候选启用快照（Activation Snapshot）。 |
@@ -197,12 +200,12 @@ Python 写模式
 
 约束：
 
-- 同一草稿同一时刻只有一种可写模式；切换前必须处理 dirty 状态；
-- 不做两份文本的自动增量合并或强制覆盖；
+- 同一草稿只有一个 `draft_revision` 和当前可写模式；保存携带 base revision/digest 做 CAS；
+- 切换前编译、校验并展示完整语义 diff；冲突不自动合并或强制覆盖，必须显式 rebase；
 - 语义往返不承诺注释、空行、局部变量风格和 import 排列的字节级无损；
 - 稳定 `member_id`、引用、嵌套 definition digest 和 source map 不能靠变量名或数组顺序猜测；
 - AI 可以修改 Python，也可以提交有类型图编辑/JSON Patch，但必须经过同一 compiler/generator/validator；
-- 无效草稿可以保存和诊断，但不能发布、启用或替换最后一个有效 revision。
+- 无效草稿可以保存和诊断，但不能替换最后一个有效候选图，也不能发布或启用。
 
 ## 5. 发布、组合与设备注册表（Device Registry）
 
@@ -217,7 +220,9 @@ Authoring Draft
        └── activation resolver input
 ```
 
-发布必须原子失败关闭。Draft/Candidate 不进入设备注册表（Device Registry）；Published 才能产生
+草稿（Draft）可变；候选定义（Candidate）是绑定草稿 revision、诊断和规范摘要的不可变编译结果；已发布定义（Published Definition）是唯一可被引用或启用的不可变 revision。发布以 CAS 锁定草稿，
+重新编译精确闭包并验证 digest 固定点后原子提交定义、公共合同、source map 与目录。任一步失败均保留
+旧 Published 与可诊断 Draft，不产生部分发布。Draft/Candidate 不进入设备注册表（Device Registry）；Published 才能产生
 候选复合设备投影（Composite Device Projection）。设备注册表（Device Registry）只投影公共合同、
 展示信息和活跃实例状态，不成为候选装配拓扑（Assembly Topology）的第二写权威。
 
@@ -377,7 +382,7 @@ v1 已接受运行模型：
 以下是目标设计（Target Design），不是已实现文件树：
 
 - Package Manager Module：现有 Package Source 到 PackageCatalog 的唯一发现入口，增加定义种类而不复制扫描器；
-- WorkCell Definition Module：拥有 AST lowering、link、recursive closure、public contract、canonical codec、source map 和投影；
+- WorkCell Definition Module：以失败关闭 AST allowlist 拒绝动态控制流、任意调用/I/O 和未知节点，拥有 lowering、link、recursive closure、public contract、canonical codec、source map 和投影；
 - 候选启用解析器（Activation Resolver）：通过唯一 `prepare_activation(...)` 接口把定义、可选请求、实例部署和 Secret Provider 降低为候选启用图与脱敏快照；
 - Action Publication Module：复用既有动作（Action）与组合工作流调用（CompositeWorkflowInvocation）合同；
 - ExecutionPlan Builder：继续由调度器（Scheduler）拥有唯一运行时 lowering；
@@ -389,9 +394,9 @@ v1 已接受运行模型：
 
 ## 10. 身份、版本与失败语义
 
-- 定义机器身份使用 PackageCatalog fqid；显示名可独立修改；
-- 已发布 revision/content digest 不原地改写，外层固定 exact resolved digest；
-- 内部成员使用定义局部稳定身份，运行 UUID 从外层实例 namespace 与成员身份确定性派生；
+- 定义机器身份为 `<class_namespace>.<@workcell.id>` 的 PackageCatalog fqid；装饰器 `version` 是作者语义元数据，发布权威另分配单调正整数 revision；
+- 精确发布身份为 `{definition_fqid, revision, content_digest}`；内容摘要覆盖规范语义图及固定依赖/资产闭包，公共合同摘要只覆盖公开表面；
+- `id=` 是定义局部稳定 `member_id`，变量名只属于 source map；运行 UUID 从外层实例 namespace 与成员身份确定性派生；
 - 库位（Site）key、公共端口、导出 alias、公开参数名和动作名都是兼容面；
 - 改 `instance_id` 创建新实例；改其他实例部署或启动值为同一实例创建新候选启用快照（Activation Snapshot），不产生新定义 revision；
 - 修改定义或内层依赖产生新 definition revision，不能热切换既有任务；
@@ -401,7 +406,7 @@ v1 已接受运行模型：
 
 ## 11. 典型压测场景
 
-1. Python 局部变量重命名：稳定成员身份不变，否则要求显式迁移；
+1. Python 局部变量重命名：`member_id` 与内容语义不变，source map 可以变化；
 2. Python → JSON → Python：注释可规范化，但图 digest、成员、连接、库位（Site）和位姿不变；
 3. 零公开参数：只用 `workcell.py` 启动，不创建空 params 记录，但生成并持久化快照；
 4. 全部参数有默认值：不提供参数输入，快照记录规范化默认值及来源；
