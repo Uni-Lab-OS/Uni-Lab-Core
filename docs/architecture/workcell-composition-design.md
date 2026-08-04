@@ -1,10 +1,10 @@
 # 候选工作单元（WorkCell）组合定义、启动与分层动作设计
 
-> 状态：协议定义中（Protocol Definition）
-> 合同草案版本：`workcell-composition-draft-20260805-d5-interleaved`
+> 状态：协议已冻结，待实现与跨仓验收
+> 合同草案版本：`workcell-composition-draft-20260805-g1-frozen`
 > 父地图：[Core #181](https://github.com/Uni-Lab-OS/Uni-Lab-Core/issues/181)
 > 历史来源：#181 拆票前最后一份完整正文（2026-08-04 17:18，Asia/Shanghai）
-> 对齐范围：D1～D5 的协议决策已全部收口；D2-06 的真实物料预置执行链已明确推迟到 v2+。G1 仍是候选设计。
+> 对齐范围：D1～D5 与 G1 的协议决策已全部收口；D2-06 的真实物料预置执行链已明确推迟到 v2+。后续工作是各仓实现与跨仓验收。
 
 本文是候选工作单元（WorkCell）功能的独立、长期可维护设计文档。GitHub Issue 继续拥有
 决策状态、负责人、讨论和验收权威；本文负责保存整体设计及各协议面的共同背景。若本文与已接受的
@@ -82,7 +82,8 @@ Python / 规范 JSON / 结构化画布
 | D3-14～15 | 已接受 | 全部选择 A：Uni-Lab OS 原子持久化内容寻址候选启用快照（Activation Snapshot）；候选启用解析器（Activation Resolver）只公开 `prepare_activation(...)` 深模块接口。 |
 | D4-01～07 | 已接受 | 全部选择 A：exact 嵌套闭包与确定性实例身份；封闭 `private`/`exported` 和显式 `re_export`；候选可查看性与候选可寻址性分离；公共能力只允许收窄；定义、目录、设备注册表与运行时投影权威分离；前端展开只影响视图；完整定义与公共合同使用双摘要。 |
 | D5 | 已接受 | 显式工作流支持动作（Workflow-backed Action）复用既有工作流目录合同并静态降低；不同调用的内部作业可以交错，只由完整逐作业执行占用保护，不建立整次调用容量合同。 |
-| G1 | 待确认 | 遗留启动 JSON、trusted-exec 原型和真实 SZLab 夹具的迁移与退役门。 |
+| G1-01～02 | 已接受（B′） | 永久支持 `.json`/`.graphml` 输入并无损保留遗留字段，但所有格式必须进入同一规范编译、校验、发布和启用链；兼容数据不获得运行权威。 |
+| G1-03～08 | 已接受 | 全部选择 A：动态 `data` 分类隔离；最小仿真与 SZLab 双夹具；语义固定点；真实跨仓集成；失败场景；按仓交付子问题与 Core 总验收门。 |
 
 ## 3. 设计边界与权威
 
@@ -291,7 +292,8 @@ assembly_graph = nx.node_link_graph(
   显式 `pose`；
 - 2D 与 3D 编辑器共享同一物理 `pose`；候选工作单元定义（WorkCell Definition）不增加节点级
   `ui_layout`，也不保存第二套像素或显示坐标；
-- `config` 只保存定义期固定 JSON 值；`data` 为现有结构兼容保留，但在定义中必须是 `{}`；
+- `config` 只保存定义期固定 JSON 值；规范定义中的 `data` 必须是 `{}`。遗留非空 `data` 和未知字段只进入
+  无损兼容保留层，不获得定义、启用或运行语义；
 - 唯一必需的新节点字段是可选 `config_bindings`，其 `type` 仅允许 `member` 或
   `init_param`；候选启用解析器（Activation Resolver）将它降低为交给 OS/Backend 的普通 `config`；
 - `config.sites[]` 继续使用 `label/content_type/position/size`，数组位置映射 Backend
@@ -302,7 +304,8 @@ assembly_graph = nx.node_link_graph(
 
 `links[*]` 保持 `id/source/target/type/port`，NetworkX 通过 `key="id"` 使用稳定边身份。
 规范编码时 `nodes` 按 `id`、`links` 按 `id` 排序；`content_digest` 只排除
-`graph.content_digest` 自身。source map 是绑定内容摘要的 sidecar，诊断统一为
+`graph.content_digest` 自身，也不包含无损兼容保留层。`legacy_payload_digest` 单独覆盖规范化后的遗留保留
+载荷；原始文件另记录字节摘要。source map 是绑定内容摘要的 sidecar，诊断统一为
 `code/path/source_span/message/hint`。
 
 ### 4.5 物理布置编辑与 `layout_plane`
@@ -367,10 +370,9 @@ T_world(child) = T_world(parent) · T_parent(child)
 迁移报告。来源唯一时才归一到 `pose`；多个来源等价时保留一份并告警；冲突时失败并报告精确 JSON
 路径。遗留 2D 编辑器的毫米坐标也迁移到物理 `pose`，不分流到 `ui_layout`。若旧载荷只有两个坐标，
 适配器必须结合已知 `layout_plane` 和另一条无歧义来源补足未显示轴；无法证明第三轴时失败，不静默归零。
-`occupied_by`、非空 `data`、真实物料（Material）身份和库位占用（SiteOccupancy）不得进入定义，只能由
-库存权威（Inventory Authority）的独立迁移处理。
-v1 不生成或接受可执行物料预置候选；遗留测试 seed 必须保留为显式测试夹具。逐夹具映射与固定点测试
-归 G1。
+`occupied_by`、真实物料（Material）身份和库位占用（SiteOccupancy）不得进入定义，只能由库存权威
+（Inventory Authority）的独立迁移处理。非空 `data` 按分类报告处理：测试 seed 进入独立测试夹具，
+运行时事实排除，未知字段原样进入无损兼容保留层且不下发驱动。v1 不生成或接受可执行物料预置候选。
 
 定义中不保存 Backend 运行实例字段 `uuid/resource_template_uuid/parent_uuid/relative_position`。
 候选启用快照（Activation Snapshot）从实例 namespace 和 `member_id` 确定性派生
@@ -507,7 +509,9 @@ unilab \
 - `-g` 与 `--graph` 是同一参数的短/长形式，不能再增加并行启动来源参数；
 - 文件必须位于显式 workspace 内并经过 containment/symlink 检查；
 - `.py` 进入受限 AST 候选工作单元定义（WorkCell Definition）编译器，不 import/exec 作者源码，且必须恰好包含一个顶层 `@workcell` 根定义；
-- `.json` 进入遗留 JSON 解析器，`.graphml` 进入遗留 GraphML 解析器；
+- `.json` 与 `.graphml` 是永久支持的兼容作者输入；各自 Adapter 只负责解析、分类和无损保留，随后与
+  `.py` 一样进入同一规范编译、链接、校验、发布和候选启用解析器（Activation Resolver）；
+- 不保留第二套设备实例化或运行语义；禁止 trusted-exec、`eval`、任意 import/exec 和失败回退；
 - 未知或无后缀直接失败，不做内容探测，也不把其他格式回退为 GraphML；
 - v1 不实现 `catalog:`，生产也从 workspace/package 内显式文件启动；未来目录引用必须固定 exact revision/
   digest，禁止 `latest`，且不能与文件来源同时出现；
@@ -648,10 +652,35 @@ v1 已接受运行模型：
 16. 遗留 JSON 含动态 `data` 或 `occupied_by`：测试 seed 与运行时权威事实分别迁移，v1 不产生可执行
     物料预置候选且重启不得覆盖库存权威。
 
-## 12. 非目标
+## 12. G1 永久兼容与跨仓验收合同
+
+G1-01 与 G1-02 的 B 选择按 B′ 冻结：永久保留输入格式和原始信息，不永久保留两套语义。兼容适配器（Adapter）
+必须无损保存旧节点对象、`uuid`、非空 `data` 和未知字段，并输出分类报告；只有已知且通过校验的字段
+进入规范语义。显式、可校验的旧 `uuid` 可用于实例接管，但不得污染 `content_digest`；未知字段只可
+round-trip，不可下发驱动、覆盖库存权威（Inventory Authority）或成为候选启用快照（Activation Snapshot）
+的运行参数。已知字段之间冲突仍失败关闭。
+
+跨格式固定点同时检查两条摘要：`content_digest` 证明 JSON → 规范图 → Python → 规范图的定义语义一致；
+`legacy_payload_digest` 证明兼容保留载荷没有丢失。workspace、clean wheel 和缓存 archive 的语义摘要
+必须一致；源码格式、source map 和兼容保留载荷不进入 `content_digest`。
+
+验收使用两个固定夹具：最小本地仿真夹具，以及固定来源 commit/原始摘要的 SZLab
+`deployment/graphs/szlab-local-debug.json` 真实复杂度夹具。每个夹具保存作者 Python、规范 JSON、兼容
+保留 sidecar、迁移报告和预期双摘要。默认测试不得连接真实硬件。
+
+跨仓测试必须通过真实编译器、SQLite、SSE、设备注册表（Device Registry）和本地仿真器，覆盖
+`.py/.json/.graphml` 的 `-g/--graph` 启动、快照复用、敏感配置（Secret）、前端折叠/展开，以及工作流
+支持动作（Workflow-backed Action）的成功、取消、容量交错、部分物理成功、断电和执行未知；不得用
+路由 mock 替代集成证据，不得对整个动作调用做盲目物理重放（Blind Physical Replay）。
+
+OS、前端和 SZLab 各自拥有仓库本地交付子问题，Core #187 只在所有子问题提供精确 commit、测试命令、
+结果和对应文档 revision 后执行总验收。
+
+## 13. 非目标
 
 - 不让前端执行或静态解释 Python；
 - 不让运行时 import/exec 作者源码作为生产发现合同；
+- 不让 JSON/GraphML 永久兼容形成第二套编译、设备实例化或运行权威；
 - 不把候选工作单元（WorkCell）当成物料（Material）或第二套库存（Inventory）；
 - 不让设备注册表（Device Registry）成为候选装配拓扑（Assembly Topology）的写权威；
 - 不自动公开全部内部成员或内部动作（Action）；
@@ -661,7 +690,7 @@ v1 已接受运行模型：
 - 不在 driver、ROS callback 或前端中运行第二个 planner/调度器（Scheduler）；
 - 不在本功能重定义动作合同、工作流组合、物料权威或调度权威。
 
-## 13. 子议题与文档所有权
+## 14. 子议题与文档所有权
 
 | 子议题 | 所有范围 |
 | --- | --- |
@@ -675,7 +704,7 @@ v1 已接受运行模型：
 父地图 [#181](https://github.com/Uni-Lab-OS/Uni-Lab-Core/issues/181) 只维护 Outcome、已接受决策、
 Frontier、Blocked、Fog 和跨票冲突。详细决策写入对应子议题，并同步修订本文相关章节。
 
-## 14. 验收门
+## 15. 验收门
 
 - [ ] AST discovery 不 import/exec 作者源码、device driver 或 resource factory；
 - [ ] Python 与规范定义图达到固定点，workspace/clean wheel digest 一致；
@@ -688,6 +717,8 @@ Frontier、Blocked、Fog 和跨票冲突。详细决策写入对应子议题，�
 - [ ] 一次启用最多接受一个外部覆盖对象；多个来源同时出现时在硬件副作用前失败；
 - [ ] Phase 0 通过 `-g/--graph` 启动 Python 定义，外部参数输入明确失败且仍持久化默认值快照；
 - [ ] `-g/--graph` 只接受 `.py`、`.json`、`.graphml`；未知或无后缀失败，`.py` 不 import/exec 且只有一个顶层 `@workcell` 根定义；
+- [ ] `.json`/`.graphml` 无损保留旧字段但与 `.py` 共用单一编译、发布和启用链；未知兼容字段无运行权威；
+- [ ] 语义 `content_digest` 与 `legacy_payload_digest` 分别达到固定点，workspace/clean wheel/cache 语义一致；
 - [ ] v1 可展示和校验物料设计预期，但候选工作单元（WorkCell）启用、重启和定义升级均不创建/移动真实物料（Material）或写库位占用（SiteOccupancy）；
 - [ ] 已发布定义进入设备注册表（Device Registry）/Palette，Draft/Candidate 不进入；
 - [ ] 工作流支持动作（Workflow-backed Action）通过显式导出产生，使用 `node_type="workflow"` 与
@@ -699,7 +730,7 @@ Frontier、Blocked、Fog 和跨票冲突。详细决策写入对应子议题，�
 - [ ] 最小仿真与真实 SZLab 夹具通过 OS/前端/设备链路跨仓验收；
 - [ ] GitHub 决策、Feishu 协议文档、仓库实现和测试证据在接受时一致。
 
-## 15. 资料来源
+## 16. 资料来源
 
 - [父地图 #181](https://github.com/Uni-Lab-OS/Uni-Lab-Core/issues/181)
 - [领域设备包 PackageCatalog 与 Workspace 自动发现 #147](https://github.com/Uni-Lab-OS/Uni-Lab-Core/issues/147)
@@ -729,6 +760,6 @@ agent_report:
     - https://github.com/Uni-Lab-OS/Uni-Lab-Core/issues/186
     - https://github.com/Uni-Lab-OS/Uni-Lab-Core/issues/187
     - https://dptechnology.feishu.cn/wiki/Qa1EwFWB1iqx4OkfNXhcvTh3nPf
-  result: aligned-design-document-draft
+  result: g1-protocol-frozen-design
   human_reviewer: 昌珺涵
 ```
