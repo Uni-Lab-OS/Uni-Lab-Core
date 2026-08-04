@@ -1,10 +1,10 @@
 # 候选工作单元（WorkCell）组合定义、启动与分层动作设计
 
 > 状态：协议定义中（Protocol Definition）  
-> 合同草案版本：`workcell-composition-draft-20260804-d3-07`  
+> 合同草案版本：`workcell-composition-draft-20260804-d3-08`  
 > 父地图：[Core #181](https://github.com/Uni-Lab-OS/Uni-Lab-Core/issues/181)  
 > 历史来源：#181 拆票前最后一份完整正文（2026-08-04 17:18，Asia/Shanghai）  
-> 对齐范围：已纳入 D1–D3 的已接受决策，截止 D3-07；D4、D5 与迁移细节仍是候选设计。
+> 对齐范围：已纳入 D1–D3 的已接受决策，截止 D3-08；D4、D5 与迁移细节仍是候选设计。
 
 本文是候选工作单元（WorkCell）功能的独立、长期可维护设计文档。GitHub Issue 继续拥有
 决策状态、负责人、讨论和验收权威；本文负责保存整体设计及各协议面的共同背景。若本文与已接受的
@@ -70,6 +70,7 @@ Python / 规范 JSON / 结构化画布
 | D3-05 | 已接受 | 复用 `-g/--graph` 作为唯一启动定义来源参数，不新增 `--workcell`。 |
 | D3-06 | 已接受 | 选择 A：`-g/--graph` 严格按 `.py`、`.json`、`.graphml` 后缀分派；未知或无后缀失败，不做内容探测。 |
 | D3-07 | 已接受 | 选择 A：一个 `.py` 启动文件必须恰好声明一个顶层 `@workcell` 根定义；零个或多个失败，被引用的嵌套定义不计入。 |
+| D3-08 | 已接受 | 选择 A：任意已登记设备作者句柄只消费已发布目录的 `init_param_schema.config`；现代 `@device` 由带类型的 `__init__` 静态生成，作者句柄不另建合同。 |
 | D4 | 待确认 | 嵌套公开边界、可查看性、可寻址性和设备注册表（Device Registry）投影细节。 |
 | D5 | 部分接受 | v1 使用动作形态的组合工作流调用（CompositeWorkflowInvocation），在任务创建前静态展开；并发容量仍待确认。 |
 | G1 | 待确认 | 遗留启动 JSON、trusted-exec 原型和真实 SZLab 夹具的迁移与退役门。 |
@@ -269,9 +270,9 @@ D3-02 选择 A：零覆盖时不创建或持久化空 `{}` 参数记录。“无
 
 ### 6.2 公开与私有初始化字段
 
-候选设备初始化合同（Device Init Contract）描述叶子设备构造/连接前可接受字段的类型、默认值、
-范围、单位和敏感性。候选工作单元初始化合同（WorkCell Init Contract）只由 `@workcell` 函数签名
-中的公开 `InitParam` 派生。
+任意已登记设备作者句柄都只消费已发布目录的 `init_param_schema.config`。现代 `@device` 的该合同
+由带类型的驱动 `__init__` 静态生成并在发布时冻结；遗留 YAML 只能为遗留设备生成同一字段，不能作为
+并行覆盖层。候选工作单元初始化合同（WorkCell Init Contract）只由 `@workcell` 的公开 `InitParam` 派生。
 
 - 固定、非敏感且对该定义所有启用一致的站内设备值可以写在 Python 定义中；
 - 随物理安装变化、需要外部选择或属于敏感配置（Secret）的值必须提升为公开 `InitParam`；
