@@ -1,10 +1,10 @@
 # 候选工作单元（WorkCell）组合定义、启动与分层动作设计
 
 > 状态：协议定义中（Protocol Definition）
-> 合同草案版本：`workcell-composition-draft-20260805-d2-layout-plane`
+> 合同草案版本：`workcell-composition-draft-20260805-d5-interleaved`
 > 父地图：[Core #181](https://github.com/Uni-Lab-OS/Uni-Lab-Core/issues/181)
 > 历史来源：#181 拆票前最后一份完整正文（2026-08-04 17:18，Asia/Shanghai）
-> 对齐范围：D1、D2 与 D3 的协议决策已全部收口；D2-06 的真实物料预置执行链已明确推迟到 v2+。D4、D5 与 G1 仍是候选设计。
+> 对齐范围：D1～D5 的协议决策已全部收口；D2-06 的真实物料预置执行链已明确推迟到 v2+。G1 仍是候选设计。
 
 本文是候选工作单元（WorkCell）功能的独立、长期可维护设计文档。GitHub Issue 继续拥有
 决策状态、负责人、讨论和验收权威；本文负责保存整体设计及各协议面的共同背景。若本文与已接受的
@@ -81,7 +81,7 @@ Python / 规范 JSON / 结构化画布
 | D3-09～13 | 已接受 | 全部选择 A：公开参数使用封闭类型闭集；唯一外部输入规范化为候选启用请求（Activation Request）；v1 仅文件启动；实例部署字段与 `InitParam` 分离；敏感配置（Secret）只接受 `SecretRef`。 |
 | D3-14～15 | 已接受 | 全部选择 A：Uni-Lab OS 原子持久化内容寻址候选启用快照（Activation Snapshot）；候选启用解析器（Activation Resolver）只公开 `prepare_activation(...)` 深模块接口。 |
 | D4-01～07 | 已接受 | 全部选择 A：exact 嵌套闭包与确定性实例身份；封闭 `private`/`exported` 和显式 `re_export`；候选可查看性与候选可寻址性分离；公共能力只允许收窄；定义、目录、设备注册表与运行时投影权威分离；前端展开只影响视图；完整定义与公共合同使用双摘要。 |
-| D5 | 部分接受 | v1 使用动作形态的组合工作流调用（CompositeWorkflowInvocation），在任务创建前静态展开；并发容量仍待确认。 |
+| D5 | 已接受 | 显式工作流支持动作（Workflow-backed Action）复用既有工作流目录合同并静态降低；不同调用的内部作业可以交错，只由完整逐作业执行占用保护，不建立整次调用容量合同。 |
 | G1 | 待确认 | 遗留启动 JSON、trusted-exec 原型和真实 SZLab 夹具的迁移与退役门。 |
 
 ## 3. 设计边界与权威
@@ -550,19 +550,35 @@ Uni-Lab OS 是候选启用快照（Activation Snapshot）的本地写权威：�
 
 v1 已接受运行模型：
 
-- 目录保留 `implementation.kind = workflow`，不冒充直接设备动作；
-- 输入复用工作流输入合同（WorkflowInputContract）；
-- 输出复用工作流结果记录（WorkflowResultRecord）；
-- 物料边界复用物料占位符（ResourceSlot）；
-- 父工作流（Workflow）中的调用是动作形态的组合工作流调用（CompositeWorkflowInvocation）；
-- 在工作流任务（WorkflowTask）创建前静态展开到同一个执行计划（ExecutionPlan）；
-- 不创建嵌套工作流任务（WorkflowTask），不复用遗留 `WorkstationBase.execute_workflow()`；
-- 动作重试策略（ActionRetryPolicy）保持 `never`；
+- 作者只通过 `cell.expose_workflow_action(id=..., workflow=...)` 显式导出；节点数、设备数、函数名和
+  `plc(...)` 一类示例调用都不产生隐式导出；
+- `workflow` 必须解析到 PackageCatalog 中已发布工作流（Workflow）的精确 revision/digest；公共动作身份
+  由候选工作单元定义（WorkCell Definition）fqid 与稳定 `action_id` 共同确定；
+- 不引入 `implementation.kind`。目录复用既有 `type="workflow"`、`node_type="workflow"`、
+  `schema.x-unilabos-workflow-contract`、模板/Handle 身份和候选工作单元（WorkCell）公共导出映射，
+  因而不会冒充直接设备动作；
+- 输入/输出分别复用工作流输入合同（WorkflowInputContract）与工作流结果记录
+  （WorkflowResultRecord）；边界复用真实 Handle、物料占位符（ResourceSlot）和既有 `SiteSelector`，
+  不新增候选工作单元（WorkCell）专属 entry/exit 模型，也不从名称、顺序、位姿或库位占用
+  （SiteOccupancy）推断边界；
+- 父工作流（Workflow）中的调用复用组合工作流调用（CompositeWorkflowInvocation）、真实边界句柄、
+  UUIDv5 和 #178 既有边界映射合同；父已应用工作流图（Applied Workflow Graph）保存精确固定的内部展开图；
+- 工作流任务（WorkflowTask）提交时，由唯一执行计划构建器（ExecutionPlan Builder）把内部节点降低为
+  普通计划节点和工作流节点作业尝试（WorkflowNodeJobAttempt）；不创建宏作业、合成屏障、嵌套任务
+  或第二调度权威；
+- 不同调用同一候选工作单元实例（WorkCell Instance）时，内部作业允许交错；v1 不提供整次调用串行、
+  容量 N、`max_concurrency` 或调用期许可合同；
+- 每个普通内部作业都必须在派发前取得完整、持久、带栅栏的作业执行占用
+  （JobExecutionClaim），覆盖具体执行设备、可能改变的全部物料（Material）和源/目标库位（Site）；
+  若还存在未建模的共用门、轨道、安全区或机箱风险，该定义不得宣称并发安全，必须先把风险建模为
+  可占用资源或另开版本化协议；
+- 不增加调用级 mutex、semaphore、表或候选调用容量许可；逐作业执行占用只保护各自物理执行，
+  不承诺同时存活的候选工作单元调用数量上限；
+- 动作重试策略（ActionRetryPolicy）保持 `never`；取消、部分物理成功、执行未知、投递重放
+  （DeliveryReplay）和物理结算（PhysicalSettlement）继续由每个真实内部作业的安全合同处理，不能把
+  整次候选工作单元动作重新执行；
 - 前端折叠只影响展示，不能删除内部工作流节点作业尝试（WorkflowNodeJobAttempt）、占用意图
   （ClaimIntent）、回执（Receipt）、source map 或物理结算（PhysicalSettlement）证据。
-
-同一候选工作单元（WorkCell）的并发调用究竟允许内部节点交错、整次串行还是容量 N，仍由
-[#186](https://github.com/Uni-Lab-OS/Uni-Lab-Core/issues/186) 冻结。
 
 ## 8. 推迟的候选计划生成器（Plan Generator）
 
@@ -621,7 +637,9 @@ v1 已接受运行模型：
 8. 私有 PLC 地址：外部深路径覆盖失败；需要现场变化时必须提升为公开 `InitParam`；
 9. Secret Provider 不可用：在 driver 构造前失败，错误和快照不泄漏明文；
 10. 内层 definition 升级：不改变外层已发布 revision，必须显式 re-link/re-publish；
-11. 两个工作流任务（WorkflowTask）并发调用同一实例：在 D5 容量合同冻结前失败关闭或使用明确单容量策略；
+11. 两个工作流任务（WorkflowTask）并发调用同一实例：内部作业可以交错；每个可派发作业必须原子取得
+    覆盖设备、物料（Material）与源/目标库位（Site）的完整作业执行占用（JobExecutionClaim）。定义中
+    存在未建模共用物理风险时，发布或并发安全校验失败关闭；
 12. 内部取料后断电：相关物料、库位（Site）、作业执行占用（JobExecutionClaim）和栅栏保留不确定性并进入核对；
 13. 遗留 JSON 同时含 `position`、`position3d` 和 `rotation`：等价重复告警，冲突坐标失败并给出精确路径；
 14. 在 `layout_plane="XY"` 的 2D 编辑器拖动成员：直接修改 `pose.position.x/y`，保持 Z 不变；发布产生新
@@ -672,7 +690,10 @@ Frontier、Blocked、Fog 和跨票冲突。详细决策写入对应子议题，�
 - [ ] `-g/--graph` 只接受 `.py`、`.json`、`.graphml`；未知或无后缀失败，`.py` 不 import/exec 且只有一个顶层 `@workcell` 根定义；
 - [ ] v1 可展示和校验物料设计预期，但候选工作单元（WorkCell）启用、重启和定义升级均不创建/移动真实物料（Material）或写库位占用（SiteOccupancy）；
 - [ ] 已发布定义进入设备注册表（Device Registry）/Palette，Draft/Candidate 不进入；
-- [ ] 工作流支持动作（Workflow-backed Action）保留 `implementation.kind`，静态进入唯一执行计划；
+- [ ] 工作流支持动作（Workflow-backed Action）通过显式导出产生，使用 `node_type="workflow"` 与
+  `x-unilabos-workflow-contract` 保留工作流（Workflow）身份，并静态进入唯一执行计划（ExecutionPlan）；
+- [ ] 两个调用的内部作业可以交错，但每个作业必须取得完整作业执行占用（JobExecutionClaim）；v1 不存在
+  整次调用串行、容量 N、`max_concurrency` 或调用期许可的暗含保证；
 - [ ] 断电、部分物理成功、取消和执行未知不触发盲目物理重放（Blind Physical Replay）；
 - [ ] 遗留 JSON 迁移不覆盖真实物料（Material）、库位占用（SiteOccupancy）、遥测、预留或占用事实；
 - [ ] 最小仿真与真实 SZLab 夹具通过 OS/前端/设备链路跨仓验收；
