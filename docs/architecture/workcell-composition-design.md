@@ -1,10 +1,10 @@
 # 候选工作单元（WorkCell）组合定义、启动与分层动作设计
 
 > 状态：协议定义中（Protocol Definition）
-> 合同草案版本：`workcell-composition-draft-20260804-d1-11`
+> 合同草案版本：`workcell-composition-draft-20260804-d1-complete`
 > 父地图：[Core #181](https://github.com/Uni-Lab-OS/Uni-Lab-Core/issues/181)
 > 历史来源：#181 拆票前最后一份完整正文（2026-08-04 17:18，Asia/Shanghai）
-> 对齐范围：已纳入 D1–D3 的已接受决策；D1 仅 D1-08 待确认，D3-01～D3-15 已全部冻结；D4、D5 与迁移细节仍是候选设计。
+> 对齐范围：已纳入 D1–D3 的已接受决策；D1 与 D3 已全部冻结；D2 继续冻结位姿、库位（Site）和物料边界，D4、D5 与迁移细节仍是候选设计。
 
 本文是候选工作单元（WorkCell）功能的独立、长期可维护设计文档。GitHub Issue 继续拥有
 决策状态、负责人、讨论和验收权威；本文负责保存整体设计及各协议面的共同背景。若本文与已接受的
@@ -61,7 +61,7 @@ Python / 规范 JSON / 结构化画布
 | D1-04 | 已接受 | Python 与规范 JSON/结构化画布允许双向语义创作；同一草稿同一时刻只有一种可写模式。 |
 | D1-05 | 已接受 | 不承诺源码字节无损；发布前必须满足 `graph -> Python -> graph` 规范 digest 固定点。 |
 | D1-06～07 | 已接受 | 全部选择 A：受限 Python 使用失败关闭 AST allowlist；定义身份为 PackageCatalog fqid、单调 revision 与 digest，`id=` 是稳定 `member_id`。 |
-| D1-08 | 待确认 | 规范 JSON、引用闭包、字段级集合顺序、source map 与诊断；现有启动 JSON 仅作为遗留兼容输入证据。 |
+| D1-08 | 已接受 | 选择 A：规范 JSON 直接采用现有字段优先的 NetworkX node-link 形态；精确依赖闭包、规范排序、source map 与结构化诊断失败关闭。 |
 | D1-09～11 | 已接受 | 全部选择 A：单草稿 CAS/完整语义 diff；显式 `.py` 与 clean-wheel parity；Draft → Candidate → Published 原子失败关闭。 |
 | D2-01 | 已接受方向 | 物理位置和旋转进入 v1；候选局部位姿（LocalPose）与 `ui_layout` 分离。 |
 | D2-02 | 已接受方向 | 内部相对位姿归定义；候选工作单元实例（WorkCell Instance）的根世界位姿归候选启用图（Activation Graph）。 |
@@ -206,6 +206,47 @@ Python 写模式
 - 稳定 `member_id`、引用、嵌套 definition digest 和 source map 不能靠变量名或数组顺序猜测；
 - AI 可以修改 Python，也可以提交有类型图编辑/JSON Patch，但必须经过同一 compiler/generator/validator；
 - 无效草稿可以保存和诊断，但不能替换最后一个有效候选图，也不能发布或启用。
+
+### 4.4 现有字段优先的规范 JSON
+
+已发布候选工作单元定义（WorkCell Definition）的规范 JSON 自身就是 NetworkX node-link
+文档，不另套 `manifest/payload/assembly_graph` envelope：
+
+```python
+assembly_graph = nx.node_link_graph(
+    document,
+    edges="links",
+    key="id",
+)
+```
+
+顶层使用 `directed`、`multigraph`、`graph`、`nodes` 和 `links`。`graph` 保存
+`schema_version/id/name/display_name/definition_fqid/version/revision/content_digest/`
+`public_contract_digest/init_param_schema/dependencies/assets`。`init_param_schema` 沿用 Backend
+`{"config":{"properties":{...}}}` 形态；`dependencies[class]` 保存精确 `revision` 和
+`content_digest`，不再为每个节点引入重复 `definition_ref`。
+
+节点继续使用 `id/name/type/class/parent/children/pose/config/data`：
+
+- `id` 是定义内稳定 `member_id`；`parent` 与 `children` 必须严格互逆；
+- `children` 与 `config.sites` 的数组顺序具有语义，不在规范化时重排；
+- `pose` 是物理位姿，`ui_layout` 只能存在独立展示 sidecar；
+- `config` 只保存定义期固定 JSON 值；`data` 为现有结构兼容保留，但在定义中必须是 `{}`；
+- 唯一必需的新节点字段是可选 `config_bindings`，其 `type` 仅允许 `member` 或
+  `init_param`；候选启用解析器（Activation Resolver）将它降低为交给 OS/Backend 的普通 `config`；
+- `config.sites[]` 继续使用 `label/content_type/position/size`，数组位置映射 Backend
+  `sort_order`；禁止 `occupied_by/occupied_material_uuid`，因为它们是库位占用（SiteOccupancy）事实。
+
+`links[*]` 保持 `id/source/target/type/port`，NetworkX 通过 `key="id"` 使用稳定边身份。
+规范编码时 `nodes` 按 `id`、`links` 按 `id` 排序；`content_digest` 只排除
+`graph.content_digest` 自身。source map 与 `ui_layout` 是绑定内容摘要的 sidecar，
+诊断统一为 `code/path/source_span/message/hint`。
+
+定义中不保存 Backend 运行实例字段 `uuid/resource_template_uuid/parent_uuid/relative_position`。
+候选启用快照（Activation Snapshot）从实例 namespace 和 `member_id` 确定性派生
+`uuid/parent_uuid`，经固定 PackageCatalog 将 `class` 解析为部署的
+`resource_template_uuid`，并把 `pose` 投影为 Backend `relative_position`。这保证 workspace、
+clean wheel 与缓存 archive 的定义摘要不被数据库 UUID 污染。
 
 ## 5. 发布、组合与设备注册表（Device Registry）
 
