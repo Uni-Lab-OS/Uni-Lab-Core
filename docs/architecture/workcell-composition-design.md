@@ -1,10 +1,10 @@
 # 候选工作单元（WorkCell）组合定义、启动与分层动作设计
 
 > 状态：协议定义中（Protocol Definition）  
-> 合同草案版本：`workcell-composition-draft-20260804-d3-02`  
+> 合同草案版本：`workcell-composition-draft-20260804-d3-03`  
 > 父地图：[Core #181](https://github.com/Uni-Lab-OS/Uni-Lab-Core/issues/181)  
 > 历史来源：#181 拆票前最后一份完整正文（2026-08-04 17:18，Asia/Shanghai）  
-> 对齐范围：已纳入 D1–D3 的已接受决策，截止 D3-02=A；D4、D5 与迁移细节仍是候选设计。
+> 对齐范围：已纳入 D1–D3 的已接受决策，截止 D3-03=A；D4、D5 与迁移细节仍是候选设计。
 
 本文是候选工作单元（WorkCell）功能的独立、长期可维护设计文档。GitHub Issue 继续拥有
 决策状态、负责人、讨论和验收权威；本文负责保存整体设计及各协议面的共同背景。若本文与已接受的
@@ -65,6 +65,7 @@ Python / 规范 JSON / 结构化画布
 | D2-02 | 已接受方向 | 内部相对位姿归定义；候选工作单元实例（WorkCell Instance）的根世界位姿归候选启用图（Activation Graph）。 |
 | D3-01 | 已接受 | `workcell.py` 是必需作者制品；参数输入是按需存在的覆盖层；每次启用都生成候选启用快照（Activation Snapshot）。 |
 | D3-02 | 已接受 | 选择 A：零覆盖不创建空 params 文件或持久记录；“无覆盖”以参数输入缺席表示，候选启用快照（Activation Snapshot）仍须持久化。 |
+| D3-03 | 已接受 | 选择 A：一次启用最多接受一个外部覆盖对象；多个外部来源同时出现时失败，不做隐式叠加或优先级合并。 |
 | D4 | 待确认 | 嵌套公开边界、可查看性、可寻址性和设备注册表（Device Registry）投影细节。 |
 | D5 | 部分接受 | v1 使用动作形态的组合工作流调用（CompositeWorkflowInvocation），在任务创建前静态展开；并发容量仍待确认。 |
 | G1 | 待确认 | 遗留启动 JSON、trusted-exec 原型和真实 SZLab 夹具的迁移与退役门。 |
@@ -277,9 +278,14 @@ D3-02 选择 A：零覆盖时不创建或持久化空 `{}` 参数记录。“无
 
 ### 6.3 参数来源
 
-已接受的边界只有：参数覆盖可缺席、未知字段失败关闭、运行实例不热读参数。CLI inline 非敏感覆盖、
-params 文档和持久部署记录的精确优先级仍由 [#184](https://github.com/Uni-Lab-OS/Uni-Lab-Core/issues/184)
-继续 Grill，本文不把早期候选顺序升级成已接受合同。
+已接受的 D3-03=A 合同是“定义默认值 + 零或一个外部覆盖对象”。一次启用可以完全没有外部来源；
+存在覆盖时，只能从 params 文档、持久部署记录或 UI/API 提交等入口中选择一个规范化对象。多个来源
+同时出现必须在硬件副作用前失败，不做隐式 merge，也不存在 CLI、文件和记录之间的优先级。候选启用
+快照（Activation Snapshot）必须记录每个最终值来自定义固定值、默认值还是该唯一覆盖对象。
+
+首个实现切片是否完全不接收外部覆盖仍由 [#184](https://github.com/Uni-Lab-OS/Uni-Lab-Core/issues/184)
+继续 Grill。若采用 Python-only 切片，它只是目标合同的阶段性子集：只能启用零公开参数或全部参数已有
+默认值且不依赖敏感配置（Secret）引用的定义，不能把“暂未实现”重新解释成参数永远不可覆盖。
 
 敏感配置（Secret）只能以 reference 流转。定义、PackageCatalog、设备注册表（Device Registry）、
 source map、日志、诊断和候选启用快照（Activation Snapshot）不得包含明文。Secret Provider 应在
@@ -397,12 +403,13 @@ v1 已接受运行模型：
 2. Python → JSON → Python：注释可规范化，但图 digest、成员、连接、库位（Site）和位姿不变；
 3. 零公开参数：只用 `workcell.py` 启动，不创建空 params 记录，但生成并持久化快照；
 4. 全部参数有默认值：不提供参数输入，快照记录规范化默认值及来源；
-5. 私有 PLC 地址：外部深路径覆盖失败；需要现场变化时必须提升为公开 `InitParam`；
-6. Secret Provider 不可用：在 driver 构造前失败，错误和快照不泄漏明文；
-7. 内层 definition 升级：不改变外层已发布 revision，必须显式 re-link/re-publish；
-8. 两个工作流任务（WorkflowTask）并发调用同一实例：在 D5 容量合同冻结前失败关闭或使用明确单容量策略；
-9. 内部取料后断电：相关物料、库位（Site）、作业执行占用（JobExecutionClaim）和栅栏保留不确定性并进入核对；
-10. 遗留 JSON 含动态 `data`：测试 seed、一次性 bootstrap 与运行时权威事实分别迁移，重启不得覆盖库存权威。
+5. 多个外部参数来源同时出现：在 driver 构造前失败，不按来源优先级隐式合并；
+6. 私有 PLC 地址：外部深路径覆盖失败；需要现场变化时必须提升为公开 `InitParam`；
+7. Secret Provider 不可用：在 driver 构造前失败，错误和快照不泄漏明文；
+8. 内层 definition 升级：不改变外层已发布 revision，必须显式 re-link/re-publish；
+9. 两个工作流任务（WorkflowTask）并发调用同一实例：在 D5 容量合同冻结前失败关闭或使用明确单容量策略；
+10. 内部取料后断电：相关物料、库位（Site）、作业执行占用（JobExecutionClaim）和栅栏保留不确定性并进入核对；
+11. 遗留 JSON 含动态 `data`：测试 seed、一次性 bootstrap 与运行时权威事实分别迁移，重启不得覆盖库存权威。
 
 ## 12. 非目标
 
@@ -439,6 +446,7 @@ Frontier、Blocked、Fog 和跨票冲突。详细决策写入对应子议题，�
 - [ ] 私有成员默认不可寻址，export/re-export 只按稳定公共身份生效；
 - [ ] 零参数、全默认、覆盖、必填缺失、Secret Provider 失败均在硬件副作用前得到确定结果；
 - [ ] 零覆盖不创建空 params 记录，但始终生成持久、脱敏候选启用快照（Activation Snapshot）；
+- [ ] 一次启用最多接受一个外部覆盖对象；多个来源同时出现时在硬件副作用前失败；
 - [ ] 已发布定义进入设备注册表（Device Registry）/Palette，Draft/Candidate 不进入；
 - [ ] 工作流支持动作（Workflow-backed Action）保留 `implementation.kind`，静态进入唯一执行计划；
 - [ ] 断电、部分物理成功、取消和执行未知不触发盲目物理重放（Blind Physical Replay）；
