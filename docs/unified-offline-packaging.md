@@ -9,6 +9,67 @@ Constructor 生成离线 Runtime 安装器，再把该安装器和 SHA-256 manif
 PLC-Sim 和领域设备包不随桌面端打包。用户在桌面端选择源码目录或可执行文件后分别
 启动；未签名或签名无效的设备包会显示警告，在用户确认后仍可启动并写入本机审计记录。
 
+## 可测试的分支组合
+
+一键打包以 Uni-Lab-Core 的 submodule 指针为准。当前已验证组合如下：
+
+| 仓库 | 推荐分支 | Core 锁定提交 | 作用 |
+| --- | --- | --- | --- |
+| `Uni-Lab-OS/Uni-Lab-Core` | `feat/unified-offline-runtime-plc` | 使用该分支最新提交 | 统一入口、CI、文档和子模块版本 |
+| `Uni-Lab-OS/uni-lab-fe` | `feat/managed-runtime-installer` | `729c3bcab8ce497f5bc052ca561fb278da483979` | Electron 内嵌 Runtime、安装、控制和 PLC-Sim 验收 |
+| `Uni-Lab-OS/Uni-Lab-OS` | `docs/unified-offline-packaging` | `6314de52b63d8dda7d868cf871c38b9f5c92f3a4` | Runtime/Supervisor 功能及修正后的打包命令文档 |
+
+OS 的实际功能提交是 `feat/managed-runtime-supervisor` 分支上的
+`b46cf7c526f0c346965cebfca9ec7ac639de0ef0`。当前 Core 锁定的 `6314de52` 基于该提交，
+只额外修正了一处打包命令文档。因此手工组合时两者功能相同，但为了可复现应优先使用
+Core 锁定的 `6314de52`。
+
+### 推荐：由 Core 自动锁定子模块
+
+```bash
+git clone --recurse-submodules \
+  --branch feat/unified-offline-runtime-plc \
+  git@github.com:Uni-Lab-OS/Uni-Lab-Core.git
+cd Uni-Lab-Core
+git submodule update --init --recursive
+pnpm --dir uni-lab-fe install --frozen-lockfile
+```
+
+如果已经克隆了 Core：
+
+```bash
+git fetch origin
+git switch feat/unified-offline-runtime-plc
+git pull --ff-only
+git submodule update --init --recursive
+pnpm --dir uni-lab-fe install --frozen-lockfile
+```
+
+执行 `git submodule update` 后，子模块通常处于 detached HEAD，这是 Git 按 Core 锁定提交
+工作的正常状态，不需要再手工切换 FE 或 OS 分支。可用下面的命令核对：
+
+```bash
+git branch --show-current
+git submodule status
+```
+
+预期 FE 指向 `729c3bc`，OS 指向 `6314de52`。
+
+### 备选：手工检出子模块分支
+
+只有需要直接修改子模块时才使用：
+
+```bash
+git -C uni-lab-fe fetch origin
+git -C uni-lab-fe switch feat/managed-runtime-installer
+
+git -C Uni-Lab-OS fetch origin
+git -C Uni-Lab-OS switch docs/unified-offline-packaging
+```
+
+手工切换后必须确认提交与上表一致；否则 Core 会显示 submodule 已修改，得到的安装包也不再
+是本文档记录的验证组合。
+
 ## 新命令
 
 日常使用直接运行根 `package.json` 中的平台别名：
