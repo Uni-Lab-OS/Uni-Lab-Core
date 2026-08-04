@@ -372,7 +372,8 @@ T_world(child) = T_world(parent) · T_parent(child)
 适配器必须结合已知 `layout_plane` 和另一条无歧义来源补足未显示轴；无法证明第三轴时失败，不静默归零。
 `occupied_by`、真实物料（Material）身份和库位占用（SiteOccupancy）不得进入定义，只能由库存权威
 （Inventory Authority）的独立迁移处理。非空 `data` 按分类报告处理：测试 seed 进入独立测试夹具，
-运行时事实排除，未知字段原样进入无损兼容保留层且不下发驱动。v1 不生成或接受可执行物料预置候选。
+运行时事实排除，无法分类的非空 `data` 原样进入无损兼容保留层，但发布与启用失败关闭，直到完成
+分类；任何兼容保留值都不下发驱动。v1 不生成或接受可执行物料预置候选。
 
 定义中不保存 Backend 运行实例字段 `uuid/resource_template_uuid/parent_uuid/relative_position`。
 候选启用快照（Activation Snapshot）从实例 namespace 和 `member_id` 确定性派生
@@ -649,8 +650,8 @@ v1 已接受运行模型：
 14. 在 `layout_plane="XY"` 的 2D 编辑器拖动成员：直接修改 `pose.position.x/y`，保持 Z 不变；发布产生新
     definition revision，但既有候选启用快照（Activation Snapshot）和工作流任务（WorkflowTask）不变；
 15. 父节点绕 Z 轴旋转后包含子节点：世界位姿由矩阵递归组合，不能用位置和欧拉角逐分量相加；
-16. 遗留 JSON 含动态 `data` 或 `occupied_by`：测试 seed 与运行时权威事实分别迁移，v1 不产生可执行
-    物料预置候选且重启不得覆盖库存权威。
+16. 遗留 JSON 含动态 `data` 或 `occupied_by`：测试 seed 与运行时权威事实分别迁移，无法分类的非空
+    `data` 无损保留但阻止发布/启用；v1 不产生可执行物料预置候选且重启不得覆盖库存权威。
 
 ## 12. G1 永久兼容与跨仓验收合同
 
@@ -658,7 +659,7 @@ G1-01 与 G1-02 的 B 选择按 B′ 冻结：永久保留输入格式和原始�
 必须无损保存旧节点对象、`uuid`、非空 `data` 和未知字段，并输出分类报告；只有已知且通过校验的字段
 进入规范语义。显式、可校验的旧 `uuid` 可用于实例接管，但不得污染 `content_digest`；未知字段只可
 round-trip，不可下发驱动、覆盖库存权威（Inventory Authority）或成为候选启用快照（Activation Snapshot）
-的运行参数。已知字段之间冲突仍失败关闭。
+的运行参数。无法分类的非空 `data` 即使已无损保存，也必须阻止发布与启用；已知字段之间冲突仍失败关闭。
 
 跨格式固定点同时检查两条摘要：`content_digest` 证明 JSON → 规范图 → Python → 规范图的定义语义一致；
 `legacy_payload_digest` 证明兼容保留载荷没有丢失。workspace、clean wheel 和缓存 archive 的语义摘要
@@ -718,6 +719,7 @@ Frontier、Blocked、Fog 和跨票冲突。详细决策写入对应子议题，�
 - [ ] Phase 0 通过 `-g/--graph` 启动 Python 定义，外部参数输入明确失败且仍持久化默认值快照；
 - [ ] `-g/--graph` 只接受 `.py`、`.json`、`.graphml`；未知或无后缀失败，`.py` 不 import/exec 且只有一个顶层 `@workcell` 根定义；
 - [ ] `.json`/`.graphml` 无损保留旧字段但与 `.py` 共用单一编译、发布和启用链；未知兼容字段无运行权威；
+- [ ] 无法分类的非空 `data` 在无损保留后仍阻止发布/启用，直到迁移矩阵完成分类；
 - [ ] 语义 `content_digest` 与 `legacy_payload_digest` 分别达到固定点，workspace/clean wheel/cache 语义一致；
 - [ ] v1 可展示和校验物料设计预期，但候选工作单元（WorkCell）启用、重启和定义升级均不创建/移动真实物料（Material）或写库位占用（SiteOccupancy）；
 - [ ] 已发布定义进入设备注册表（Device Registry）/Palette，Draft/Candidate 不进入；
