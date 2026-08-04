@@ -1,7 +1,7 @@
 # 候选工作单元（WorkCell）组合定义、启动与分层动作设计
 
 > 状态：协议定义中（Protocol Definition）
-> 合同草案版本：`workcell-composition-draft-20260805-d2-frozen`
+> 合同草案版本：`workcell-composition-draft-20260805-d2-layout-plane`
 > 父地图：[Core #181](https://github.com/Uni-Lab-OS/Uni-Lab-Core/issues/181)
 > 历史来源：#181 拆票前最后一份完整正文（2026-08-04 17:18，Asia/Shanghai）
 > 对齐范围：D1、D2 与 D3 的协议决策已全部收口；D2-06 的真实物料预置执行链已明确推迟到 v2+。D4、D5 与 G1 仍是候选设计。
@@ -63,13 +63,13 @@ Python / 规范 JSON / 结构化画布
 | D1-06～07 | 已接受 | 全部选择 A：受限 Python 使用失败关闭 AST allowlist；定义身份为 PackageCatalog fqid、单调 revision 与 digest，`id=` 是稳定 `member_id`。 |
 | D1-08 | 已接受 | 选择 A：规范 JSON 直接采用现有字段优先的 NetworkX node-link 形态；精确依赖闭包、规范排序、source map 与结构化诊断失败关闭。 |
 | D1-09～11 | 已接受 | 全部选择 A：单草稿 CAS/完整语义 diff；显式 `.py` 与 clean-wheel parity；Draft → Candidate → Published 原子失败关闭。 |
-| D2-01 | 已接受 | 选择 A：右手 Z-up；`pose.position` 使用毫米，`pose.rotation` 使用度与 XYZ 欧拉合同；物理位姿与 `ui_layout` 分离。 |
+| D2-01 | 已接受（已修订） | 右手 Z-up；`pose.position` 使用毫米，`pose.rotation` 使用度与 XYZ 欧拉合同；2D/3D 编辑共用物理 `pose`，不增加节点级 `ui_layout`。 |
 | D2-02 | 已接受 | 选择 A：父子组合统一使用 `assign_child_resource(..., pose=Pose(position=..., rotation=...))`；省略位姿规范化为恒等位姿。 |
 | D2-03 | 已接受 | 选择 A：成员位姿始终相对父节点，以变换矩阵递归组合世界位姿；根世界位姿归候选启用图（Activation Graph）。 |
 | D2-04 | 已接受 | 选择 A：定义拥有固定结构、物料设计约束和只读投影；库存权威（Inventory Authority）独占真实物料（Material）与库位占用（SiteOccupancy）动态事实。 |
 | D2-05 | 已接受 | 选择 A：v1 复用 `config.sites[].label/content_type/position/size`；稳定 key、几何、允许类型与 Backend `sort_order` 投影在发布期校验。 |
 | D2-06 | 已决策延期 | v1 只描述和校验物料设计预期，不生成或执行真实物料预置命令；`command_id`、请求摘要、整批事务与持久回执的执行链推迟到 v2+。 |
-| D2-07 | 已接受 | 选择 A：遗留位置由离线适配器（Adapter）输出规范图与迁移报告；等价重复告警、冲突失败，运行事实不进入定义。 |
+| D2-07 | 已接受（已修订） | 遗留毫米坐标统一迁移到物理 `pose`；离线适配器（Adapter）对等价重复告警、冲突失败，运行事实不进入定义。 |
 | D3-01 | 已接受 | `workcell.py` 是必需作者制品；参数输入是按需存在的覆盖层；每次启用都生成候选启用快照（Activation Snapshot）。 |
 | D3-02 | 已接受 | 选择 A：零覆盖不创建空 params 文件或持久记录；“无覆盖”以参数输入缺席表示，候选启用快照（Activation Snapshot）仍须持久化。 |
 | D3-03 | 已接受 | 选择 A：一次启用最多接受一个外部覆盖对象；多个外部来源同时出现时失败，不做隐式叠加或优先级合并。 |
@@ -190,6 +190,7 @@ from szlab_poly_studio.devices import mixer_robot, plc, pump_station
     id="szlab_poly_station",
     display_name="SZLab 聚合物工作站",
     version="1.0.0",
+    layout_plane="XY",
 )
 def szlab_poly_station(
     *,
@@ -274,7 +275,7 @@ assembly_graph = nx.node_link_graph(
 
 顶层使用 `directed`、`multigraph`、`graph`、`nodes` 和 `links`。`graph` 保存
 `schema_version/id/name/display_name/definition_fqid/version/revision/content_digest/`
-`public_contract_digest/init_param_schema/dependencies/assets`。`init_param_schema` 沿用 Backend
+`public_contract_digest/init_param_schema/dependencies/assets/layout_plane`。`init_param_schema` 沿用 Backend
 `{"config":{"properties":{...}}}` 形态；`dependencies[class]` 保存精确 `revision` 和
 `content_digest`，不再为每个节点引入重复 `definition_ref`。
 
@@ -288,7 +289,8 @@ assembly_graph = nx.node_link_graph(
   角度规范到 `[-180, 180)`，不做任意小数位舍入；
 - 省略 `pose` 规范化为全零恒等位姿；物理可渲染成员省略时产生结构化告警，Python 生成器始终输出
   显式 `pose`；
-- `ui_layout` 只能存在于独立展示 sidecar，不能作为物理 `pose` 的缺省值、输入或回写目标；
+- 2D 与 3D 编辑器共享同一物理 `pose`；候选工作单元定义（WorkCell Definition）不增加节点级
+  `ui_layout`，也不保存第二套像素或显示坐标；
 - `config` 只保存定义期固定 JSON 值；`data` 为现有结构兼容保留，但在定义中必须是 `{}`；
 - 唯一必需的新节点字段是可选 `config_bindings`，其 `type` 仅允许 `member` 或
   `init_param`；候选启用解析器（Activation Resolver）将它降低为交给 OS/Backend 的普通 `config`；
@@ -300,33 +302,52 @@ assembly_graph = nx.node_link_graph(
 
 `links[*]` 保持 `id/source/target/type/port`，NetworkX 通过 `key="id"` 使用稳定边身份。
 规范编码时 `nodes` 按 `id`、`links` 按 `id` 排序；`content_digest` 只排除
-`graph.content_digest` 自身。source map 与 `ui_layout` 是绑定内容摘要的 sidecar，
-诊断统一为 `code/path/source_span/message/hint`。
+`graph.content_digest` 自身。source map 是绑定内容摘要的 sidecar，诊断统一为
+`code/path/source_span/message/hint`。
 
-### 4.5 `ui_layout` 的边界
+### 4.5 物理布置编辑与 `layout_plane`
 
-`ui_layout` 是编辑器如何摆放节点的展示 sidecar，不是实验室中的物理事实。它可以保存节点卡片的
-像素坐标、折叠状态、分组边框或 viewport，使同一候选工作单元定义（WorkCell Definition）在画布上
-保持可读。它通过稳定 `member_id` 关联节点，并绑定精确 `content_digest`，但不进入定义语义摘要：
+候选工作单元（WorkCell）的 2D 编辑器是毫米制物理布置编辑器，不是任意流程画布。2D 和 3D 读取、
+编辑同一个 `pose`；2D 拖动直接修改所选平面对应的两个物理坐标，未显示的第三轴保持不变。候选工作
+单元定义（WorkCell Definition）因此不保存节点级 `ui_layout`，也不从像素坐标推导毫米坐标。
 
-- 只改 `ui_layout` 不产生新的候选工作单元定义 revision，不改变候选启用图（Activation Graph）、
-  Backend `relative_position`、3D 场景或设备动作（Action）；
-- 删除 `ui_layout` 只会丢失人工排版，编辑器可以重新自动布局；删除或缺失物理 `pose` 则必须按位姿
-  合同规范化并产生相应诊断；
-- 2D 画布拖动默认只修改 `ui_layout`。只有明确进入“物理布置编辑”并提交毫米/角度值时，才修改
-  `pose`；系统不得因为两个字段都出现 `x/y` 就自动互转；
-- AI 若收到“把图排整齐”，只能编辑 `ui_layout`；收到“把机械臂向右移动 200 mm”，才编辑 `pose`。
+定义级可选字段 `layout_plane` 只选择 2D 编辑器的观察/约束平面：
 
-以下只是 sidecar 的说明性形态，具体前端 envelope 不新增 D2 协议决策：
+- `XY`：显示并编辑 X/Y，保持 Z；
+- `XZ`：显示并编辑 X/Z，保持 Y；
+- `YZ`：显示并编辑 Y/Z，保持 X；
+- 省略：没有首选 2D 平面，编辑器可进入 3D 或要求用户选择平面。
+
+Python 使用 `layout_plane: Literal["XY", "XZ", "YZ"] | None = None` 的语义；规范 JSON 仅在有首选
+平面时保存 `graph.layout_plane`。UI 中的“None”选项规范化为 Python `None` / JSON 字段缺席，字符串
+`"None"` 不是 wire enum，避免“字段缺席”和“字符串哨兵”形成两种空值。
+
+`layout_plane` 不是第二坐标系，不改变右手 Z-up、父子变换、轴方向、单位或 Backend
+`relative_position`，也不把未显示轴强制归零。嵌套定义各自拥有首选平面；编辑外层组合时使用外层
+`layout_plane` 投影子候选工作单元实例（WorkCell Instance）的根 `pose`，进入内层编辑后使用内层值。
+
+作者在草稿（Draft）中修改 `pose` 只改变数字模型，不直接产生硬件副作用，也不会自动搬动真实设备。
+保存/发布会形成新的候选工作单元定义 revision；既有候选启用快照（Activation Snapshot）和正在运行的
+工作流任务（WorkflowTask）继续固定旧 revision。只有显式重新启用后，新的 `pose` 才进入后续运行模型；
+若动作（Action）使用这些坐标，后续执行会使用新模型，因此重新启用前仍必须校验测绘结果。
+
+规范 JSON 示例：
 
 ```json
 {
-  "definition_digest": "sha256:...",
-  "nodes": {
-    "plc": {"x": 80, "y": 160},
-    "robot": {"x": 360, "y": 160}
+  "graph": {
+    "id": "szlab_poly_station",
+    "layout_plane": "XY"
   },
-  "viewport": {"x": 0, "y": 0, "zoom": 1.0}
+  "nodes": [
+    {
+      "id": "robot",
+      "pose": {
+        "position": {"x": 1200.0, "y": 350.0, "z": 0.0},
+        "rotation": {"x": 0.0, "y": 0.0, "z": 90.0}
+      }
+    }
+  ]
 }
 ```
 
@@ -344,8 +365,10 @@ T_world(child) = T_world(parent) · T_parent(child)
 
 遗留 `position`、`pose.position`、`position3d` 与 `rotation` 必须由离线适配器（Adapter）输出规范图和
 迁移报告。来源唯一时才归一到 `pose`；多个来源等价时保留一份并告警；冲突时失败并报告精确 JSON
-路径。已确认的画布坐标只进入 `ui_layout` sidecar。`occupied_by`、非空 `data`、真实物料（Material）
-身份和库位占用（SiteOccupancy）不得进入定义，只能由库存权威（Inventory Authority）的独立迁移处理。
+路径。遗留 2D 编辑器的毫米坐标也迁移到物理 `pose`，不分流到 `ui_layout`。若旧载荷只有两个坐标，
+适配器必须结合已知 `layout_plane` 和另一条无歧义来源补足未显示轴；无法证明第三轴时失败，不静默归零。
+`occupied_by`、非空 `data`、真实物料（Material）身份和库位占用（SiteOccupancy）不得进入定义，只能由
+库存权威（Inventory Authority）的独立迁移处理。
 v1 不生成或接受可执行物料预置候选；遗留测试 seed 必须保留为显式测试夹具。逐夹具映射与固定点测试
 归 G1。
 
@@ -533,8 +556,8 @@ v1 已接受运行模型：
 
 - 包管理模块（Package Manager Module）：现有包来源（Package Source）到 PackageCatalog 的唯一发现入口，增加定义种类而不复制扫描器；
 - 候选工作单元定义模块（WorkCell Definition Module）：以失败关闭 AST allowlist 拒绝动态控制流、任意调用/I/O 和未知节点，拥有 lowering、link、recursive closure、public contract、canonical codec、source map 和投影；
-- 位姿/变换模块（Pose/Transform Module）：统一拥有坐标单位、旋转顺序、数值规范化、父子矩阵组合、物理 `pose` 编解码
-  和 `ui_layout` 隔离，设备作者句柄与前端 Adapter 不重复实现坐标换算；
+- 位姿/变换模块（Pose/Transform Module）：统一拥有坐标单位、旋转顺序、数值规范化、父子矩阵组合、
+  物理 `pose` 编解码和 `layout_plane` 投影约束，设备作者句柄与前端 Adapter 不重复实现坐标换算；
 - 库位投影模块（Site Projection Module）：统一校验 `config.sites[]` 的稳定 key、几何、允许类型和顺序，并投影为 Backend
   库位（Site）；不接受库位占用（SiteOccupancy）写入；
 - 候选启用解析器（Activation Resolver）：通过唯一 `prepare_activation(...)` 接口把定义、可选请求、实例部署和 Secret Provider 降低为候选启用图与脱敏快照；
@@ -573,7 +596,8 @@ v1 已接受运行模型：
 11. 两个工作流任务（WorkflowTask）并发调用同一实例：在 D5 容量合同冻结前失败关闭或使用明确单容量策略；
 12. 内部取料后断电：相关物料、库位（Site）、作业执行占用（JobExecutionClaim）和栅栏保留不确定性并进入核对；
 13. 遗留 JSON 同时含 `position`、`position3d` 和 `rotation`：等价重复告警，冲突坐标失败并给出精确路径；
-14. 只拖动画布卡片：仅 `ui_layout` 变化，定义 digest、物理 `pose`、候选启用图与 3D 场景均不变化；
+14. 在 `layout_plane="XY"` 的 2D 编辑器拖动成员：直接修改 `pose.position.x/y`，保持 Z 不变；发布产生新
+    definition revision，但既有候选启用快照（Activation Snapshot）和工作流任务（WorkflowTask）不变；
 15. 父节点绕 Z 轴旋转后包含子节点：世界位姿由矩阵递归组合，不能用位置和欧拉角逐分量相加；
 16. 遗留 JSON 含动态 `data` 或 `occupied_by`：测试 seed 与运行时权威事实分别迁移，v1 不产生可执行
     物料预置候选且重启不得覆盖库存权威。
@@ -609,7 +633,8 @@ Frontier、Blocked、Fog 和跨票冲突。详细决策写入对应子议题，�
 
 - [ ] AST discovery 不 import/exec 作者源码、device driver 或 resource factory；
 - [ ] Python 与规范定义图达到固定点，workspace/clean wheel digest 一致；
-- [ ] 稳定成员、包含、连接、库位（Site）、资产、物理位姿和 `ui_layout` 分离通过 round-trip；
+- [ ] 稳定成员、包含、连接、库位（Site）、资产、`layout_plane` 和物理 `pose` 通过 round-trip；2D/3D
+  编辑不存在第二套节点坐标；
 - [ ] 候选工作单元（WorkCell）可递归组合，多实例身份稳定，循环失败关闭；
 - [ ] 私有成员默认不可寻址，export/re-export 只按稳定公共身份生效；
 - [ ] 零参数、全默认、覆盖、必填缺失、Secret Provider 失败均在硬件副作用前得到确定结果；
