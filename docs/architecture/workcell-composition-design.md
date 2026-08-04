@@ -1,10 +1,10 @@
 # 候选工作单元（WorkCell）组合定义、启动与分层动作设计
 
 > 状态：协议定义中（Protocol Definition）  
-> 合同草案版本：`workcell-composition-draft-20260804-d3-03`  
+> 合同草案版本：`workcell-composition-draft-20260804-d3-05`  
 > 父地图：[Core #181](https://github.com/Uni-Lab-OS/Uni-Lab-Core/issues/181)  
 > 历史来源：#181 拆票前最后一份完整正文（2026-08-04 17:18，Asia/Shanghai）  
-> 对齐范围：已纳入 D1–D3 的已接受决策，截止 D3-03=A；D4、D5 与迁移细节仍是候选设计。
+> 对齐范围：已纳入 D1–D3 的已接受决策，截止 D3-05；D4、D5 与迁移细节仍是候选设计。
 
 本文是候选工作单元（WorkCell）功能的独立、长期可维护设计文档。GitHub Issue 继续拥有
 决策状态、负责人、讨论和验收权威；本文负责保存整体设计及各协议面的共同背景。若本文与已接受的
@@ -58,7 +58,7 @@ Python / 规范 JSON / 结构化画布
 | --- | --- | --- |
 | D1-01 | 已接受 | 候选工作单元定义（WorkCell Definition）是一等、可版本化定义；启用实例拥有独立身份。 |
 | D1-02 | 已接受 | v1 结构固定；不支持候选结构选择（StructuralChoice）、`optional`/`variant` 或动态拓扑。 |
-| D1-03 | 已接受 | 保留 `@workcell` 函数语法，Python 定义文件可以直接作为 `--workcell file:...` 启动输入。 |
+| D1-03 | 已接受 | 保留 `@workcell` 函数语法，Python 定义文件可以直接作为 `-g/--graph` 启动输入。 |
 | D1-04 | 已接受 | Python 与规范 JSON/结构化画布允许双向语义创作；同一草稿同一时刻只有一种可写模式。 |
 | D1-05 | 已接受 | 不承诺源码字节无损；发布前必须满足 `graph -> Python -> graph` 规范 digest 固定点。 |
 | D2-01 | 已接受方向 | 物理位置和旋转进入 v1；候选局部位姿（LocalPose）与 `ui_layout` 分离。 |
@@ -66,6 +66,8 @@ Python / 规范 JSON / 结构化画布
 | D3-01 | 已接受 | `workcell.py` 是必需作者制品；参数输入是按需存在的覆盖层；每次启用都生成候选启用快照（Activation Snapshot）。 |
 | D3-02 | 已接受 | 选择 A：零覆盖不创建空 params 文件或持久记录；“无覆盖”以参数输入缺席表示，候选启用快照（Activation Snapshot）仍须持久化。 |
 | D3-03 | 已接受 | 选择 A：一次启用最多接受一个外部覆盖对象；多个外部来源同时出现时失败，不做隐式叠加或优先级合并。 |
+| D3-04 | 已接受 | 选择 A：Phase 0 仅实现 Python-only 零外部参数路径；完整 v1 保留 D3-03 的单一外部来源合同。 |
+| D3-05 | 已接受 | 复用 `-g/--graph` 作为唯一启动定义来源参数，不新增 `--workcell`。 |
 | D4 | 待确认 | 嵌套公开边界、可查看性、可寻址性和设备注册表（Device Registry）投影细节。 |
 | D5 | 部分接受 | v1 使用动作形态的组合工作流调用（CompositeWorkflowInvocation），在任务创建前静态展开；并发容量仍待确认。 |
 | G1 | 待确认 | 遗留启动 JSON、trusted-exec 原型和真实 SZLab 夹具的迁移与退役门。 |
@@ -182,11 +184,11 @@ def szlab_poly_station(
 上例所有公开参数都有默认值，因此可以只提供 Python：
 
 ```bash
-unilab --workspace . --workcell file:deployment/workcell.py --backend ros
+unilab --workspace . -g deployment/workcell.py --backend ros
 ```
 
-没有公开 `InitParam` 时同样只需 Python。存在无默认值参数、现场覆盖或敏感配置（Secret）引用时，
-才提供 `--workcell-params` 或持久部署记录。
+没有公开 `InitParam` 时同样只需 Python。Phase 0 不接受外部参数；存在无默认值参数、现场覆盖或
+敏感配置（Secret）引用的定义必须明确拒绝启用，后续切片再按 D3-03 接受单一外部覆盖对象。
 
 ### 4.2 v1 固定结构
 
@@ -283,9 +285,9 @@ D3-02 选择 A：零覆盖时不创建或持久化空 `{}` 参数记录。“无
 同时出现必须在硬件副作用前失败，不做隐式 merge，也不存在 CLI、文件和记录之间的优先级。候选启用
 快照（Activation Snapshot）必须记录每个最终值来自定义固定值、默认值还是该唯一覆盖对象。
 
-首个实现切片是否完全不接收外部覆盖仍由 [#184](https://github.com/Uni-Lab-OS/Uni-Lab-Core/issues/184)
-继续 Grill。若采用 Python-only 切片，它只是目标合同的阶段性子集：只能启用零公开参数或全部参数已有
-默认值且不依赖敏感配置（Secret）引用的定义，不能把“暂未实现”重新解释成参数永远不可覆盖。
+D3-04=A 把 Phase 0 限定为 Python-only 零外部参数子集：只能启用零公开参数或全部参数已有默认值且
+不依赖敏感配置（Secret）引用的定义。任何外部参数输入都必须明确报“尚未支持”，不能静默忽略；
+系统仍须完成合同校验、默认值解析并持久化脱敏候选启用快照（Activation Snapshot）。
 
 敏感配置（Secret）只能以 reference 流转。定义、PackageCatalog、设备注册表（Device Registry）、
 source map、日志、诊断和候选启用快照（Activation Snapshot）不得包含明文。Secret Provider 应在
@@ -293,26 +295,26 @@ source map、日志、诊断和候选启用快照（Activation Snapshot）不得
 
 ### 6.4 CLI 语义
 
-目标 CLI 使用显式启动源，避免按文件后缀猜语义：
+目标 CLI 复用现有 `-g/--graph` 作为唯一启动定义来源参数，不新增 `--workcell`：
 
 ```bash
 unilab \
   --workspace . \
-  --workcell file:deployment/workcell.py \
-  --workcell-params deployment/szlab.production.json \
+  -g deployment/workcell.py \
   --backend ros
 
 unilab \
   --workspace . \
-  --workcell catalog:community.szlab_poly_studio.szlab_poly_station@3 \
+  -g legacy/startup.json \
   --backend ros
 ```
 
 候选规则：
 
-- `--graph` 与 `--workcell` 互斥；
-- `file:` 必须位于显式 workspace 内并经过 containment/symlink 检查；
-- `catalog:` 必须冻结 exact revision/content digest，生产模式不能静默选择漂移的 latest；
+- `-g` 与 `--graph` 是同一参数的短/长形式，不能再增加并行启动来源参数；
+- 文件必须位于显式 workspace 内并经过 containment/symlink 检查；
+- Python、遗留 JSON/GraphML 与未来目录引用的精确识别规则继续由 [#184](https://github.com/Uni-Lab-OS/Uni-Lab-Core/issues/184) Grill；
+- Phase 0 出现任何外部参数输入时必须明确失败；
 - `--config` 继续只配置 Uni-Lab OS 进程，不进入候选工作单元初始化合同；
 - params 输入是 closed object，未知字段失败；命令行不得携带敏感配置（Secret）明文；
 - `--check_mode` 在首个 driver import、构造和硬件连接前完成全部验证并退出。
@@ -322,7 +324,7 @@ unilab \
 ```text
 解析 OS 进程配置
   -> 编译显式 PackageCatalog
-  -> 解析 file:/catalog: WorkCell source
+  -> 解析 `-g/--graph` 唯一启动定义来源
   -> link exact definition closure
   -> 解析可选参数覆盖与默认值
   -> 校验 internal init bindings
@@ -403,13 +405,14 @@ v1 已接受运行模型：
 2. Python → JSON → Python：注释可规范化，但图 digest、成员、连接、库位（Site）和位姿不变；
 3. 零公开参数：只用 `workcell.py` 启动，不创建空 params 记录，但生成并持久化快照；
 4. 全部参数有默认值：不提供参数输入，快照记录规范化默认值及来源；
-5. 多个外部参数来源同时出现：在 driver 构造前失败，不按来源优先级隐式合并；
-6. 私有 PLC 地址：外部深路径覆盖失败；需要现场变化时必须提升为公开 `InitParam`；
-7. Secret Provider 不可用：在 driver 构造前失败，错误和快照不泄漏明文；
-8. 内层 definition 升级：不改变外层已发布 revision，必须显式 re-link/re-publish；
-9. 两个工作流任务（WorkflowTask）并发调用同一实例：在 D5 容量合同冻结前失败关闭或使用明确单容量策略；
-10. 内部取料后断电：相关物料、库位（Site）、作业执行占用（JobExecutionClaim）和栅栏保留不确定性并进入核对；
-11. 遗留 JSON 含动态 `data`：测试 seed、一次性 bootstrap 与运行时权威事实分别迁移，重启不得覆盖库存权威。
+5. Phase 0 提供外部参数输入：在 driver 构造前明确失败，不能静默忽略；
+6. 完整 v1 多个外部参数来源同时出现：失败且不按来源优先级隐式合并；
+7. 私有 PLC 地址：外部深路径覆盖失败；需要现场变化时必须提升为公开 `InitParam`；
+8. Secret Provider 不可用：在 driver 构造前失败，错误和快照不泄漏明文；
+9. 内层 definition 升级：不改变外层已发布 revision，必须显式 re-link/re-publish；
+10. 两个工作流任务（WorkflowTask）并发调用同一实例：在 D5 容量合同冻结前失败关闭或使用明确单容量策略；
+11. 内部取料后断电：相关物料、库位（Site）、作业执行占用（JobExecutionClaim）和栅栏保留不确定性并进入核对；
+12. 遗留 JSON 含动态 `data`：测试 seed、一次性 bootstrap 与运行时权威事实分别迁移，重启不得覆盖库存权威。
 
 ## 12. 非目标
 
@@ -447,6 +450,7 @@ Frontier、Blocked、Fog 和跨票冲突。详细决策写入对应子议题，�
 - [ ] 零参数、全默认、覆盖、必填缺失、Secret Provider 失败均在硬件副作用前得到确定结果；
 - [ ] 零覆盖不创建空 params 记录，但始终生成持久、脱敏候选启用快照（Activation Snapshot）；
 - [ ] 一次启用最多接受一个外部覆盖对象；多个来源同时出现时在硬件副作用前失败；
+- [ ] Phase 0 通过 `-g/--graph` 启动 Python 定义，外部参数输入明确失败且仍持久化默认值快照；
 - [ ] 已发布定义进入设备注册表（Device Registry）/Palette，Draft/Candidate 不进入；
 - [ ] 工作流支持动作（Workflow-backed Action）保留 `implementation.kind`，静态进入唯一执行计划；
 - [ ] 断电、部分物理成功、取消和执行未知不触发盲目物理重放（Blind Physical Replay）；
