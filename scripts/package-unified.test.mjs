@@ -22,6 +22,24 @@ afterEach(() => {
 })
 
 describe('unified package command', () => {
+  it('exposes memorable native packaging aliases', () => {
+    const packageConfig = JSON.parse(
+      readFileSync(new URL('../package.json', import.meta.url), 'utf8')
+    )
+
+    assert.deepEqual({
+      linux: packageConfig.scripts['build:linux'],
+      mac: packageConfig.scripts['build:mac'],
+      macIntel: packageConfig.scripts['build:mac-intel'],
+      windows: packageConfig.scripts['build:win']
+    }, {
+      linux: 'node scripts/package-unified.mjs --platform linux-64',
+      mac: 'node scripts/package-unified.mjs --platform osx-arm64',
+      macIntel: 'node scripts/package-unified.mjs --platform osx-64',
+      windows: 'node scripts/package-unified.mjs --platform win-64'
+    })
+  })
+
   it('maps a platform alias to one native Constructor and Electron plan', () => {
     const root = mkdtempSync(join(tmpdir(), 'unilab-unified-plan-'))
     temporaryDirectories.push(root)

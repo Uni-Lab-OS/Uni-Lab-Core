@@ -3,6 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "build:linux": "node scripts/package-unified.mjs --platform linux-64",
+    "build:mac": "node scripts/package-unified.mjs --platform osx-arm64",
+    "build:mac-intel": "node scripts/package-unified.mjs --platform osx-64",
+    "build:win": "node scripts/package-unified.mjs --platform win-64",
     "package:unified": "node scripts/package-unified.mjs",
     "test:package:unified": "node --test scripts/package-unified.test.mjs"
   }
