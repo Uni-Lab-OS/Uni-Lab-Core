@@ -1,10 +1,10 @@
 # 候选工作单元（WorkCell）组合定义、启动与分层动作设计
 
 > 状态：协议定义中（Protocol Definition）
-> 合同草案版本：`workcell-composition-draft-20260804-d1-complete`
+> 合同草案版本：`workcell-composition-draft-20260804-d2-material`
 > 父地图：[Core #181](https://github.com/Uni-Lab-OS/Uni-Lab-Core/issues/181)
 > 历史来源：#181 拆票前最后一份完整正文（2026-08-04 17:18，Asia/Shanghai）
-> 对齐范围：已纳入 D1–D3 的已接受决策；D1 与 D3 已全部冻结；D2 继续冻结位姿、库位（Site）和物料边界，D4、D5 与迁移细节仍是候选设计。
+> 对齐范围：已纳入 D1–D3 的已接受决策；D1 与 D3 已全部冻结；D2-04、D2-06 的动态物料边界与预置机制已经冻结，D2 其余 5 项及 D4、D5、迁移细节仍是候选设计。
 
 本文是候选工作单元（WorkCell）功能的独立、长期可维护设计文档。GitHub Issue 继续拥有
 决策状态、负责人、讨论和验收权威；本文负责保存整体设计及各协议面的共同背景。若本文与已接受的
@@ -65,6 +65,8 @@ Python / 规范 JSON / 结构化画布
 | D1-09～11 | 已接受 | 全部选择 A：单草稿 CAS/完整语义 diff；显式 `.py` 与 clean-wheel parity；Draft → Candidate → Published 原子失败关闭。 |
 | D2-01 | 已接受方向 | 物理位置和旋转进入 v1；候选局部位姿（LocalPose）与 `ui_layout` 分离。 |
 | D2-02 | 已接受方向 | 内部相对位姿归定义；候选工作单元实例（WorkCell Instance）的根世界位姿归候选启用图（Activation Graph）。 |
+| D2-04 | 已接受 | 选择 A：定义拥有固定结构、物料设计约束和只读投影；库存权威（Inventory Authority）独占真实物料（Material）与库位占用（SiteOccupancy）动态事实。 |
+| D2-06 | 已接受 | 选择 A：定义只生成预置计划；操作者显式授权后，由单一库存权威（Inventory Authority）按稳定 `command_id`、请求摘要和持久回执原子执行；启动和重启都不自动执行。 |
 | D3-01 | 已接受 | `workcell.py` 是必需作者制品；参数输入是按需存在的覆盖层；每次启用都生成候选启用快照（Activation Snapshot）。 |
 | D3-02 | 已接受 | 选择 A：零覆盖不创建空 params 文件或持久记录；“无覆盖”以参数输入缺席表示，候选启用快照（Activation Snapshot）仍须持久化。 |
 | D3-03 | 已接受 | 选择 A：一次启用最多接受一个外部覆盖对象；多个外部来源同时出现时失败，不做隐式叠加或优先级合并。 |
@@ -114,14 +116,50 @@ Python / 规范 JSON / 结构化画布
 
 ### 3.4 物料与运行事实边界
 
-资源模板（ResourceTemplate）、允许出现的固定资源结构和库位（Site）可以进入定义。真实物料
-（Material）UUID、条码、当前数量、库存分配和库位占用（SiteOccupancy）归库存权威
-（Inventory Authority），不得由 `workcell.py`、params 输入或每次重启覆盖。
+资源模板（ResourceTemplate）、允许出现的固定资源结构、库位（Site）、允许模板、预期数量和目标
+库位可以进入定义。真实物料（Material）UUID、条码、批次、当前数量、库存分配和库位占用
+（SiteOccupancy）归库存权威（Inventory Authority），不得由 `workcell.py`、参数输入或每次重启覆盖。
+候选工作单元实例（WorkCell Instance）可以查询或订阅这些事实形成只读物料投影，但投影和缓存均
+不取得写权威。
 
-任务物料预留（TaskMaterialReservation）、作业执行占用（JobExecutionClaim）、设备遥测投影
-（DeviceTelemetryProjection）和物理结算（PhysicalSettlement）继续留在各自运行权威中。
-首次预置真实物料若确有必要，必须成为显式、一次性、幂等且有持久回执的 bootstrap/provision
-操作；该合同仍由 [#183](https://github.com/Uni-Lab-OS/Uni-Lab-Core/issues/183) 继续确认。
+任务物料准入（TaskMaterialAdmission）、任务物料预留（TaskMaterialReservation）、作业执行占用
+（JobExecutionClaim）、设备遥测投影（DeviceTelemetryProjection）和物理结算（PhysicalSettlement）
+继续留在各自运行权威中。动态物料缺失不阻止候选工作单元（WorkCell）启用；相关工作流任务
+（WorkflowTask）是否可开始由任务物料准入（TaskMaterialAdmission）判定。安全必需且不可动态缺失的
+固定反应器、废液桶等必须建模为固定结构成员或启用前置条件。
+
+首次真实物料预置采用显式授权、可安全重试且逻辑效果至多一次的机制，而不是 `executed=true`
+布尔标志：
+
+1. 编译精确已发布定义，生成只含模板、数量和目标库位的规范计划及 `provisioning_digest`；生成计划
+   本身没有副作用，候选工作单元启用也不会自动提交该计划。
+2. 操作者检查计划与现场差异后显式授权。授权方创建并持久化一个不可变 `command_id`；请求同时携带
+   `definition_digest`、`provisioning_digest`、候选工作单元实例身份和完整规范计划。`command_id` 是
+   这次授权的身份，不能仅由库位或定义摘要推导，否则无法区分未来一次有意重新预置。
+3. 单一库存权威（Inventory Authority）在幂等命令表中以 `command_id` 为主键，并保存完整请求的
+   `request_digest`、状态、结果或错误、`receipt_id` 与处理时间。并发请求依靠数据库唯一约束串行化，
+   禁止先查询再在事务外写入。
+4. 认领命令、校验计划、生成真实物料（Material）UUID、写入所有物料和库位占用（SiteOccupancy）、
+   台账、事务发件箱（Outbox）、回执（Receipt）及完成状态必须在库存权威的同一数据库事务中提交。
+   任一条目失败则全部回滚，不允许留下部分预置。
+5. 同一 `command_id` 与同一 `request_digest` 重放时，直接返回已持久化的原回执；同一 `command_id`
+   携带不同摘要时以 `idempotency_conflict` 失败。进程在提交前崩溃则事务回滚，重试重新执行；在提交后、
+   响应前崩溃则重试读取原回执，不再创建第二批物料。
+6. 候选启用快照（Activation Snapshot）只记录计划摘要、`command_id` 和 `receipt_id` 引用，不复制真实
+   物料或库位占用。重启只恢复既有库存事实，不扫描定义并重新提交预置命令。
+7. 定义升级只生成计划差异。确需再次预置时，必须由操作者审阅差异、产生新的显式授权和新的
+   `command_id`；旧命令永远不能被“重置为未执行”。生产重置与仿真清场使用独立显式命令或隔离库存
+   命名空间（namespace），不复用启动语义。
+
+上述保证精确限定为“库存逻辑效果至多一次 + 请求可安全重试”。如果计划包含机器人搬运等外部硬件
+副作用，数据库事务无法回滚物理世界；这类步骤必须降低为工作流（Workflow），使用作业执行占用
+（JobExecutionClaim）、变更集（ChangeSet）和回执（Receipt）结算，不得由物料预置命令直接声称
+物理恰好一次（exactly-once）。
+
+当前 Uni-Lab OS 的 `processed_command` 已具备 `command_id` 主键、同一事务内认领/业务写入/台账/
+事务发件箱（Outbox）/结果持久化和重放返回，可作为实现接缝。它目前尚未持久化 `request_digest`，
+因此实施本合同前必须补齐“同身份不同内容拒绝”校验，并增加整批预置的领域命令和持久回执；不能直接
+把现有单物料命令循环调用后宣称整批原子。
 
 ## 4. 创作模型
 
@@ -372,7 +410,7 @@ unilab \
   -> 降低为候选启用图（Activation Graph）
   -> 原子持久化候选启用快照（Activation Snapshot）
   -> 返回 PreparedActivation 或稳定 ActivationDiagnostics
-  -> 显式一次性 bootstrap（若存在且获授权）
+  -> 生成可选物料预置计划（无副作用，不自动授权或执行）
   -> import/initialize selected drivers
 ```
 
