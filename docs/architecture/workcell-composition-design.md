@@ -1,10 +1,10 @@
 # 候选工作单元（WorkCell）组合定义、启动与分层动作设计
 
-> 状态：协议定义中（Protocol Definition）  
-> 合同草案版本：`workcell-composition-draft-20260804-d3-08`  
-> 父地图：[Core #181](https://github.com/Uni-Lab-OS/Uni-Lab-Core/issues/181)  
-> 历史来源：#181 拆票前最后一份完整正文（2026-08-04 17:18，Asia/Shanghai）  
-> 对齐范围：已纳入 D1–D3 的已接受决策，截止 D3-08；D4、D5 与迁移细节仍是候选设计。
+> 状态：协议定义中（Protocol Definition）
+> 合同草案版本：`workcell-composition-draft-20260804-d3-15`
+> 父地图：[Core #181](https://github.com/Uni-Lab-OS/Uni-Lab-Core/issues/181)
+> 历史来源：#181 拆票前最后一份完整正文（2026-08-04 17:18，Asia/Shanghai）
+> 对齐范围：已纳入 D1–D3 的已接受决策，D3-01～D3-15 已全部冻结；D4、D5 与迁移细节仍是候选设计。
 
 本文是候选工作单元（WorkCell）功能的独立、长期可维护设计文档。GitHub Issue 继续拥有
 决策状态、负责人、讨论和验收权威；本文负责保存整体设计及各协议面的共同背景。若本文与已接受的
@@ -32,12 +32,11 @@ Python / 规范 JSON / 结构化画布
               │ compile / link / validate / canonicalize
               ▼
 已发布候选工作单元定义（immutable revision + digest）
-              │ optional parameter override + secret reference
+              │ zero/one activation request + secret reference
               ▼
-候选启用快照（Activation Snapshot）
-              │ lowering
-              ▼
-候选启用图（Activation Graph）与设备注册表（Device Registry）投影
+候选启用解析器（Activation Resolver）
+              ├─ 候选启用快照（Activation Snapshot）
+              └─ 候选启用图（Activation Graph）与设备注册表（Device Registry）投影
               │ public workflow-backed action invocation
               ▼
 唯一工作流任务（WorkflowTask）与执行计划（ExecutionPlan）
@@ -71,6 +70,8 @@ Python / 规范 JSON / 结构化画布
 | D3-06 | 已接受 | 选择 A：`-g/--graph` 严格按 `.py`、`.json`、`.graphml` 后缀分派；未知或无后缀失败，不做内容探测。 |
 | D3-07 | 已接受 | 选择 A：一个 `.py` 启动文件必须恰好声明一个顶层 `@workcell` 根定义；零个或多个失败，被引用的嵌套定义不计入。 |
 | D3-08 | 已接受 | 选择 A：任意已登记设备作者句柄只消费已发布目录的 `init_param_schema.config`；现代 `@device` 由带类型的 `__init__` 静态生成，作者句柄不另建合同。 |
+| D3-09～13 | 已接受 | 全部选择 A：公开参数使用封闭类型闭集；唯一外部输入规范化为候选启用请求（Activation Request）；v1 仅文件启动；实例部署字段与 `InitParam` 分离；敏感配置（Secret）只接受 `SecretRef`。 |
+| D3-14～15 | 已接受 | 全部选择 A：Uni-Lab OS 原子持久化内容寻址候选启用快照（Activation Snapshot）；候选启用解析器（Activation Resolver）只公开 `prepare_activation(...)` 深模块接口。 |
 | D4 | 待确认 | 嵌套公开边界、可查看性、可寻址性和设备注册表（Device Registry）投影细节。 |
 | D5 | 部分接受 | v1 使用动作形态的组合工作流调用（CompositeWorkflowInvocation），在任务创建前静态展开；并发容量仍待确认。 |
 | G1 | 待确认 | 遗留启动 JSON、trusted-exec 原型和真实 SZLab 夹具的迁移与退役门。 |
@@ -95,8 +96,10 @@ Python / 规范 JSON / 结构化画布
 ### 3.2 候选工作单元实例（WorkCell Instance）
 
 候选工作单元实例（WorkCell Instance）是某个候选启用图（Activation Graph）对精确已发布定义的
-一次实例化。它拥有稳定实例身份、根世界位姿、外部连接、机器/Edge 放置和已解析启动值。
-定义 revision 更新不得静默改变既有实例或已创建工作流任务（WorkflowTask）。
+一次实例化。稳定 `instance_id`、根世界位姿、外部连接和 Edge/机器放置属于实例部署字段，不属于
+公开 `InitParam`。Phase 0 使用 `instance_id = workcell.id`、单位根位姿、当前 Edge 和空外部连接；
+完整 v1 由唯一候选启用请求（Activation Request）提供。改变 `instance_id` 创建新实例；改变其他部署
+字段为同一实例创建新快照。定义 revision 更新不得静默改变既有实例或已创建工作流任务（WorkflowTask）。
 
 ### 3.3 三种图必须分离
 
@@ -138,47 +141,23 @@ from szlab_poly_studio.devices import mixer_robot, plc, pump_station
 )
 def szlab_poly_station(
     *,
-    auto_connect: Annotated[
-        bool,
-        InitParam(title="Start device connections"),
-    ] = True,
+    auto_connect: Annotated[bool, InitParam(title="Start device connections")] = True,
     pump_timeout_s: Annotated[
-        float,
-        InitParam(title="Pump timeout", ge=0.1, le=30.0, unit="s"),
+        float, InitParam(title="Pump timeout", ge=0.1, le=30.0, unit="s")
     ] = 5.0,
 ) -> WorkCell:
     cell = WorkCell()
-
-    plc_1 = plc(
-        id="plc",
-        url="opc.tcp://127.0.0.1:4840",
-        auto_connect=auto_connect,
-        csv_path="assets/szlab_plc_0730.csv",
-    )
-    robot = mixer_robot(
-        id="robot",
-        plc_device=plc_1,
-        auto_connect=auto_connect,
-    )
-    pump = pump_station(
-        id="pump",
-        plc_device=plc_1,
-        timeout_s=pump_timeout_s,
-    )
-
+    plc_1 = plc(id="plc", url="opc.tcp://127.0.0.1:4840", auto_connect=auto_connect,
+                csv_path="assets/szlab_plc_0730.csv")
+    robot = mixer_robot(id="robot", plc_device=plc_1, auto_connect=auto_connect)
+    pump = pump_station(id="pump", plc_device=plc_1, timeout_s=pump_timeout_s)
     cell.assign_child_resource(
-        plc_1,
-        local_pose=Pose(
-            position_mm=(0.0, 0.0, 0.0),
-            rotation_deg_xyz=(0.0, 0.0, 0.0),
-        ),
+        plc_1, local_pose=Pose(position_mm=(0.0, 0.0, 0.0),
+                               rotation_deg_xyz=(0.0, 0.0, 0.0)),
     )
     cell.assign_child_resource(
-        robot,
-        local_pose=Pose(
-            position_mm=(1200.0, 350.0, 0.0),
-            rotation_deg_xyz=(0.0, 0.0, 90.0),
-        ),
+        robot, local_pose=Pose(position_mm=(1200.0, 350.0, 0.0),
+                               rotation_deg_xyz=(0.0, 0.0, 90.0)),
     )
     cell.assign_child_resource(pump)
     return cell
@@ -278,23 +257,27 @@ D3-02 选择 A：零覆盖时不创建或持久化空 `{}` 参数记录。“无
 - 随物理安装变化、需要外部选择或属于敏感配置（Secret）的值必须提升为公开 `InitParam`；
 - 外部不能用 `members.plc.config.*` 或 `devices.plc.url` 一类深路径覆盖私有字段；
 - 外层候选工作单元（WorkCell）只能绑定内层的公开参数，不能越过内层合同；
-- 一个公开参数可以 fan-out 到多个兼容目标；有效约束是所有目标合同的安全交集；
-- 未使用参数、未知目标、重复来源、空约束交集和类型/单位不兼容必须在发布或启用前失败。
+- v1 类型闭集为 JSON 标量、`Literal`/Enum、`Optional[T]`、有界同质 `list[T]`、封闭 `TypedDict`/
+  冻结 dataclass 和 `Secret[str]`；禁止 `Any`、无类型 `dict`、任意对象及除 `Optional` 外的 union；
+- 约束只由 `Annotated[..., InitParam(...)]` 声明；一个公开参数可以 fan-out 到多个兼容目标；
+- fan-out 必须同时满足所有目标 Schema，不做字符串、数字或单位隐式转换；安全交集为空即失败。
 
 ### 6.3 参数来源
 
-已接受的 D3-03=A 合同是“定义默认值 + 零或一个外部覆盖对象”。一次启用可以完全没有外部来源；
-存在覆盖时，只能从 params 文档、持久部署记录或 UI/API 提交等入口中选择一个规范化对象。多个来源
-同时出现必须在硬件副作用前失败，不做隐式 merge，也不存在 CLI、文件和记录之间的优先级。候选启用
-快照（Activation Snapshot）必须记录每个最终值来自定义固定值、默认值还是该唯一覆盖对象。
+已接受的 D3-03=A 合同是“定义默认值 + 零或一个外部覆盖对象”。存在覆盖时，params 文档、持久部署
+记录或 UI/API 提交只能选一个来源，并规范化为封闭候选启用请求（Activation Request）：顶层只有
+`schema_version`、必需 `definition_digest`、`instance` 和 `params`；`params` 再按候选工作单元初始化合同
+（WorkCell Init Contract）封闭校验。零外部输入时整个对象缺席；未知顶层字段、digest 不符或第二来源
+都在硬件副作用前失败。候选启用快照（Activation Snapshot）记录每个最终值的来源。
 
 D3-04=A 把 Phase 0 限定为 Python-only 零外部参数子集：只能启用零公开参数或全部参数已有默认值且
 不依赖敏感配置（Secret）引用的定义。任何外部参数输入都必须明确报“尚未支持”，不能静默忽略；
 系统仍须完成合同校验、默认值解析并持久化脱敏候选启用快照（Activation Snapshot）。
 
-敏感配置（Secret）只能以 reference 流转。定义、PackageCatalog、设备注册表（Device Registry）、
-source map、日志、诊断和候选启用快照（Activation Snapshot）不得包含明文。Secret Provider 应在
-结构、Schema、绑定和定义闭包全部验证成功后、首个驱动构造前解析 reference；错误必须脱敏。
+敏感配置（Secret）只接受封闭 `SecretRef {provider, key, version?}`。Secret Provider 作为候选启用解析器
+（Activation Resolver）的内部 Adapter，在全部非敏感校验后、驱动构造前解析。定义、PackageCatalog、
+设备注册表（Device Registry）、source map、日志、诊断和快照只保留引用、版本和指纹，不得包含明文。
+v1 不支持热轮换；版本变化要求显式重新启用并生成新快照。
 
 ### 6.4 CLI 语义
 
@@ -312,19 +295,25 @@ unilab \
   --backend ros
 ```
 
-候选规则：
+已接受规则：
 
 - `-g` 与 `--graph` 是同一参数的短/长形式，不能再增加并行启动来源参数；
 - 文件必须位于显式 workspace 内并经过 containment/symlink 检查；
 - `.py` 进入受限 AST 候选工作单元定义（WorkCell Definition）编译器，不 import/exec 作者源码，且必须恰好包含一个顶层 `@workcell` 根定义；
 - `.json` 进入遗留 JSON 解析器，`.graphml` 进入遗留 GraphML 解析器；
 - 未知或无后缀直接失败，不做内容探测，也不把其他格式回退为 GraphML；
+- v1 不实现 `catalog:`，生产也从 workspace/package 内显式文件启动；未来目录引用必须固定 exact revision/
+  digest，禁止 `latest`，且不能与文件来源同时出现；
 - Phase 0 出现任何外部参数输入时必须明确失败；
 - `--config` 继续只配置 Uni-Lab OS 进程，不进入候选工作单元初始化合同；
 - params 输入是 closed object，未知字段失败；命令行不得携带敏感配置（Secret）明文；
 - `--check_mode` 在首个 driver import、构造和硬件连接前完成全部验证并退出。
 
 ### 6.5 启动顺序
+
+候选启用解析器（Activation Resolver）是深模块（Deep Module），对调用方只公开
+`prepare_activation(request) -> PreparedActivation | ActivationDiagnostics`。文件、目录、Secret Provider
+和快照存储 Adapter 是内部 seam；CLI、UI/API 与 `--check_mode` 不能自行编排解析阶段。
 
 ```text
 解析 OS 进程配置
@@ -334,14 +323,19 @@ unilab \
   -> 解析可选参数覆盖与默认值
   -> 校验 internal init bindings
   -> 解析 secret references
-  -> 冻结候选启用快照（Activation Snapshot）
   -> 降低为候选启用图（Activation Graph）
+  -> 原子持久化候选启用快照（Activation Snapshot）
+  -> 返回 PreparedActivation 或稳定 ActivationDiagnostics
   -> 显式一次性 bootstrap（若存在且获授权）
   -> import/initialize selected drivers
 ```
 
-任一 source、definition、parameter、binding 或 secret 失败都必须发生在硬件副作用前；失败启动不能
-留下部分 driver、部分设备注册表（Device Registry）实例或部分物料 bootstrap。
+Uni-Lab OS 是候选启用快照（Activation Snapshot）的本地写权威：在驱动创建前原子持久化不可变、
+内容寻址快照；Backend 只接收副本/投影。快照包含定义/目录/请求/lowering digest、稳定实例部署、最终
+非敏感值及来源、Secret 引用版本和候选启用图（Activation Graph）digest。输入变化要求显式重新启用；
+重启只自动复用完全相同的 digest。Phase 0 收到外部输入可保留默认解析快照，但必须标记不可启用且不
+产生 launch plan。诊断固定为 `code/path/source_span/message/hint`；任一失败都不得留下部分 driver、
+部分设备注册表（Device Registry）实例或部分物料 bootstrap。
 
 ## 7. 分层动作（Action）
 
@@ -384,7 +378,7 @@ v1 已接受运行模型：
 
 - Package Manager Module：现有 Package Source 到 PackageCatalog 的唯一发现入口，增加定义种类而不复制扫描器；
 - WorkCell Definition Module：拥有 AST lowering、link、recursive closure、public contract、canonical codec、source map 和投影；
-- 候选启用解析器（activation resolver）：把定义、可选覆盖、实例身份和 Secret Provider 降低为候选启用图与脱敏快照；
+- 候选启用解析器（Activation Resolver）：通过唯一 `prepare_activation(...)` 接口把定义、可选请求、实例部署和 Secret Provider 降低为候选启用图与脱敏快照；
 - Action Publication Module：复用既有动作（Action）与组合工作流调用（CompositeWorkflowInvocation）合同；
 - ExecutionPlan Builder：继续由调度器（Scheduler）拥有唯一运行时 lowering；
 - Registry Adapter：只从已发布定义生成候选复合设备投影（Composite Device Projection）；
@@ -399,8 +393,9 @@ v1 已接受运行模型：
 - 已发布 revision/content digest 不原地改写，外层固定 exact resolved digest；
 - 内部成员使用定义局部稳定身份，运行 UUID 从外层实例 namespace 与成员身份确定性派生；
 - 库位（Site）key、公共端口、导出 alias、公开参数名和动作名都是兼容面；
-- 修改启动值产生新候选启用快照（Activation Snapshot），不产生新定义 revision；
+- 改 `instance_id` 创建新实例；改其他实例部署或启动值为同一实例创建新候选启用快照（Activation Snapshot），不产生新定义 revision；
 - 修改定义或内层依赖产生新 definition revision，不能热切换既有任务；
+- 重启只复用完全相同的快照 digest；任一输入或 Secret 版本变化都要求显式重新启用；
 - 执行未知、部分物理成功或取消不得触发盲目物理重放（Blind Physical Replay）；
 - 候选启用快照（Activation Snapshot）不是第二份工作流快照或执行计划（ExecutionPlan）。
 
