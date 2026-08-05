@@ -59,5 +59,5 @@ Used by `/wayfinder`. The map is a single Issue with child Issues as tickets.
 - **Child ticket**: an Issue linked through GitHub sub-issues. Where unavailable, add it to the map task list and put `Part of #<map>` at the top of the child body.
 - **Blocking**: use GitHub native Issue dependencies where available; otherwise use a `Blocked by: #<n>` line.
 - **Frontier query**: list open children, remove assigned or blocked Issues, and select the first remaining ticket in map order.
-- **Claim**: `gh issue edit <n> --add-assignee @me`.
+- **Claim**: `gh issue edit <n> --repo Uni-Lab-OS/Uni-Lab-Core --add-assignee @me`.
 - **Resolve**: comment with the answer, close the child, then append its context pointer to the map.

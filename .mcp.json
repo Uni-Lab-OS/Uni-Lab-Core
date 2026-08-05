@@ -1,0 +1,27 @@
+{
+  "mcpServers": {
+    "whalent": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "--yes",
+        "@whalent/agent",
+        "daemon-mcp",
+        "--token",
+        "${WHALENT_TOKEN}",
+        "--platform-url",
+        "https://memory.whalent.com",
+        "--workspace",
+        ".",
+        "--agent-id",
+        "${WHALENT_AGENT_ID}",
+        "--provider",
+        "claude",
+        "--config-path",
+        ".",
+        "--composer-id",
+        "${WHALENT_COMPOSER_ID:-}"
+      ]
+    }
+  }
+}

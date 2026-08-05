@@ -1,0 +1,25 @@
+{
+  "outcome": "passed",
+  "frontendUrl": "http://127.0.0.1:4173",
+  "osUrl": "http://127.0.0.1:8014",
+  "total": 1,
+  "packages": {
+    "AI4C": 1
+  },
+  "workflows": [
+    {
+      "order": 1,
+      "package": "AI4C",
+      "source": "ai4c_robot/workflows/ai4c_canvas_workflow.py",
+      "source_file": "ai4c_canvas_workflow.py",
+      "workflow_id": "szlab_canvas_workflow",
+      "node_count": 8,
+      "edge_count": 7,
+      "screenshot": "workflows/01-szlab_canvas_workflow.png"
+    }
+  ],
+  "apiCalls": [],
+  "httpFailures": [],
+  "browserErrors": [],
+  "compatibilityWarnings": []
+}

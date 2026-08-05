@@ -1,0 +1,16 @@
+schema_version: 1
+source:
+  repository: https://github.com/styxhuang/Uni-Lab-OS
+  branch: dev
+  commit: d58a8c0d6de26b9de77161359bb627d75fa8e4e8
+capture:
+  committed_presets: 1
+  live_browser_draft_found: false
+presets:
+  - id: ai4c
+    legacy_preset: legacy/ui-presets/ai4c.json
+    legacy_runtime: legacy/runtime-configs/ai4c_runtime.json
+    workflow_id: szlab_canvas_workflow
+    python_source: ../ai4c_robot/workflows/ai4c_canvas_workflow.py
+    devices: [AI4C_robot_arm]
+    equivalence: committed_preset
