@@ -639,8 +639,19 @@ unilabos/workspace_host/
 
 ### [AIW-06](https://github.com/Uni-Lab-OS/Uni-Lab-Core/issues/221)：让 Agent 检查并截图已打开的物料画布
 
-- scene inspect；
-- attached capture；
+- `unilab material scene inspect` 返回物料/Site 身份、世界变换、包围盒、
+  可见与选择状态、布局 revision 及 source identity；
+- `unilab material scene capture --attached` 只通过 Workspace Host 发现当前
+  唯一 renderer，不硬编码 Workbench 端口，也不由 CLI 抓取浏览器 DOM；
+- Workbench 在真实公共 Material 视口内临时应用 2D/2.5D/3D、Site/转运层、
+  选择/隐藏、viewport 与 camera preset；截图完成后恢复用户视图；
+- 2D/2.5D 使用同一前端 DOM/SVG renderer 栅格化，3D 复用 Pascal 离屏 GPU
+  RenderTarget；两条路径都等待字体、图片、模型与几何稳定帧；
+- CLI 与 MCP 共用 `MaterialRendererClient`，输出 PNG 原子写入、SHA-256、尺寸、
+  renderer generation、workspace/source/revision 元数据；
+- 2026-08-13 在 SZLab 0810 工作区 E2E 验证：132 个物料、422 个 Site，
+  1440×960 的 2.5D/3D 与 1024×768 的 2D 截图成功；整页 reload 后 attached
+  renderer 自动恢复且 source identity 保持为 `local` / Workspace Backend 49832。
 
 ### [AIW-07](https://github.com/Uni-Lab-OS/Uni-Lab-Core/issues/222)：通过布局 CAS 与 Headless Renderer 闭环模板优化
 
