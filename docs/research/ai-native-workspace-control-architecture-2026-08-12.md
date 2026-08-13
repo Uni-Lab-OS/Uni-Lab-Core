@@ -14,7 +14,7 @@
 2. **“重启 OS”只重启 OS Edge Runtime。** Edge Runtime 负责 Edge 协议、ROS、驱动、设备动作和物理完成判据；不拥有工作区源码、Authoring revision 或完整 Workflow/Material HTTP 数据面。
 3. **没有 `authoring-only` 模式。** Authoring 是 Workbench 的查看与编辑上下文，不是第三个 Domain Control Plane。设备停止时仍能 Authoring，只是设备执行 capability 不可用。
 4. **Domain Control Plane 只有 `local | backend` 两种互斥模式。** 该定义直接采用新 OS 分支：`local` 的 Workflow/Material/Scheduler Authority 位于 Local Backend；`backend` 的 Authority 位于 Go Backend + Go Scheduler。
-5. **前端工作流、设备和物料视图始终使用 Backend-shaped `/api/v1` Interface。** Authoring 上下文使用 Local Backend 的 Authoring Projection Adapter；运行上下文根据 `domainMode` 使用 Local Domain Adapter 或 Go Backend Adapter。
+5. **前端工作流、设备和物料视图始终使用 Backend-shaped `/api/v1` Interface。** 本地代码 Authoring 使用 Local Backend 的 Authoring Projection Adapter；画布编辑与运行事实则根据 `domainMode` 原子选择 Local Domain Adapter 或 Go Backend Adapter。`backend` 模式下画布直接编辑 Backend 工作流定义，本地代码保存不会隐式改写 Backend。
 6. **本地设备执行尽量复用生产 Edge 协议。** Local Scheduler 与 Edge Runtime 分进程后，不新增脆弱的临时 RPC；优先让 Local Backend 实现与 Go Backend/Scheduler 同形的 durable HTTP + WebSocket Edge Interface，使 `EdgeControlClient` 可同时连接 local 和 backend Adapter。
 7. **Workspace Host 是唯一生命周期权威。** CLI、MCP、Theia、Electron 都是 Client Adapter；它们不直接 spawn/kill Python，不保存唯一 PID、端口或 generation。
 8. **Authoring 编译与 Local Backend 分进程。** Local Backend 不直接 import Agent 刚写的驱动和模板；动态加载、编译与预览在可丢弃 Authoring Worker 中完成，成功后才原子发布新 revision。
@@ -94,17 +94,19 @@ domainMode=backend
 
 两种 Authority 互斥，不能同时写同一 aggregate，不能静默 fallback，不能在前端合并列表后假装成一套事实。
 
-### 2.6 Authoring Context 与 Runtime Context
+### 2.6 Workspace Authoring、Canvas Definition 与 Runtime Context
 
 这是每个 Workbench/CLI 客户端自己的数据查看上下文，不是进程模式，也不写入工作区全局 session 状态：
 
 | Workbench 上下文 | Backend Client 数据源 |
 |---|---|
-| Authoring | Local Backend 的 Authoring Projection Adapter |
+| Workspace 代码 Authoring | Local Backend 的 Authoring Projection Adapter |
+| Canvas Definition + `domainMode=local` | Local Backend 的 Authoring/Local Domain Adapter |
+| Canvas Definition + `domainMode=backend` | Go Backend 的工作流图读写 Interface |
 | Runtime + `domainMode=local` | Local Backend 的 Local Domain Adapter |
 | Runtime + `domainMode=backend` | Go Backend |
 
-因此两个窗口可以同时分别查看 Authoring 候选和 Runtime 事实；设备停止、启动或重启都不会退出 Authoring，也不会停止 Local Backend。
+因此两个窗口可以同时分别查看 Workspace Authoring 候选和 Runtime 事实；设备停止、启动或重启都不会退出 Workspace Authoring，也不会停止 Local Backend。切到 `backend` 后，画布的编辑、保存、工作流列表和运行属于同一个 Go Backend source；Monaco/Agent 修改的本地 Python 仍由 Local Backend 编译和保存，但不会自动投影到 Backend 画布，也不会形成隐式发布或双写。回到 `local` 后恢复代码与画布双向联动。
 
 ### 2.7 Process Role 与 Domain Mode 必须正交
 
@@ -247,7 +249,7 @@ flowchart LR
 
 1. Local Backend 地址不因启动、停止或重启 OS 改变；
 2. Authoring SSE 不经过 Edge Runtime；
-3. 一个 Runtime Context 只选择一个 Domain Authority；
+3. 一个 Canvas Definition/Runtime Context 只选择一个 Domain Authority；
 4. Edge Runtime 使用同一个 EdgeExecution Interface 连接 Local Scheduler 或 Go Scheduler；
 5. 前端不逐接口 fallback，只原子切换整个 Backend Client Adapter；
 6. UI reload 不停止 Local Backend、Edge Runtime、PLC 或活动 Task；
@@ -290,12 +292,14 @@ Interface 包含：
 选择由 Workbench Context 与 `domainMode` 决定：
 
 ```text
-context=authoring              -> authoringBackendBaseUrl
-context=runtime, mode=local    -> localDomainBaseUrl
-context=runtime, mode=backend  -> goBackendBaseUrl
+context=workspace-authoring           -> authoringBackendBaseUrl
+context=canvas, mode=local            -> localDomainBaseUrl
+context=canvas, mode=backend          -> goBackendBaseUrl
+context=runtime, mode=local           -> localDomainBaseUrl
+context=runtime, mode=backend         -> goBackendBaseUrl
 ```
 
-切换时必须同时更换 `backendSourceId`、认证、SSE cursor 和 query cache namespace。
+切换时必须同时更换 Canvas/Runtime 的 `backendSourceId`、认证、SSE cursor 和 query cache namespace。Workspace Authoring Client 独立常驻；切换到 Backend 时必须断开它与当前画布的代码双向同步，但不能停止文件监控或丢失本地候选。
 
 ### 5.4 EdgeExecution
 
@@ -526,7 +530,7 @@ Skill = 调用策略、业务工作流和安全说明，不拥有状态
 }
 ```
 
-Authoring/Runtime Context 是每个 Client Adapter 的本地选择，不写入该全局 manifest。Client 根据 Context 与 `domainMode` 从 `sources` 选择一组 `baseUrl/sourceId/capabilities`。Frontend query key 必须包含选中的 `sourceId`；切换 Context 或 Authority 时取消旧请求、断开旧 SSE、切换认证与 cache namespace，再获取新 snapshot。禁止把不同来源的对象保留在同一 cache。
+Workspace Authoring/Canvas Definition/Runtime Context 是每个 Client Adapter 的本地选择，不写入该全局 manifest。Client 根据 Context 与 `domainMode` 从 `sources` 选择一组 `baseUrl/sourceId/capabilities`。Frontend query key 必须包含选中的 `sourceId`；切换 Context 或 Authority 时取消旧请求、断开旧 SSE、切换认证与 cache namespace，再获取新 snapshot。禁止把不同来源的对象保留在同一 cache。`backend` 模式的画布写操作只调用 Go Backend 工作流图 CAS 接口；本地源码变更继续进入 Workspace Authoring cache，但不刷新当前 Backend 画布。
 
 `capabilities` 表示该 Adapter 是否实现某种行为，`availability` 表示它是否是当前可选择的数据源，`device.state` 表示设备是否可立即执行，三者不能混用。例如 local/backend Adapter 支持 DeviceActionRun，但非当前 Authority 时不可选择，Edge Runtime 停止时也不可立即执行；Authoring Adapter 则从 Interface 层就不支持执行。
 
@@ -624,6 +628,7 @@ unilabos/workspace_host/
 
 - 前端 Context/Authority base URL 原子切换；
 - `sourceId` / 认证 / SSE cursor / cache namespace 一起切换；
+- `local` 模式代码与画布双向同步；`backend` 模式画布直接保存 Backend 工作流图，本地代码修改不生效；
 - Local Backend 与 Go Backend 通过合同矩阵。
 
 ### [AIW-05](https://github.com/Uni-Lab-OS/Uni-Lab-Core/issues/220)：通过 `unilab` CLI 与 MCP 运行和观察工作流
