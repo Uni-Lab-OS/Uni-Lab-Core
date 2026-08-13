@@ -655,9 +655,31 @@ unilabos/workspace_host/
 
 ### [AIW-07](https://github.com/Uni-Lab-OS/Uni-Lab-Core/issues/222)：通过布局 CAS 与 Headless Renderer 闭环模板优化
 
-- preview/apply CAS；
-- headless renderer；
-- 模板隔离编译与视觉回归。
+- `unilab material layout inspect|preview|apply` 与同合同 MCP tools 已实现；
+  preview 以稳定 `sourceNodeId` + expected revision 产生规范候选、约束诊断、结构
+  diff 和不可变 preview artifact，不修改设备图；apply 只接受该 preview identity，
+  并以源文件 SHA-256 revision 执行 CAS 与原子替换。
+- 布局变更支持设备平移、旋转、视图/相机/viewport preset，以及只通过
+  `/api/v1/material-models/` 发布且可选绑定工作区 `sourcePath` 的模板资产；local
+  apply 通过 Backend-shaped API 更新运行中的 Local Backend，再请求同一 Material
+  viewport reload，使源码、Backend projection 与已打开画布同步；`backend`
+  Authority 下关闭式拒绝工作区布局隐式写入，避免双写。
+- `unilab material template validate` 在一次性 Python 子进程中静态编译完整
+  PackageCatalog，不导入作者驱动；坏模板只返回结构化诊断，不停止 Workspace
+  Host、Local Backend 或污染 last-valid scene。
+- Workbench 关闭时，Workspace Host 可按需启动普通 Workbench Theia bundle 与
+  Chromium adapter；它和 attached 模式共享 React/Pascal scene、布局与截图实现，
+  不维护第二套 renderer，且可由 Host 单独停止。
+- 每张截图同时原子保存 PNG 与结构元数据：workspace、source identity、layout /
+  template revision、viewport、renderer version、renderer generation 和 SHA-256；
+  `material scene compare` 同时比较像素与节点 placement/bounds/Sites 等结构事实，
+  阈值、批准和基线替换均为显式操作。
+- 2026-08-14 在 SZLab 0810 工作区完成真实闭环：inspect → attached capture →
+  preview（源文件摘要不变）→ apply（Local Backend 更新 1 个节点，已打开 viewport
+  reload）→ recapture；旧 revision 重放稳定返回 `layout_revision_conflict`。验证中将
+  `s2_tip_warehouse` x=3065 临时改为 2945 后恢复；像素变化 0.4248%，结构比较命中
+  `scene.nodes`。关闭 Workbench 后又由 Host 自动启动 headless renderer，成功输出
+  1200×800 的 3D top-view PNG，随后通过同一控制面停止。
 
 ### [AIW-08](https://github.com/Uni-Lab-OS/Uni-Lab-Core/issues/223)：跨平台与故障恢复总验收
 
