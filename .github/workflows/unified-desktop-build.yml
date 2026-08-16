@@ -132,6 +132,7 @@ jobs:
         env:
           UNILABOS_INSTALLER_VERSION: ${{ inputs.runtime_version }}
           UNILABOS_INSTALLER_PACKAGE: unilabos
+          UNILAB_RELEASE_MODE: ${{ inputs.release_mode }}
           CSC_LINK: ${{ inputs.release_mode == 'production' && secrets.CSC_LINK || '' }}
           CSC_KEY_PASSWORD: ${{ inputs.release_mode == 'production' && secrets.CSC_KEY_PASSWORD || '' }}
           APPLE_ID: ${{ inputs.release_mode == 'production' && secrets.APPLE_ID || '' }}
@@ -153,7 +154,7 @@ jobs:
           case "$TARGET_PLATFORM" in
             linux-64)
               printf '%s' "$LINUX_GPG_KEY_VALUE" | gpg --batch --import
-              for artifact in uni-lab-fe/apps/desktop/release/*.AppImage; do
+              for artifact in uni-lab-fe/apps/workbench/release-linux/*.AppImage; do
                 gpg --batch --yes --pinentry-mode loopback \
                   --passphrase "$LINUX_GPG_PASSWORD_VALUE" \
                   --armor --detach-sign "$artifact"
@@ -161,24 +162,26 @@ jobs:
               done
               ;;
             osx-64|osx-arm64)
-              xcrun stapler validate uni-lab-fe/apps/desktop/release/*.dmg
+              xcrun stapler validate uni-lab-fe/apps/workbench/release-macos/*.dmg
               spctl --assess --type open --context context:primary-signature \
-                --verbose=2 uni-lab-fe/apps/desktop/release/*.dmg
+                --verbose=2 uni-lab-fe/apps/workbench/release-macos/*.dmg
               ;;
             win-64)
-              powershell -NoProfile -Command '$files = Get-ChildItem "uni-lab-fe/apps/desktop/release/*-setup.exe"; if (-not $files) { throw "Signed installer missing" }; foreach ($file in $files) { $signature = Get-AuthenticodeSignature $file.FullName; if ($signature.Status -ne "Valid") { throw "Invalid Authenticode signature: $($file.Name) $($signature.Status)" } }'
+              powershell -NoProfile -Command '$files = Get-ChildItem "uni-lab-fe/apps/workbench/release-windows/*-setup.exe"; if (-not $files) { throw "Signed installer missing" }; foreach ($file in $files) { $signature = Get-AuthenticodeSignature $file.FullName; if ($signature.Status -ne "Valid") { throw "Invalid Authenticode signature: $($file.Name) $($signature.Status)" } }'
               ;;
           esac
 
       - name: Mark development artifacts
         if: steps.select.outputs.enabled == 'true' && inputs.release_mode == 'development'
-        run: echo "UNSIGNED DEVELOPMENT BUILD" > uni-lab-fe/apps/desktop/release/DEVELOPMENT-BUILD.txt
+        run: |
+          find uni-lab-fe/apps/workbench -maxdepth 1 -type d -name 'release-*' -print0 \
+            | xargs -0 -I{} sh -c 'echo "UNSIGNED DEVELOPMENT BUILD" > "$1/DEVELOPMENT-BUILD.txt"' _ {}
 
       - name: Write SHA-256 manifest
         if: steps.select.outputs.enabled == 'true'
-        working-directory: uni-lab-fe/apps/desktop/release
+        working-directory: uni-lab-fe/apps/workbench
         run: |
-          find . -maxdepth 1 -type f ! -name SHA256SUMS -print0 \
+          find release-* -maxdepth 1 -type f ! -name SHA256SUMS -print0 \
             | sort -z \
             | xargs -0 shasum -a 256 > SHA256SUMS
 
@@ -187,7 +190,7 @@ jobs:
         with:
           name: Uni-Lab-unified-${{ matrix.platform }}-${{ inputs.release_mode }}
           path: |
-            uni-lab-fe/apps/desktop/release/*
+            uni-lab-fe/apps/workbench/release-*/*
             artifacts/runtime-installer/${{ matrix.platform }}/*
           if-no-files-found: error
           retention-days: 30

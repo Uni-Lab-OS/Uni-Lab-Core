@@ -14,6 +14,11 @@ import { pathToFileURL } from 'node:url'
 
 const temporaryDirectories = []
 const scriptPath = new URL('./package-unified.mjs', import.meta.url)
+const nativePlatform = process.platform === 'darwin'
+  ? process.arch === 'arm64' ? 'osx-arm64' : 'osx-64'
+  : process.platform === 'win32'
+    ? 'win-64'
+    : 'linux-64'
 
 afterEach(() => {
   for (const directory of temporaryDirectories.splice(0)) {
@@ -63,7 +68,8 @@ describe('unified package command', () => {
       runtimeInstaller: installer,
       runtimeVersion: '0.11.3',
       constructorRequired: false,
-      desktopScript: 'package:linux'
+      desktopScript: 'package:linux',
+      releaseMode: 'development'
     })
   })
 
@@ -89,7 +95,11 @@ appendFileSync(process.env.UNILAB_TEST_COMMAND_LOG, JSON.stringify({
 if (command === 'constructor') {
   const outputDirectory = process.argv[process.argv.indexOf('--output-dir') + 1]
   mkdirSync(outputDirectory, { recursive: true })
-  writeFileSync(join(outputDirectory, 'Uni-Lab-OS-0.11.3-linux-64.sh'), 'fixture')
+  const extension = process.env.UNILAB_TEST_TARGET_PLATFORM === 'win-64' ? '.exe' : '.sh'
+  writeFileSync(join(
+    outputDirectory,
+    'Uni-Lab-OS-0.11.3-' + process.env.UNILAB_TEST_TARGET_PLATFORM + extension
+  ), 'fixture')
 }
 `
     for (const command of ['rattler-build', 'constructor', 'micromamba', 'pnpm']) {
@@ -99,7 +109,7 @@ if (command === 'constructor') {
     const result = spawnSync(process.execPath, [
       scriptPath.pathname,
       '--platform',
-      'linux-64',
+      nativePlatform,
       '--runtime-version',
       '0.11.3'
     ], {
@@ -111,6 +121,7 @@ if (command === 'constructor') {
         UNILAB_CONSTRUCTOR_COMMAND: join(binDirectory, 'constructor'),
         UNILAB_CONDA_EXE: join(binDirectory, 'micromamba'),
         UNILAB_PNPM_COMMAND: join(binDirectory, 'pnpm'),
+        UNILAB_TEST_TARGET_PLATFORM: nativePlatform,
         UNILAB_TEST_COMMAND_LOG: commandLog
       }
     })
@@ -135,6 +146,52 @@ if (command === 'constructor') {
     assert.equal(
       constructor.channel,
       pathToFileURL(channelDirectory).href
+    )
+    const pnpm = commands.find(({ command }) => command === 'pnpm')
+    assert.deepEqual(pnpm.args.slice(0, 4), [
+      '--dir',
+      join(new URL('../uni-lab-fe', import.meta.url).pathname),
+      '--filter',
+      '@unilab/workbench'
+    ])
+  })
+
+  it('selects the formal signed or ad-hoc Workbench package explicitly', () => {
+    const production = spawnSync(process.execPath, [
+      scriptPath.pathname,
+      '--platform',
+      'osx-arm64',
+      '--runtime-installer',
+      '/tmp/runtime.sh',
+      '--runtime-version',
+      '0.11.3',
+      '--release-mode',
+      'production',
+      '--dry-run'
+    ], { encoding: 'utf8' })
+    assert.equal(production.status, 1)
+    assert.match(production.stderr, /Runtime 安装器不存在/u)
+
+    const root = mkdtempSync(join(tmpdir(), 'unilab-unified-mac-plan-'))
+    temporaryDirectories.push(root)
+    const installer = join(root, 'runtime.sh')
+    writeFileSync(installer, 'fixture')
+    const development = spawnSync(process.execPath, [
+      scriptPath.pathname,
+      '--platform',
+      'osx-arm64',
+      '--runtime-installer',
+      installer,
+      '--runtime-version',
+      '0.11.3',
+      '--release-mode',
+      'development',
+      '--dry-run'
+    ], { encoding: 'utf8' })
+    assert.equal(development.status, 0, development.stderr)
+    assert.equal(
+      JSON.parse(development.stdout).desktopScript,
+      'package:mac:adhoc'
     )
   })
 })

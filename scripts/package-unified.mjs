@@ -26,19 +26,18 @@ const PLATFORM_ALIASES = new Map([
   ['win-64', 'win-64']
 ])
 
-const DESKTOP_SCRIPTS = {
-  'linux-64': 'package:linux',
-  'osx-64': 'package:mac',
-  'osx-arm64': 'package:mac',
-  'win-64': 'package:win'
-}
-
 function main() {
   const options = parseArguments(process.argv.slice(2))
   const targetPlatform = normalizePlatform(
     options.platform ?? currentConstructorPlatform()
   )
   const runtimeVersion = options.runtimeVersion ?? sourceRuntimeVersion()
+  const releaseMode = options.releaseMode
+    ?? process.env.UNILAB_RELEASE_MODE
+    ?? 'development'
+  if (!['development', 'production', 'adhoc'].includes(releaseMode)) {
+    throw new Error(`不支持的发布模式：${releaseMode}`)
+  }
   let runtimeInstaller = options.runtimeInstaller
     ? resolve(options.runtimeInstaller)
     : null
@@ -50,7 +49,8 @@ function main() {
     runtimeInstaller,
     runtimeVersion,
     constructorRequired: runtimeInstaller === null,
-    desktopScript: DESKTOP_SCRIPTS[targetPlatform]
+    desktopScript: workbenchScript(targetPlatform, releaseMode),
+    releaseMode
   }
   if (options.dryRun) {
     process.stdout.write(`${JSON.stringify(plan)}\n`)
@@ -191,8 +191,8 @@ function main() {
       '--dir',
       frontendDirectory,
       '--filter',
-      '@unilab/desktop',
-      DESKTOP_SCRIPTS[targetPlatform]
+      '@unilab/workbench',
+      plan.desktopScript
     ],
     frontendDirectory,
     {
@@ -205,7 +205,7 @@ function main() {
   process.stdout.write(`${JSON.stringify({
     ...plan,
     runtimeInstaller,
-    releaseDirectory: join(frontendDirectory, 'apps', 'desktop', 'release')
+    releaseDirectory: workbenchReleaseDirectory(targetPlatform)
   })}\n`)
 }
 
@@ -214,6 +214,7 @@ function parseArguments(argumentsList) {
     platform: null,
     runtimeInstaller: null,
     runtimeVersion: null,
+    releaseMode: null,
     dryRun: false
   }
   for (let index = 0; index < argumentsList.length; index += 1) {
@@ -226,6 +227,7 @@ function parseArguments(argumentsList) {
       argument === '--platform'
       || argument === '--runtime-installer'
       || argument === '--runtime-version'
+      || argument === '--release-mode'
     ) {
       const value = argumentsList[index + 1]
       if (!value || value.startsWith('--')) {
@@ -235,11 +237,27 @@ function parseArguments(argumentsList) {
       if (argument === '--platform') options.platform = value
       if (argument === '--runtime-installer') options.runtimeInstaller = value
       if (argument === '--runtime-version') options.runtimeVersion = value
+      if (argument === '--release-mode') options.releaseMode = value
       continue
     }
     throw new Error(`未知参数：${argument}`)
   }
   return options
+}
+
+function workbenchScript(targetPlatform, releaseMode) {
+  if (targetPlatform === 'linux-64') return 'package:linux'
+  if (targetPlatform === 'win-64') return 'package:win'
+  return releaseMode === 'production' ? 'package:mac' : 'package:mac:adhoc'
+}
+
+function workbenchReleaseDirectory(targetPlatform) {
+  const name = targetPlatform === 'linux-64'
+    ? 'release-linux'
+    : targetPlatform === 'win-64'
+      ? 'release-windows'
+      : 'release-macos'
+  return join(frontendDirectory, 'apps', 'workbench', name)
 }
 
 function normalizePlatform(value) {

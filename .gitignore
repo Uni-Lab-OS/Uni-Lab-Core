@@ -1,3 +1,4 @@
 .venv/
 dev/data/
 dev/logs/
+*.p12
